@@ -1,5 +1,4 @@
 public class Card {
-
     private int cardNum;
     private Colour colour;
     private Special special;
