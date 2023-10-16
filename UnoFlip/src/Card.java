@@ -1,12 +1,17 @@
 public class Card {
-    private int cardNum;
+    private Integer cardNum;
     private Colour colour;
     private Special special;
-    public enum Colour{RED,YELLOW,BLUE,GREEN}
+    public enum Colour{RED,YELLOW,BLUE,GREEN,BLACK}
     public enum Special{WILD,REVERSE,SKIP, WILD_DRAW_TWO_CARDS}
 
-    public Card(int cardNumber, Colour colour, Special specialCard){
-        if(cardNumber <= 9 && cardNumber >= 0){
+    public Card(Integer cardNumber, Colour colour, Special specialCard){
+
+        if(cardNumber == -1){
+            // This condition is for the special cards only that don't have a number
+            this.cardNum = -1;
+        }
+        else if(cardNumber <= 9 && cardNumber >= 0){
             this.cardNum = cardNumber;
         }
         else {
@@ -18,7 +23,7 @@ public class Card {
 
     }
 
-    public int getCardNum(){
+    public Integer getCardNum(){
         return this.cardNum;
     }
 
@@ -31,6 +36,6 @@ public class Card {
     }
 
     public String toString(){
-        return "Card Number: " + getCardNum() + ", Card Colour: " + getCardColour() + ", Card Special Type: " + getSpecialType();
+        return "Card Number: " + getCardNum() + ", Card Colour: " + getCardColour() + ", Card Special Type: " + getSpecialType() + "\n";
     }
 }
