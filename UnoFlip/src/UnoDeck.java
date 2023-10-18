@@ -5,6 +5,7 @@ import java.util.Random;
 public class UnoDeck {
 
     private ArrayList<Card> cards;
+    //private int drawNcards;
 
     /*
     * generate card in deck
@@ -20,7 +21,7 @@ public class UnoDeck {
                 Card Number_pair = new Card(rank, colour,null);
                 cards.add(Number_pair); // 36 cards in deck
                 cards.add(Number_pair); // 72 cards in deck
-                System.out.println("ben:" + Number_pair);
+                //System.out.println("ben:" + Number_pair);
             }
         // NO black,no wild, each special with red,yellow,green,blue,16 cards
             for (Card.Special special: Card.Special.values()){
@@ -42,7 +43,6 @@ public class UnoDeck {
         }
     }
 
-    // each special with 4 color, no wild card
 
 
 
@@ -53,6 +53,8 @@ public class UnoDeck {
     public ArrayList<Card> getDeckCards(){
         return cards;
     }
+
+    /*
 
     public ArrayList<Card> getSevenCards(){
         ArrayList<Card> sevenCards = new ArrayList<Card>(7);
@@ -66,6 +68,20 @@ public class UnoDeck {
         }
         return sevenCards;
     }
+*/
+
+    public ArrayList<Card> getNCards(int nCards){
+        ArrayList<Card> cardArray = new ArrayList<Card>(nCards);
+        Random rand = new Random();
+        int upperbound = 112;
+        int int_random = rand.nextInt(upperbound);
+
+        for(int i = 0; i < nCards; i++){
+            cardArray.add(cards.get(int_random));
+            cards.remove(int_random);
+        }
+        return cardArray;
+    }
 
     public static void main(String[] args) {
         UnoDeck unoDeck = new UnoDeck();
@@ -73,11 +89,11 @@ public class UnoDeck {
         int a = unoDeck.cards.size();
 
         System.out.println(unoDeck.getDeckCards());
-        System.out.println(unoDeck.getSevenCards());
+        //System.out.println(unoDeck.getSevenCards());
+        System.out.println(unoDeck.getNCards(12));
         System.out.println("the deck has total of : "+ a + " cards");
         int b = unoDeck.cards.size();
         System.out.println("the deck now has:"+b + " cards");
-
         System.out.println("draw: " + (a-b) + " cards");
     }
 }
