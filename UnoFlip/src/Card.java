@@ -9,8 +9,6 @@ public class Card {
 
     public Card(Rank rank, Colour colour, Special specialCard){
 
-
-
         this.rank = rank;
         this.colour = colour;
         this.special = specialCard;
