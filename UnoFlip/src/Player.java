@@ -4,21 +4,21 @@ public class Player {
     private String name;
     private ArrayList<Card> hand;
 
-    public Player(String n, ArrayList<Card> h){
-        name = n;
-        hand = h;
+    public Player(String inputName, ArrayList<Card> inputHand){
+        this.name = inputName;
+        this.hand = inputHand;
     }
 
     public String getName(){
-        return name;
+        return this.name;
     }
 
-    public void setName(String n){
-        name = n;
+    public void setName(String inputName){
+        this.name = inputName;
     }
 
     public Card playCard(Card card){
-        hand.remove(card);
+        this.hand.remove(card);
         return card;
     }
 
@@ -31,7 +31,7 @@ public class Player {
     }
 
     public ArrayList<Card> getHand(){
-        return hand;
+        return this.hand;
     }
 
     public void removeAllCards(){
