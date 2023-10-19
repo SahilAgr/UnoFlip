@@ -28,7 +28,7 @@ public class Main {
 
                     System.out.println("What is the name of Player#" + i);
                     name = playerNames.nextLine();
-                    playerList.add(new Player(name));
+                    playerList.add(new Player(name, new ArrayList<Card>()));
                     System.out.println(playerList.get(playerList.size()-1).getName()); // Instead of this do System.out.println(player.toString()); to list names of all players like Player#1: bill, Player#2: ...
                     i++;
                 }

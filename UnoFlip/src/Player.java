@@ -17,18 +17,7 @@ public class Player {
         name = n;
     }
 
-    private Card findCard(Card.Colour c, Card.Special s, int n){
-        for (Card card : hand){
-            if (card.getCardColour() == c && card.getSpecialType() == s && card.getCardNum() == n){
-                hand.remove(card);
-                return card;
-            }
-        }
-        return null;
-    }
-
-    public Card playCard(Card.Colour c, Card.Special s, int n){
-        Card card = findCard(c, s, n);
+    public Card playCard(Card card){
         hand.remove(card);
         return card;
     }
@@ -37,8 +26,7 @@ public class Player {
         hand.addAll(cardList);
     }
 
-    public void removeCard(Card.Colour c, Card.Special s, int n){
-        Card card = findCard(c, s, n);
+    public void removeCard(Card card){
         hand.remove(card);
     }
 
@@ -49,5 +37,4 @@ public class Player {
     public void removeAllCards(){
         hand = new ArrayList<Card>();
     }
-
 }
