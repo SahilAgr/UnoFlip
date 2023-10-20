@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class TextView implements View{
+public class TextView implements View {
 
     public TextView(){
         UnoDeck deck = new UnoDeck();
@@ -9,11 +9,24 @@ public class TextView implements View{
         game.setView(this);
     }
 
-    public void nextPlayer(){
-
+    public void topCard(Card card) {
+        System.out.println("Top Card: " + card);
     }
 
-    public void cardPlayed(){
+    public void playerDecision(Player player) {
+        System.out.println("Enter card index to play or 0 to draw a card: \n");
+    }
+
+    public void cardPlayed(Card card){
+        System.out.println("Played: " + card);
+    }
+
+    public void nextPlayer(Player player){
+        System.out.println(player + "'s Turn");
+    }
+
+    public void cardHand(Player playerHand) {
+        System.out.println("Your Cards: \n");
 
     }
 
