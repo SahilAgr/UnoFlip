@@ -4,9 +4,12 @@ public class Player {
     private String name;
     private ArrayList<Card> hand;
 
+    private int points;
+
     public Player(String inputName, ArrayList<Card> inputHand){
         this.name = inputName;
         this.hand = inputHand;
+        this.points = 0;
     }
 
     public String getName(){
@@ -34,7 +37,32 @@ public class Player {
         return this.hand;
     }
 
+    public int getHandScore(){
+        int total = 0;
+        for (Card card : this.hand){
+            if (card.getCardNum() == null){
+                if (card.getSpecialType() == Card.Special.WILD || card.getSpecialType() == Card.Special.WILD_DRAW_TWO_CARDS){
+                    total += 50;
+                }
+                else {
+                    total += 20;
+                }
+            }
+            else {
+                total += card.getCardNum().ordinal()+1;
+            }
+        }
+        return total;
+    }
+
     public void removeAllCards(){
-        hand = new ArrayList<Card>();
+        this.hand = new ArrayList<Card>();
+    }
+
+    public int getPoints(){
+        return this.points;
+    }
+    public void addPoints(int roundScore){
+        this.points += roundScore;
     }
 }
