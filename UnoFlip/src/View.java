@@ -1,7 +1,7 @@
 public interface View {
-    public void nextPlayer();
+    public void nextPlayer(Player player);
 
-    public void cardPlayed();
+    public void cardPlayed(Card card);
 
     public void roundEnd(Player roundWinner);
 
