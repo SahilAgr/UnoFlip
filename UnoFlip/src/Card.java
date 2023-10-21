@@ -28,6 +28,11 @@ public class Card {
     }
 
     public String toString(){
-        return "Card Number: " + getCardNum() + ", Card Colour: " + getCardColour() + ", Card Special Type: " + getSpecialType() + "\n";
+        if (this.special == null){
+            return getCardColour() + " " + getCardNum();
+        }
+        else {
+            return getCardColour() + " " + getSpecialType();
+        }
     }
 }

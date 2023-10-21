@@ -6,6 +6,11 @@ public class Player {
 
     private int points;
 
+    public Player(String inputName){
+        this.name = inputName;
+        this.hand = new ArrayList<Card>();
+        this.points = 0;
+    }
     public Player(String inputName, ArrayList<Card> inputHand){
         this.name = inputName;
         this.hand = inputHand;

@@ -5,7 +5,6 @@ import java.util.Random;
 public class UnoDeck {
 
     private ArrayList<Card> cards;
-    //private int drawNcards;
 
     /*
     * generate card in deck
@@ -35,6 +34,7 @@ public class UnoDeck {
 
             }
             //add the wild card
+
             else {
                 for (int i=0;i<4;i++) {
                     cards.add(new Card(null, Card.Colour.BLACK, Card.Special.WILD));
@@ -49,22 +49,6 @@ public class UnoDeck {
         return cards;
     }
 
-    /*
-
-    public ArrayList<Card> getSevenCards(){
-        ArrayList<Card> sevenCards = new ArrayList<Card>(7);
-        Random rand = new Random();
-        int upperbound = 112;
-        int int_random = rand.nextInt(upperbound);
-
-        for(int i = 1; i < 8; i++){
-            sevenCards.add(cards.get(int_random));
-            cards.remove(int_random);
-        }
-        return sevenCards;
-    }
-*/
-
     public ArrayList<Card> getNCards(int nCards){
         ArrayList<Card> cardArray = new ArrayList<Card>(nCards);
         Random rand = new Random();
@@ -76,19 +60,5 @@ public class UnoDeck {
             cards.remove(int_random);
         }
         return cardArray;
-    }
-
-    public static void main(String[] args) {
-        UnoDeck unoDeck = new UnoDeck();
-
-        int a = unoDeck.cards.size();
-
-        System.out.println(unoDeck.getDeckCards());
-        //System.out.println(unoDeck.getSevenCards());
-        System.out.println(unoDeck.getNCards(50));
-        System.out.println("the deck has total of : "+ a + " cards");
-        int b = unoDeck.cards.size();
-        System.out.println("the deck now has:"+b + " cards");
-        System.out.println("draw: " + (a-b) + " cards");
     }
 }

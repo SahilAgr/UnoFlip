@@ -3,14 +3,19 @@ import java.util.ArrayList;
 public class Game {
     private ArrayList<Player> players;
 
+    public enum State{GAME_START, IN_ROUND, BETWEEN_ROUND, GAME_END}
 
-    //Not sure where and how exactly to create the deck
-    //ArrayList<Card> deck;
+    private State gameState;
 
     private Card topCard;
 
+    private ArrayList<Card> playedCards;
+
     private UnoDeck deck;
+
     private Player currPlayer;
+
+    private int playerChoice;
 
     private int roundCounter;
 
@@ -22,55 +27,84 @@ public class Game {
 
     int currPlayerIndex;
 
-    public Game(ArrayList<Player> players, UnoDeck deck){
+    public Game(ArrayList<Player> players){
         this.players = players;
-        this.topCard = deck.getNCards(1).get(0);
-        this.deck = deck;
-        this.currPlayerIndex = 0;
-        this.currPlayer = players.get(0);
-        startGame();
+        this.roundCounter = 0;
+        this.gameState = State.GAME_START;
     }
-    /**
-     * public Game(ArrayList<Player> players, Card topCard){
-     *         this.players = players;
-     *         this.topCard = topCard;
-     *     }
-     */
+
+    public Game(){
+        this.roundCounter = 0;
+    }
+
+    public void setView(View view){
+        this.view = view;
+    }
 
     public void startGame(){
+        updateGame();
     }
 
-    public void updateGame(){
+    public void addPlayer(Player player){
+        if (gameState != State.IN_ROUND){
+            players.add(player);
+            view.addPlayer(player);
+        }
+    }
+
+    private void updateGame(){
+        this.gameState = State.BETWEEN_ROUND;
         if (checkWinner()){
             view.winner(gameWinner);
+            this.gameState = State.GAME_END;
         }
         else {
             roundCounter ++;
-            startRound();
+            playRound();
         }
     }
 
-    public void startRound(){
-        System.out.println(topCard);
-        boolean roundFinished = false;
-        int roundScore = 0;
-        ArrayList<Card> legalMoves;
-        while (roundFinished == false){
-            legalMoves = new ArrayList<Card>();
-            currPlayer = players.get(currPlayerIndex);
-            for (Card c: currPlayer.getHand()){
-                if (legalMove(c)){
-                    legalMoves.add(c);
-                }
-            }
+    private void playRound(){
+        this.currPlayerIndex = 0;
+        this.deck = new UnoDeck();
+        this.playedCards = new ArrayList<Card>();
+        playCard(deck.getNCards(1).get(0));
 
+        view.roundStart(roundCounter);
+
+        this.gameState = State.IN_ROUND;
+
+        for (Player player : this.players){
+            drawCard(player, 7);
+        }
+
+        while (gameState == State.IN_ROUND){
+            this.topCard = this.playedCards.get(this.playedCards.size()-1);
+            this.currPlayer = players.get(currPlayerIndex);
+
+            view.nextPlayer(currPlayer, topCard);
+
+            if (playerChoice != 0){
+                Card card = currPlayer.getHand().get(playerChoice-1);
+                view.cardPlayed(card, legalMove(card));
+                while (!legalMove(card)){
+                    view.illegalMove(currPlayer);
+                    card = currPlayer.getHand().get(playerChoice-1);
+                    view.cardPlayed(card, legalMove(card));
+                }
+                playCard(currPlayer.playCard(card));
+            }
+            else {
+                drawCard(currPlayer, 1);
+            }
             if (currPlayer.getHand().isEmpty()){
-                roundFinished = true;
+                gameState = State.BETWEEN_ROUND;
                 roundWinner = currPlayer;
             }
             iteratePlayers();
         }
         //Scoring
+        int roundScore = 0;
         for (Player player : players){
             if (player != roundWinner) {
                 roundScore += player.getHandScore();
@@ -91,29 +125,22 @@ public class Game {
         return false;
     }
 
-    public void setView(View view){
-        this.view = view;
+    public void setPlayerChoice(int choice){
+        this.playerChoice = choice;
     }
 
-    public boolean legalMove(Card card){
+    private boolean legalMove(Card card){
         return (card.getCardNum() == topCard.getCardNum() || card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType());
     }
 
-    public void drawCard(Player currPlayer, int amount){
-        currPlayer.addCard(deck.getNCards(amount));
+    private void playCard(Card card){
+        playedCards.add(card);
     }
 
-    public Player getGameWinner(){
-        return gameWinner;
-    }
-
-    public Player getRoundWinner(){
-        return roundWinner;
-    }
-
-    public void print(int currPlayer){
-        System.out.println();
-
+    private void drawCard(Player player, int amount){
+        ArrayList<Card> cards = deck.getNCards(amount);
+        player.addCard(cards);
+        view.drawCard(player, cards);
     }
 
     public void iteratePlayers(){
@@ -124,6 +151,4 @@ public class Game {
         }
         currPlayer = players.get(currPlayerIndex);
     }
-
-
 }
