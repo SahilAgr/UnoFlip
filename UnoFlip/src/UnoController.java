@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.Scanner;
 
 public class UnoController {
@@ -13,16 +12,15 @@ public class UnoController {
     public void addPlayers(){
         String validPlayerCounts = "234";
         Scanner sc = new Scanner(System.in);
-        int amount = sc.nextInt();
+        String amount = sc.nextLine();
 
-        while (!validPlayerCounts.contains(String.valueOf(amount))){
+        while (!validPlayerCounts.contains(String.valueOf(amount)) || amount.length() > 1){
             System.out.println("Amount must be a number between 2 and 4 players!");
-            amount = sc.nextInt();
+            amount = sc.nextLine();
         }
 
-        ArrayList<Player> players = new ArrayList<Player>();
         String name;
-        for (int i = 1; i <= amount; i ++){
+        for (int i = 1; i <= Integer.parseInt(amount); i ++){
             System.out.println("Name of player "+i);
             name = sc.nextLine();
             this.game.addPlayer(new Player(name));
