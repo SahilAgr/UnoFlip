@@ -118,6 +118,34 @@ public class Game {
                     view.cardPlayed(card, legalMove(card));
                 }
                 playCard(currPlayer.playCard(card));
+                if (card.getSpecialType() != null){
+                    switch (card.getSpecialType()) {
+                        case DRAW_ONE -> {
+                            drawOne();
+                            break;
+                        }
+                        case FLIP -> {
+                            flip();
+                        }
+                        case REVERSE -> {
+                            reverse();
+                        }
+                        case SKIP -> {
+                            skip();
+                            break;
+                        }
+                        case WILD -> {
+                            wild();
+                            break;
+                        }
+                        case WILD_DRAW_TWO_CARDS -> {
+                            wildDrawTwo();
+                        }
+                        default -> {
+                            break;
+                        }
+                    }
+                }
             }
             else {
                 drawCard(currPlayer, 1);
@@ -139,6 +167,41 @@ public class Game {
         roundWinner.addPoints(roundScore);
         view.roundEnd(roundWinner);
         updateGame();
+    }
+
+    /**
+     * Makes the player after currPlayer draw one card.
+     */
+    private void drawOne() {
+    }
+
+    //Not yet necessary, but place here for posterity's sake
+    private void flip(){
+    }
+
+    /**
+     * Reverses the order of the player list
+     */
+    private void reverse() {
+    }
+
+    /**
+     * Skips the player after currPlayer's turn.
+     */
+    private void skip() {
+    }
+
+    /**
+     * Tranfsorms the most recently played card into a colour of the current player's choice
+     */
+    private void wild() {
+    }
+
+    /**
+     * Transforms the most recently player card into a colour of the current player's choice
+     * and causes the following player to draw 2.
+     */
+    private void wildDrawTwo() {
     }
 
     /**
