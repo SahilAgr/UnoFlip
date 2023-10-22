@@ -44,7 +44,6 @@ class UnoControllerTest {
         String input = "1\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
-        controller.setScannerInput(in);
         game.addPlayer(player);
 
         controller.getPlay(player);
