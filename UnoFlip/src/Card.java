@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Card {
     private Rank rank;
     private Colour colour;
@@ -25,6 +27,10 @@ public class Card {
 
     public Special getSpecialType(){
         return this.special;
+    }
+
+    public void setColour(Card.Colour colour){
+        this.colour = colour;
     }
 
     public String toString(){

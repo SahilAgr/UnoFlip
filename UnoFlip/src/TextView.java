@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Scanner;
 
 public class TextView implements View {
 
@@ -73,6 +75,46 @@ public class TextView implements View {
     public void winner(Player winner){
         System.out.println(winner.getName() + " has won the with a score of " + winner.getPoints());
     }
+    public Card.Colour getColour(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Pick a Colour that you would like to change to: ");
+        String input = sc.nextLine();
+        input = input.toUpperCase();
+
+        while (!(Card.Colour.valueOf(input) == Card.Colour.RED) && (Card.Colour.valueOf(input) == Card.Colour.BLUE) == false && !(Card.Colour.valueOf(input) == Card.Colour.YELLOW ) && !(Card.Colour.valueOf(input) == Card.Colour.GREEN)){
+            System.out.println("\n"+input+" is not a valid input.");
+            input = sc.next();
+        }
+        return Card.Colour.valueOf(input);
+        /**
+         * Scanner sc = new Scanner(System.in);
+         *         System.out.println("Pick a Colour that you would like to change to: ");
+         *         System.out.println("1 RED");
+         *         System.out.println("2 BLUE");
+         *         System.out.println("3 GREEN");
+         *         System.out.println("4 YELLOW");
+         *         int input = sc.nextInt();
+         *
+         *         if(input == 1){
+         *             return Card.Colour.RED;
+         *         } else if (input == 2) {
+         *             return Card.Colour.BLUE;
+         *
+         *         }
+         *         else if (input == 3) {
+         *             return Card.Colour.GREEN;
+         *
+         *         }else if (input == 4) {
+         *             return Card.Colour.YELLOW;
+         *
+         *         }else {
+         *             System.out.println("\n"+input+" is not a valid input.");
+         *             input = sc.nextInt();
+         *         }
+         */
+
+    }
+
 
     public static void main(String[] args){
         new TextView();

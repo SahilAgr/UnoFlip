@@ -17,4 +17,6 @@ public interface View {
 
     public void addPlayer(Player player);
 
+    public Card.Colour getColour();
+
 }
