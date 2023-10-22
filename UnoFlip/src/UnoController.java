@@ -43,17 +43,17 @@ public class UnoController {
      * @param player The current player.
      */
     public void getPlay(Player player){
-        ArrayList<Integer> options = new ArrayList<Integer>();
+        ArrayList<String> options = new ArrayList<String>();
         for (int i = 0; i <= player.getHand().size(); i ++){
-            options.add(i);
+            options.add(String.valueOf(i));
         }
         Scanner sc = new Scanner(System.in);
-        int input = sc.nextInt();
+        String input = sc.nextLine();
         while (!options.contains(input)){
             System.out.println("\n"+input+" is not a valid input.");
-            input = sc.nextInt();
+            input = sc.nextLine();
         }
-        game.setPlayerChoice(input);
+        game.setPlayerChoice(Integer.parseInt(input));
     }
 
 }
