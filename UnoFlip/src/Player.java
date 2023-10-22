@@ -6,6 +6,10 @@ public class Player {
 
     private int points;
 
+    /**
+     * Player constructor
+     * @param inputName String
+     */
     public Player(String inputName){
         this.name = inputName;
         this.hand = new ArrayList<Card>();
@@ -17,31 +21,60 @@ public class Player {
         this.points = 0;
     }
 
+    /**
+     * Returns the name of the player
+     * @return String
+     */
     public String getName(){
         return this.name;
     }
 
+    /**
+     * Sets the name of the player
+     * @param inputName
+     */
     public void setName(String inputName){
         this.name = inputName;
     }
 
+    /**
+     * Plays a chosen card by the player
+     * @param card Card
+     * @return card
+     */
     public Card playCard(Card card){
         this.hand.remove(card);
         return card;
     }
 
+    /**
+     * Adds a card to the players hand
+     * @param cardList ArrayList<Card>
+     */
     public void addCard(ArrayList<Card> cardList){
         hand.addAll(cardList);
     }
 
+    /**
+     * removes a card from the players hand
+     * @param card Card
+     */
     public void removeCard(Card card){
         hand.remove(card);
     }
 
+    /**
+     * Returns all the cards in a players hand
+     * @return ArrayList<Card>
+     */
     public ArrayList<Card> getHand(){
         return this.hand;
     }
 
+    /**
+     * Returns the score of a players hand based on the rules
+     * @return int
+     */
     public int getHandScore(){
         int total = 0;
         for (Card card : this.hand){
@@ -60,13 +93,25 @@ public class Player {
         return total;
     }
 
+    /**
+     * Removes all cards from a players hand
+     */
     public void removeAllCards(){
         this.hand = new ArrayList<Card>();
     }
 
+    /**
+     * returns how many points a player has
+     * @return int
+     */
     public int getPoints(){
         return this.points;
     }
+
+    /**
+     * Adds points to a player
+     * @param roundScore int
+     */
     public void addPoints(int roundScore){
         this.points += roundScore;
     }
