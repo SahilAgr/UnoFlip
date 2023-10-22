@@ -32,8 +32,6 @@ public class Game {
 
     int currPlayerIndex;
 
-    Enum wildPick;
-
     /**
      * Constructor used to create a game.
      * @param players The players playing in the game.
@@ -100,15 +98,9 @@ public class Game {
         view.roundStart(roundCounter);
 
         this.gameState = State.IN_ROUND;
-        ArrayList<Card> reverses;
+
         for (Player player : this.players){
             drawCard(player, 7);
-            reverses = new ArrayList<Card>();
-            reverses.add(new Card(null, Card.Colour.RED, Card.Special.REVERSE));
-            reverses.add(new Card(null, Card.Colour.BLUE, Card.Special.REVERSE));
-            reverses.add(new Card(null, Card.Colour.GREEN, Card.Special.REVERSE));
-            reverses.add(new Card(null, Card.Colour.YELLOW, Card.Special.REVERSE));
-            player.addCard(reverses);
         }
 
         //Runs round
@@ -147,7 +139,6 @@ public class Game {
                         }
                         case WILD -> {
                             card.setColour(view.getColour());
-                            //wild();
                             break;
                         }
                         case WILD_DRAW_TWO_CARDS -> {
@@ -225,7 +216,6 @@ public class Game {
             currPlayerIndex = 0;
         }
         else{
-            players.get(currPlayerIndex+1).addCard(deck.getNCards(1));
             currPlayerIndex++;
         }
         /**
@@ -238,13 +228,6 @@ public class Game {
          */
     }
 
-    /**
-     * Tranfsorms the most recently played card into a colour of the current player's choice
-     */
-    private void wild() {
-
-
-    }
 
     /**
      * Transforms the most recently player card into a colour of the current player's choice
@@ -255,14 +238,14 @@ public class Game {
         //topCard = new Card(null,)
 
 
-        /*if(currPlayerIndex == players.size()-1){
+        if(currPlayerIndex == players.size()-1){
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex = 0;
         }
         else{
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex++;
-        }*/
+        }
 
     }
 
