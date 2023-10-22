@@ -6,10 +6,9 @@ public class UnoDeck {
 
     private ArrayList<Card> cards;
 
-    /*
-    * generate card in deck
-    * */
-
+    /**
+     * Creates specific amount of cards that are determined by the rules of the game
+     */
     public UnoDeck(){
         this.cards = new ArrayList<Card>();
 
@@ -20,7 +19,6 @@ public class UnoDeck {
                     Card Number_pair = new Card(rank, colour,null);
                     cards.add(Number_pair); // 36 cards in deck
                     cards.add(Number_pair); // 72 cards in deck
-                    //System.out.println("ben:" + Number_pair);
                 }
             // NO black,no wild, each special with red,yellow,green,blue,16 cards
                 for (Card.Special special: Card.Special.values()){
@@ -33,8 +31,9 @@ public class UnoDeck {
 
 
             }
-            //add the wild card
-
+            /**
+            * Adding the wild cards
+            */
             else {
                 for (int i=0;i<4;i++) {
                     cards.add(new Card(null, Card.Colour.BLACK, Card.Special.WILD));
@@ -45,10 +44,19 @@ public class UnoDeck {
         Collections.shuffle(cards);
     }
 
+    /**
+     * returns all the cards in the deck
+     * @return ArrayList<Card>
+     */
     public ArrayList<Card> getDeckCards(){
         return cards;
     }
 
+    /**
+     * returns n amount of cards from the deck of cards
+     * @param nCards int
+     * @return ArrayList<Card>
+     */
     public ArrayList<Card> getNCards(int nCards){
         ArrayList<Card> cardArray = new ArrayList<Card>(nCards);
         Random rand = new Random();

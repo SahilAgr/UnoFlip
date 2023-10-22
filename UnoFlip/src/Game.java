@@ -50,6 +50,9 @@ public class Game {
         this.view = view;
     }
 
+    /**
+     * Starts the game and calls update game that will send information to the controller
+     */
     public void startGame(){
         updateGame();
     }
@@ -118,6 +121,7 @@ public class Game {
                     card = currPlayer.getHand().get(playerChoice-1);
                     view.cardPlayed(card, legalMove(card));
                 }
+                //Switch case for the different types of special cards
                 if (card.getSpecialType() != null){
                     switch (card.getSpecialType()) {
                         case DRAW_ONE -> {
@@ -205,14 +209,7 @@ public class Game {
         else{
             currPlayerIndex++;
         }
-        /**
-        if(currPlayerIndex == players.size() - 1) {
-            currPlayer = players.get(0);
-        }
-        else {
-            currPlayer = players.get(currPlayerIndex + 1);
-        }
-         */
+
     }
 
 
@@ -221,10 +218,6 @@ public class Game {
      * and causes the following player to draw 2.
      */
     private void wildDrawTwo() {
-        //Set the top card to the returned colour of the of view.getColour then remove it from the players hand and add 2 cards to the next player
-        //topCard = new Card(null,)
-
-
         if(currPlayerIndex == players.size()-1){
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex = 0;
@@ -233,7 +226,6 @@ public class Game {
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex++;
         }
-
     }
 
     /**
