@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Card {
+public class Card extends ArrayList<Card> {
     private Rank rank;
     private Colour colour;
     private Special special;
