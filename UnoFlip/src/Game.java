@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Sahil, Nic
@@ -99,9 +100,15 @@ public class Game {
         view.roundStart(roundCounter);
 
         this.gameState = State.IN_ROUND;
-
+        ArrayList<Card> reverses;
         for (Player player : this.players){
             drawCard(player, 7);
+            reverses = new ArrayList<Card>();
+            reverses.add(new Card(null, Card.Colour.RED, Card.Special.REVERSE));
+            reverses.add(new Card(null, Card.Colour.BLUE, Card.Special.REVERSE));
+            reverses.add(new Card(null, Card.Colour.GREEN, Card.Special.REVERSE));
+            reverses.add(new Card(null, Card.Colour.YELLOW, Card.Special.REVERSE));
+            player.addCard(reverses);
         }
 
         //Runs round
@@ -140,7 +147,6 @@ public class Game {
                         }
                         case WILD -> {
                             card.setColour(view.getColour());
-
                             //wild();
                             break;
                         }
@@ -204,10 +210,11 @@ public class Game {
     }
 
     /**
-     * Reverses the order of the player list
+     * Reverses the order of the player list, then updates the index to reflect that change.
      */
-    private void reverse() {
-        //players.reversed();
+    public void reverse() {
+        Collections.reverse(players);
+        currPlayerIndex = players.indexOf(currPlayer);
     }
 
     /**
