@@ -1,87 +1,270 @@
 import java.util.ArrayList;
 
+/**
+ * @author Sahil, Nic
+ * @version 1.0
+ */
 public class Game {
-    ArrayList<Player> players;
+    private ArrayList<Player> players;
 
+    public enum State{GAME_START, IN_ROUND, BETWEEN_ROUND, GAME_END}
 
-    //Not sure where and how exactly to create the deck
-    //ArrayList<Card> deck;
+    private State gameState;
 
-    Card topCard;
-    Player currPlayer;
+    private Card topCard;
+
+    private ArrayList<Card> playedCards;
+
+    private UnoDeck deck;
+
+    private Player currPlayer;
+
+    private int playerChoice;
+
+    private int roundCounter;
+
+    private Player roundWinner;
+
+    private Player gameWinner;
+
+    private View view;
 
     int currPlayerIndex;
 
-
-
-
-    public Game(ArrayList<Player> players, Card topCard){
-        this.players = players;
-        this.topCard = topCard;
-        this.currPlayerIndex = 0;
-        this.currPlayer = players.get(0);
-        startGame();
-
-    }
     /**
-     * public Game(ArrayList<Player> players, Card topCard){
-     *         this.players = players;
-     *         this.topCard = topCard;
-     *     }
+     * Constructor used to create a game.
+     * @param players The players playing in the game.
      */
+    public Game(ArrayList<Player> players){
+        this.players = players;
+        this.roundCounter = 0;
+        this.gameState = State.GAME_START;
+    }
+
+    /**
+     * Sets the view of the MVC
+     * @param view The view
+     */
+    public void setView(View view){
+        this.view = view;
+    }
 
     public void startGame(){
-        System.out.println(topCard);
-        boolean gameFinished = false;
-        while (gameFinished == false){
+        updateGame();
+    }
 
+    /**
+     * Adds a player to the game, so long as a round is not currently in effect.
+     * @param player The player to be added to the game.
+     */
+    public void addPlayer(Player player){
+        if (gameState != State.IN_ROUND){
+            players.add(player);
+            view.addPlayer(player);
         }
     }
 
-    public void legalMove(Card card, Card topCard){
-        if(card.getCardNum() == topCard.getCardNum()){
-            //place()
+    /**
+     * Checks if any player has won.
+     * If they have, the state changes, and a winner is declared.
+     * If not, the roundCounter increases, and the next round begins.
+     */
+    private void updateGame(){
+        this.gameState = State.BETWEEN_ROUND;
+        if (checkWinner()){
+            view.winner(gameWinner);
+            this.gameState = State.GAME_END;
         }
-        else if(card.getCardColour() == topCard.getCardColour() || card.getSpeicalType() == topCard.getSpecialType()) {
-            if (!card.getSpecialType()) {
-                //do special thing
-            } else {
-                //place()
-            }
+        else {
+            roundCounter ++;
+            playRound();
         }
-        else if (card.getSpecialType && card.getCardNum == null){
-            //do other special
-            }
-        else{
-            System.out.println("You cannot place this card");
-        }
-
-        }
-
-        public void drawCard(PLayer currPlayer, int amount){
-            for(int i = 0; i < amount; i++){
-                currPlayer.addCard(deck.removeCard());
-            }
-        }
-
-
-
-
-    public void print(int currPlayer){
-        System.out.println();
-
     }
 
+    /**
+     * Plays a round of Uno with all the current players.
+     * It first creates a new deck and empty discard pile, then runs on a loop
+     * until one of the players reaches zero cards. It then calculates the scores,
+     * and cals updateGame()
+     */
+    private void playRound(){
+        //Initializing round variables and objects
+        this.currPlayerIndex = 0;
+        this.deck = new UnoDeck();
+        this.playedCards = new ArrayList<Card>();
+        playCard(deck.getNCards(1).get(0));
 
+        view.roundStart(roundCounter);
 
+        this.gameState = State.IN_ROUND;
+
+        for (Player player : this.players){
+            drawCard(player, 7);
+        }
+
+        //Runs round
+        while (gameState == State.IN_ROUND){
+            this.topCard = this.playedCards.get(this.playedCards.size()-1);
+            this.currPlayer = players.get(currPlayerIndex);
+
+            view.nextPlayer(currPlayer, topCard);
+
+            if (playerChoice != 0){
+                Card card = currPlayer.getHand().get(playerChoice-1);
+                view.cardPlayed(card, legalMove(card));
+                while (!legalMove(card)){
+                    view.illegalMove(currPlayer);
+                    card = currPlayer.getHand().get(playerChoice-1);
+                    view.cardPlayed(card, legalMove(card));
+                }
+                playCard(currPlayer.playCard(card));
+                if (card.getSpecialType() != null){
+                    switch (card.getSpecialType()) {
+                        case DRAW_ONE -> {
+                            drawOne();
+                            break;
+                        }
+                        case FLIP -> {
+                            flip();
+                        }
+                        case REVERSE -> {
+                            reverse();
+                        }
+                        case SKIP -> {
+                            skip();
+                            break;
+                        }
+                        case WILD -> {
+                            wild();
+                            break;
+                        }
+                        case WILD_DRAW_TWO_CARDS -> {
+                            wildDrawTwo();
+                        }
+                        default -> {
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                drawCard(currPlayer, 1);
+            }
+            if (currPlayer.getHand().isEmpty()){
+                gameState = State.BETWEEN_ROUND;
+                roundWinner = currPlayer;
+            }
+            //Moves on to the next player
+            iteratePlayers();
+        }
+        //Scoring
+        int roundScore = 0;
+        for (Player player : players){
+            if (player != roundWinner) {
+                roundScore += player.getHandScore();
+            }
+        }
+        roundWinner.addPoints(roundScore);
+        view.roundEnd(roundWinner);
+        updateGame();
+    }
+
+    /**
+     * Makes the player after currPlayer draw one card.
+     */
+    private void drawOne() {
+    }
+
+    //Not yet necessary, but place here for posterity's sake
+    private void flip(){
+    }
+
+    /**
+     * Reverses the order of the player list
+     */
+    private void reverse() {
+    }
+
+    /**
+     * Skips the player after currPlayer's turn.
+     */
+    private void skip() {
+    }
+
+    /**
+     * Tranfsorms the most recently played card into a colour of the current player's choice
+     */
+    private void wild() {
+    }
+
+    /**
+     * Transforms the most recently player card into a colour of the current player's choice
+     * and causes the following player to draw 2.
+     */
+    private void wildDrawTwo() {
+    }
+
+    /**
+     * Checks if a player has exceeded 500 points. If one has, set them to be the winner, adn return true. Otherwise, return false.
+     * @return true if someone has exceeded 500 points, false otherwise.
+     */
+    private boolean checkWinner(){
+        for (Player player : this.players){
+            if (player.getPoints() >= 500){
+                this.gameWinner = player;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Used by the controller to transmit what option the player chose, which
+     * is then used in the main playRound loop.
+     * @param choice The input choice of the player, an integer between 0 and the number of cards in their hand.
+     */
+    public void setPlayerChoice(int choice){
+        this.playerChoice = choice;
+    }
+
+    /**
+     * Verifies whether a given card can be legally played on topCard.
+     * @param card A card, normally the one being played.
+     * @return whether the provided card is a legal move
+     */
+    private boolean legalMove(Card card){
+        return (card.getCardNum() == topCard.getCardNum() || card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType());
+    }
+
+    /**
+     * Plays a given card, adding it to the end of the discard pile.
+     * @param card the card being played
+     */
+    private void playCard(Card card){
+        playedCards.add(card);
+    }
+
+    /**
+     * Draws amount cards from the deck, and gives them to provided player.
+     * @param player The player drawing the cards
+     * @param amount The amount of cards the player draws
+     */
+    private void drawCard(Player player, int amount){
+        ArrayList<Card> cards = deck.getNCards(amount);
+        player.addCard(cards);
+        view.drawCard(player, cards);
+    }
+
+    /**
+     * Either increments or loops the current player index currPlayerIndex
+     * back around to 0.
+     */
     public void iteratePlayers(){
         if(currPlayerIndex < players.size()-1){
-            currPlayerIndex++;
-        }else{
+            currPlayerIndex ++;
+        } else {
             currPlayerIndex = 0;
         }
         currPlayer = players.get(currPlayerIndex);
     }
-
-
 }
