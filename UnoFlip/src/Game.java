@@ -112,49 +112,36 @@ public class Game {
 
             if (playerChoice != 0){
                 Card card = currPlayer.getHand().get(playerChoice-1);
+                view.cardPlayed(card, legalMove(card));
+                while (!legalMove(card)){
+                    view.illegalMove(currPlayer);
+                    card = currPlayer.getHand().get(playerChoice-1);
+                    view.cardPlayed(card, legalMove(card));
+                }
                 if (card.getSpecialType() != null){
                     switch (card.getSpecialType()) {
                         case DRAW_ONE -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()){
-                                drawOne();
-                            }
-
-                            break;
+                            drawOne();
                         }
                         case FLIP -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()) {
-                                flip();
-                            }
+                            flip();
                         }
                         case REVERSE -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()) {
-                                reverse();
-                            }
+                            reverse();
                         }
                         case SKIP -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()) {
-                                skip();
-                            }
-                            break;
+                            skip();
                         }
                         case WILD -> {
                             card.setColour(view.getColour());
-                            break;
                         }
                         case WILD_DRAW_TWO_CARDS -> {
                             card.setColour(view.getColour());
                             wildDrawTwo();
                         }
                         default -> {
-                            break;
                         }
                     }
-                }
-                view.cardPlayed(card, legalMove(card));
-                while (!legalMove(card)){
-                    view.illegalMove(currPlayer);
-                    card = currPlayer.getHand().get(playerChoice-1);
-                    view.cardPlayed(card, legalMove(card));
                 }
                 playCard(currPlayer.playCard(card));
 
@@ -278,6 +265,12 @@ public class Game {
      * @return whether the provided card is a legal move
      */
     private boolean legalMove(Card card){
+        if (card.getCardColour() == Card.Colour.BLACK){
+            return true;
+        }
+        if (card.getSpecialType() != null){
+            return (card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType());
+        }
         return (card.getCardNum() == topCard.getCardNum() || card.getCardColour() == topCard.getCardColour());
     }
 
