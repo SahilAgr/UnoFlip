@@ -82,52 +82,39 @@ public class TextView implements View {
     public Card.Colour getColour(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Pick a Colour that you would like to change to (RED,BLUE,YELLOW,GREEN): ");
-        String input = sc.nextLine();
-        input = input.toUpperCase();
 
         boolean test = true;
 
-        while (test) {
-            if ((Card.Colour.valueOf(input) == Card.Colour.valueOf("RED")) || (Card.Colour.valueOf(input) == Card.Colour.valueOf("BLUE")) || (Card.Colour.valueOf(input) == Card.Colour.valueOf("YELLOW")) || (Card.Colour.valueOf(input) == Card.Colour.valueOf("GREEN"))) {
-                test = false;
-            }
-            else {
-                System.out.println("\n" + input + " is not a valid input.");
-                input = sc.next();
-            }
-        }
-        return Card.Colour.valueOf(input);
-        /*while (Card.Colour.valueOf(input) != Card.Colour.RED || (Card.Colour.valueOf(input) != Card.Colour.BLUE) || (Card.Colour.valueOf(input) != Card.Colour.YELLOW) || (Card.Colour.valueOf(input) != Card.Colour.GREEN)){
-            System.out.println("\n"+input+" is not a valid input.");
-            input = sc.next();
-        }
-        return Card.Colour.valueOf(input);*/
-        /**
-         * Scanner sc = new Scanner(System.in);
-         *         System.out.println("Pick a Colour that you would like to change to: ");
-         *         System.out.println("1 RED");
-         *         System.out.println("2 BLUE");
-         *         System.out.println("3 GREEN");
-         *         System.out.println("4 YELLOW");
-         *         int input = sc.nextInt();
-         *
-         *         if(input == 1){
-         *             return Card.Colour.RED;
-         *         } else if (input == 2) {
-         *             return Card.Colour.BLUE;
-         *
-         *         }
-         *         else if (input == 3) {
-         *             return Card.Colour.GREEN;
-         *
-         *         }else if (input == 4) {
-         *             return Card.Colour.YELLOW;
-         *
-         *         }else {
-         *             System.out.println("\n"+input+" is not a valid input.");
-         *             input = sc.nextInt();
-         *         }
-         */
+        System.out.println("Pick a Colour that you would like to change to: ");
+        System.out.println("1 RED");
+        System.out.println("2 BLUE");
+        System.out.println("3 GREEN");
+        System.out.println("4 YELLOW");
+        int input = sc.nextInt();
+
+        while(test) {
+            if (input == 1) {
+                  test = false;
+                return Card.Colour.RED;
+            } else if (input == 2) {
+              test = false;
+              return Card.Colour.BLUE;
+
+          } else if (input == 3) {
+              test = false;
+              return Card.Colour.GREEN;
+
+          } else if (input == 4) {
+              test = false;
+              return Card.Colour.YELLOW;
+
+          } else {
+              System.out.println("\n" + input + " is not a valid input.");
+              input = sc.nextInt();
+          }
+      }
+
+        return Card.Colour.BLACK;
 
     }
 
