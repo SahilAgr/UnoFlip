@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class TextView implements View {
 
     UnoController controller;
+    private Card topCard;
 
     public TextView(){
         ArrayList<Player> players = new ArrayList<Player>();
@@ -12,7 +13,7 @@ public class TextView implements View {
         controller = new UnoController(game);
         game.setView(this);
 
-        System.out.println("How many players are there?");
+        System.out.println("Enter Number of players (2-4): ");
         controller.addPlayers();
 
         game.startGame();
@@ -31,7 +32,8 @@ public class TextView implements View {
     }
 
     public void nextPlayer(Player player, Card topCard){
-        System.out.println("The top card is " +  topCard);
+        System.out.println("\n The top card is " +  topCard);
+        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType());
         System.out.println(player.getName() + "'s Turn\n");
         cardHand(player.getHand());
         controller.getPlay(player);
@@ -42,6 +44,8 @@ public class TextView implements View {
         for (int i = 0; i < playerHand.size(); i++) {
             System.out.println(String.valueOf(i+1) + " " + playerHand.get(i));
         }
+        System.out.println("\nThe top card is " +  this.topCard);
+        System.out.println("Enter card index to play or 0 to draw a card: ");
     }
 
     public void drawCard(Player player, ArrayList<Card> cardsDrawn){
@@ -77,15 +81,27 @@ public class TextView implements View {
     }
     public Card.Colour getColour(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Pick a Colour that you would like to change to: ");
+        System.out.println("Pick a Colour that you would like to change to (RED,BLUE,YELLOW,GREEN): ");
         String input = sc.nextLine();
         input = input.toUpperCase();
 
-        while (!(Card.Colour.valueOf(input) == Card.Colour.RED) && (Card.Colour.valueOf(input) == Card.Colour.BLUE) == false && !(Card.Colour.valueOf(input) == Card.Colour.YELLOW ) && !(Card.Colour.valueOf(input) == Card.Colour.GREEN)){
+        boolean test = true;
+
+        while (test) {
+            if ((Card.Colour.valueOf(input) == Card.Colour.valueOf("RED")) || (Card.Colour.valueOf(input) == Card.Colour.valueOf("BLUE")) || (Card.Colour.valueOf(input) == Card.Colour.valueOf("YELLOW")) || (Card.Colour.valueOf(input) == Card.Colour.valueOf("GREEN"))) {
+                test = false;
+            }
+            else {
+                System.out.println("\n" + input + " is not a valid input.");
+                input = sc.next();
+            }
+        }
+        return Card.Colour.valueOf(input);
+        /*while (Card.Colour.valueOf(input) != Card.Colour.RED || (Card.Colour.valueOf(input) != Card.Colour.BLUE) || (Card.Colour.valueOf(input) != Card.Colour.YELLOW) || (Card.Colour.valueOf(input) != Card.Colour.GREEN)){
             System.out.println("\n"+input+" is not a valid input.");
             input = sc.next();
         }
-        return Card.Colour.valueOf(input);
+        return Card.Colour.valueOf(input);*/
         /**
          * Scanner sc = new Scanner(System.in);
          *         System.out.println("Pick a Colour that you would like to change to: ");

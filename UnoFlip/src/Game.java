@@ -207,7 +207,7 @@ public class Game {
      * Reverses the order of the player list
      */
     private void reverse() {
-        players.reversed();
+        //players.reversed();
     }
 
     /**
@@ -236,6 +236,7 @@ public class Game {
      */
     private void wild() {
 
+
     }
 
     /**
@@ -243,14 +244,18 @@ public class Game {
      * and causes the following player to draw 2.
      */
     private void wildDrawTwo() {
-        if(currPlayerIndex == players.size()-1){
+        //Set the top card to the returned colour of the of view.getColour then remove it from the players hand and add 2 cards to the next player
+        //topCard = new Card(null,)
+
+
+        /*if(currPlayerIndex == players.size()-1){
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex = 0;
         }
         else{
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex++;
-        }
+        }*/
 
     }
 
