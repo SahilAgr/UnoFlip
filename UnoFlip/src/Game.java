@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Sahil, Nic
@@ -31,8 +32,6 @@ public class Game {
 
     int currPlayerIndex;
 
-    Enum wildPick;
-
     /**
      * Constructor used to create a game.
      * @param players The players playing in the game.
@@ -51,6 +50,9 @@ public class Game {
         this.view = view;
     }
 
+    /**
+     * Starts the game and calls update game that will send information to the controller
+     */
     public void startGame(){
         updateGame();
     }
@@ -113,51 +115,37 @@ public class Game {
 
             if (playerChoice != 0){
                 Card card = currPlayer.getHand().get(playerChoice-1);
+                view.cardPlayed(card, legalMove(card));
+                while (!legalMove(card)){
+                    view.illegalMove(currPlayer);
+                    card = currPlayer.getHand().get(playerChoice-1);
+                    view.cardPlayed(card, legalMove(card));
+                }
+                //Switch case for the different types of special cards
                 if (card.getSpecialType() != null){
                     switch (card.getSpecialType()) {
                         case DRAW_ONE -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()){
-                                drawOne();
-                            }
-
-                            break;
+                            drawOne();
                         }
                         case FLIP -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()) {
-                                flip();
-                            }
+                            flip();
                         }
                         case REVERSE -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()) {
-                                reverse();
-                            }
+                            reverse();
                         }
                         case SKIP -> {
-                            if(card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType()) {
-                                skip();
-                            }
-                            break;
+                            skip();
                         }
                         case WILD -> {
                             card.setColour(view.getColour());
-
-                            //wild();
-                            break;
                         }
                         case WILD_DRAW_TWO_CARDS -> {
                             card.setColour(view.getColour());
                             wildDrawTwo();
                         }
                         default -> {
-                            break;
                         }
                     }
-                }
-                view.cardPlayed(card, legalMove(card));
-                while (!legalMove(card)){
-                    view.illegalMove(currPlayer);
-                    card = currPlayer.getHand().get(playerChoice-1);
-                    view.cardPlayed(card, legalMove(card));
                 }
                 playCard(currPlayer.playCard(card));
 
@@ -204,10 +192,11 @@ public class Game {
     }
 
     /**
-     * Reverses the order of the player list
+     * Reverses the order of the player list, then updates the index to reflect that change.
      */
-    private void reverse() {
-        //players.reversed();
+    public void reverse() {
+        Collections.reverse(players);
+        currPlayerIndex = players.indexOf(currPlayer);
     }
 
     /**
@@ -218,45 +207,25 @@ public class Game {
             currPlayerIndex = 0;
         }
         else{
-            players.get(currPlayerIndex+1).addCard(deck.getNCards(1));
             currPlayerIndex++;
         }
-        /**
-        if(currPlayerIndex == players.size() - 1) {
-            currPlayer = players.get(0);
-        }
-        else {
-            currPlayer = players.get(currPlayerIndex + 1);
-        }
-         */
-    }
-
-    /**
-     * Tranfsorms the most recently played card into a colour of the current player's choice
-     */
-    private void wild() {
-
 
     }
+
 
     /**
      * Transforms the most recently player card into a colour of the current player's choice
      * and causes the following player to draw 2.
      */
     private void wildDrawTwo() {
-        //Set the top card to the returned colour of the of view.getColour then remove it from the players hand and add 2 cards to the next player
-        //topCard = new Card(null,)
-
-
-        /*if(currPlayerIndex == players.size()-1){
+        if(currPlayerIndex == players.size()-1){
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex = 0;
         }
         else{
             drawCard(players.get(currPlayerIndex+1),2);
             currPlayerIndex++;
-        }*/
-
+        }
     }
 
     /**
@@ -288,6 +257,12 @@ public class Game {
      * @return whether the provided card is a legal move
      */
     private boolean legalMove(Card card){
+        if (card.getCardColour() == Card.Colour.BLACK){
+            return true;
+        }
+        if (card.getSpecialType() != null){
+            return (card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType());
+        }
         return (card.getCardNum() == topCard.getCardNum() || card.getCardColour() == topCard.getCardColour());
     }
 
