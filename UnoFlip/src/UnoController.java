@@ -20,22 +20,8 @@ public class UnoController {
     /**
      * Allows the user to add players to the game, specifying the number of players and their names.
      */
-    public void addPlayers(){
-        String validPlayerCounts = "234";
-        Scanner sc = new Scanner(System.in);
-        String amount = sc.nextLine();
-
-        while (!validPlayerCounts.contains(String.valueOf(amount)) || amount.length() > 1){
-            System.out.println("Amount must be a number between 2 and 4 players!");
-            amount = sc.nextLine();
-        }
-
-        String name;
-        for (int i = 1; i <= Integer.parseInt(amount); i ++){
-            System.out.println("Name of player "+i);
-            name = sc.nextLine();
-            this.game.addPlayer(new Player(name));
-        }
+    public void addPlayers(String name){
+        this.game.addPlayer(new Player(name));
     }
 
     /**
