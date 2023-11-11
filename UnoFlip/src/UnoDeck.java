@@ -1,72 +1,112 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class UnoDeck {
 
-    private ArrayList<Card> cards;
+    public class CardPair {
+        private Card lightCard;
+        private Card darkCard;
 
-    /**
-     * Creates specific amount of cards that are determined by the rules of the game
-     */
-    public UnoDeck(){
-        this.cards = new ArrayList<Card>();
+        public CardPair(Card lightCard, Card darkCard) {
+            this.lightCard = lightCard;
+            this.darkCard = darkCard;
+        }
 
-        // rank 1-9 with color red,yellow,green,blue. NO BLACK, 36 cards
-        for (Card.Colour colour:Card.Colour.values()) {
-            if (colour != Card.Colour.BLACK) {
+        public Card getLightCard() {
+            return lightCard;
+        }
+
+        public Card getDarkCard() {
+            return darkCard;
+        }
+    }
+
+    private ArrayList<CardPair> deck;
+
+    public UnoDeck() {
+        ArrayList<Card> lightCards = new ArrayList<Card>();
+        ArrayList<Card> darkCards = new ArrayList<Card>();
+
+        // Create Light and Dark cards
+        for (Card.Colour colour : Card.Colour.values()) {
+            if (colour != Card.Colour.BLACK) { // Assuming BLACK is not used in Light/Dark cards
                 for (Card.Rank rank : Card.Rank.values()) {
-                    Card Number_pair = new Card(rank, colour,null);
-                    cards.add(Number_pair); // 36 cards in deck
-                    cards.add(Number_pair); // 72 cards in deck
+
+
+                    lightCards.add(new Card(rank, colour, null, Card.Type.LIGHT));
+                    darkCards.add(new Card(rank, colour, null, Card.Type.DARK));
+                    lightCards.add(new Card(rank, colour, null, Card.Type.LIGHT));
+                    darkCards.add(new Card(rank, colour, null, Card.Type.DARK));
+
+
                 }
-            // NO black,no wild, each special with red,yellow,green,blue,16 cards
-                for (Card.Special special: Card.Special.values()){
-                    if(special != Card.Special.WILD && special != Card.Special.WILD_DRAW_TWO_CARDS){
-                        Card special_pair = new Card(null,colour,special);
-                        cards.add(special_pair);//16 cards in deck
-                        cards.add(special_pair);//32 cards in deck
+
+                for (Card.Special special : Card.Special.values()) {
+                    if (special != Card.Special.WILD && special != Card.Special.WILD_DRAW_TWO_CARDS) {
+
+                        lightCards.add(new Card(null, colour, special, Card.Type.LIGHT));
+                        darkCards.add(new Card(null, colour, special, Card.Type.DARK));
+                        lightCards.add(new Card(null, colour, special, Card.Type.LIGHT));
+                        darkCards.add(new Card(null, colour, special, Card.Type.DARK));
                     }
                 }
 
 
             }
             /**
-            * Adding the wild cards
-            */
+             * Adding the wild cards
+             */
             else {
                 for (int i=0;i<4;i++) {
-                    cards.add(new Card(null, Card.Colour.BLACK, Card.Special.WILD));
-                    cards.add(new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS));
+                    lightCards.add(new Card(null, Card.Colour.BLACK, Card.Special.WILD,Card.Type.LIGHT));
+                    lightCards.add(new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS,Card.Type.LIGHT));
+                }
+                for(int i=0;i<8;i++){
+                    darkCards.add(new Card(null, Card.Colour.BLACK, Card.Special.WILD,Card.Type.DARK));
                 }
             }
         }
-        Collections.shuffle(cards);
+        Collections.shuffle(lightCards);
+
+        Collections.shuffle(darkCards);
+
+        this.deck = new ArrayList<CardPair>();
+
+        for (int i = 0; i < lightCards.size(); i++) {
+            this.deck.add(new CardPair(lightCards.get(i), darkCards.get(i)));
+        }
     }
 
     /**
      * returns all the cards in the deck
      * @return ArrayList<Card>
      */
-    public ArrayList<Card> getDeckCards(){
-        return cards;
+    public ArrayList<CardPair> getDeck() {
+        return deck;
     }
+
 
     /**
      * returns n amount of cards from the deck of cards
      * @param nCards int
      * @return ArrayList<Card>
      */
-    public ArrayList<Card> getNCards(int nCards){
-        ArrayList<Card> cardArray = new ArrayList<Card>(nCards);
-        Random rand = new Random();
-        int int_random;
+    public List<CardPair> drawNCard(int nCards) {
+        List<CardPair> drawnCards = new ArrayList<>();
 
-        for(int i = 0; i < nCards; i++){
-            int_random = rand.nextInt(cards.size());
-            cardArray.add(cards.get(int_random));
-            cards.remove(int_random);
+        // Check if there are enough cards in the deck
+        if (deck.size() < nCards) {
+            throw new IllegalStateException("Not enough cards in the deck to draw " + nCards + " cards.");
         }
-        return cardArray;
+
+        // Draw the specified number of cards
+        for (int i = 0; i < nCards; i++) {
+            drawnCards.add(deck.remove(0)); // Removes and returns the top card from the deck
+        }
+
+        return drawnCards;
     }
+
+
+
+
 }
