@@ -11,12 +11,24 @@ public class Main {
         ArrayList<UnoDeck.CardPair> deck = unoDeck.getDeck();
         Card card1 = new Card(Card.Rank.ONE, Card.Colour.BLUE, null, Card.Type.LIGHT);
         Card card2 = new Card(Card.Rank.TWO, Card.Colour.RED, Card.Special.DRAW_ONE, Card.Type.DARK);
+        Card card3 = new Card(Card.Rank.TWO, Card.Colour.RED, null, Card.Type.LIGHT);
 
-        System.out.println("Image Path for card1: " + card1.getImagePath());
-        System.out.println("Image Path for card2: " + card2.getImagePath());
 
-        checkFileExists(card1.getImagePath());
-        checkFileExists(card2.getImagePath());
+        System.out.println("Current working directory: " + System.getProperty("user.dir"));
+
+        for (Card.Colour colour : Card.Colour.values()) {
+            if (colour != Card.Colour.BLACK) { // Assuming BLACK is not a valid color for individual cards
+                for (Card.Rank rank : Card.Rank.values()) {
+                    checkCardImagePath(new Card(rank, colour, null, Card.Type.LIGHT));
+                    checkCardImagePath(new Card(rank, colour, null, Card.Type.DARK));
+                }
+
+                for (Card.Special special : Card.Special.values()) {
+                    checkCardImagePath(new Card(null, colour, special, Card.Type.LIGHT));
+                    checkCardImagePath(new Card(null, colour, special, Card.Type.DARK));
+                }
+            }
+        }
 
         System.out.println("Deck Contents:");
         for (int i = 0; i < deck.size(); i++) {
@@ -32,12 +44,13 @@ public class Main {
 
     }
 
-    private static void checkFileExists(String path) {
-        File file = new File(path);
+    private static void checkCardImagePath(Card card) {
+        String imagePath = card.getImagePath();
+        File file = new File(imagePath);
         if (file.exists()) {
-            System.out.println("File exists: " + path);
+            System.out.println("File exists: " + imagePath);
         } else {
-            System.out.println("File does not exist: " + path);
+            System.out.println("File does not exist: " + imagePath);
         }
     }
 }

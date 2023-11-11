@@ -30,17 +30,67 @@ public class Card extends ArrayList<Card> {
         this.type = type;
         String basePath = "uno_cards/";
 
-
-        if (special != null) {
-            this.imagePath = colour.toString().toLowerCase() + "_" + special.toString().toLowerCase() + ".png";
+        if (specialCard == Special.WILD || specialCard == Special.WILD_DRAW_TWO_CARDS) {
+            this.imagePath = basePath + specialToString(specialCard) + ".png";
         } else {
-            this.imagePath = colour.toString().toLowerCase() + "_" + rank.toString().toLowerCase() + ".png";
+            String fileNamePart;
+            if (specialCard != null) {
+
+                fileNamePart = specialToString(specialCard);
+            } else {
+
+                fileNamePart = rankToString(rank);
+            }
+
+            String colourString = (colour != null) ? colour.toString().toLowerCase() : "";
+
+            // Adjust the path based on card type
+            if (type == Type.LIGHT) {
+                this.imagePath = basePath + colourString + "_" + fileNamePart + ".png";
+            } else if (type == Type.DARK) {
+                this.imagePath = basePath + "dark_" + colourString + "_" + fileNamePart + ".png";
+            }
         }
     }
+
 
     public Type getType(){
         return this.type;
     }
+
+    private String rankToString(Rank rank) {
+        // Convert rank enums to string as per your file naming convention
+        // Example:
+        switch (rank) {
+            case ONE: return "one";
+            case TWO: return "two";
+            case THREE: return "three";
+            case FOUR: return "four";
+            case FIVE: return "five";
+            case SIX: return "six";
+            case SEVEN: return "seven";
+            case EIGHT: return "eight";
+            case NINE: return "nine";
+            // Add cases for other ranks...
+            default: return rank.toString().toLowerCase();
+        }
+    }
+
+    private String specialToString(Special special) {
+        switch (special) {
+            case DRAW_ONE: return "draw_one";
+            case REVERSE: return "reverse";
+            case SKIP: return "skip";
+            case FLIP: return "flip";
+            case WILD: return "wild";
+            case WILD_DRAW_TWO_CARDS: return "wild_draw_two";
+
+            // Add cases for other ranks...
+            default: return special.toString().toLowerCase();
+        }
+
+    }
+
 
     /**
      * Retrieves rank of card.
