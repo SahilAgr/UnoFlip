@@ -10,6 +10,12 @@ import java.util.Scanner;
 public class TextView implements View{
     UnoController controller;
     private Card topCard;
+    private JLabel topCardLabel;
+    private JButton drawCardButton;
+    private JLabel playerLabel;
+    //private JButton nextPlayerButton;
+    //private JLabel playerDiagramLabel;
+
 
     /**
      * Constructs an instance to start the game with a text-based interface.
@@ -20,6 +26,12 @@ public class TextView implements View{
         Game game = new Game(players);
         controller = new UnoController(game);
         game.setView(this);
+
+        topCardLabel = new JLabel();
+        drawCardButton = new JButton("Draw Card");
+        //playerDirectionLabel = new JLabel();
+        playerLabel = new JLabel();
+        //playerDiagramLabel = new JLabel();
 
         JFrame jFrame = new JFrame("UNO GAME");
         jFrame.setSize(600,600);
@@ -35,20 +47,21 @@ public class TextView implements View{
         }
 
 
-        JPanel jPanel1 = new JPanel();
-        JPanel jPanel2 = new JPanel();
-        JButton jButton1 = new JButton();
-        JButton jButton2 = new JButton();
+        JPanel topPanel = new JPanel();
+        topPanel.add(playerLabel);
+        jFrame.add(topPanel, BorderLayout.WEST);
+        topPanel.add(topCardLabel);
+        topPanel.add(drawCardButton);
+        jFrame.add(topPanel, BorderLayout.NORTH);
+
+        JPanel bottomPanel = new JPanel();
+        jFrame.add(bottomPanel, BorderLayout.SOUTH);
 
         Dimension dimension = new Dimension(600,600);
-        jButton2.setSize(dimension);
 
-        jPanel1.add(jButton1);
-        jPanel2.add(jButton2);
-        JSplitPane splitPane = new JSplitPane(SwingConstants.HORIZONTAL,jPanel1,jPanel2);
+        JSplitPane splitPane = new JSplitPane(SwingConstants.HORIZONTAL, topPanel, bottomPanel);
         splitPane.setDividerLocation(300);
         jFrame.add(splitPane);
-
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
@@ -65,6 +78,7 @@ public class TextView implements View{
      */
     public void topCard(Card card) {
         System.out.println("Top Card: " + card + "\n");
+        playerLabel.setText(card.toString());
     }
 
     /**
@@ -92,6 +106,7 @@ public class TextView implements View{
         System.out.println("\n The top card is " +  topCard);
         this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType());
         System.out.println(player.getName() + "'s Turn\n");
+        playerLabel.setText("Player: " + player.getName());
         cardHand(player.getHand());
         controller.getPlay(player);
     }
