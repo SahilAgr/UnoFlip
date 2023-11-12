@@ -10,11 +10,13 @@ public class Game {
 
     public enum State{GAME_START, IN_ROUND, BETWEEN_ROUND, GAME_END}
 
+    public Card.Type cardType;
+
     private State gameState;
 
-    private Card topCard;
+    private CardPair topCard;
 
-    private ArrayList<Card> playedCards;
+    private ArrayList<CardPair> playedCards;
 
     private UnoDeck deck;
 
@@ -40,6 +42,7 @@ public class Game {
         this.players = players;
         this.roundCounter = 0;
         this.gameState = State.GAME_START;
+        this.cardType = Card.Type.LIGHT;
     }
 
     /**
@@ -95,8 +98,8 @@ public class Game {
         //Initializing round variables and objects
         this.currPlayerIndex = 0;
         this.deck = new UnoDeck();
-        this.playedCards = new ArrayList<Card>();
-        playCard(deck.getNCards(1).get(0));
+        this.playedCards = new ArrayList<CardPair>();
+        playCard(deck.drawNCard(1).get(0));
 
         view.roundStart(roundCounter);
 
@@ -111,19 +114,19 @@ public class Game {
             this.topCard = this.playedCards.get(this.playedCards.size()-1);
             this.currPlayer = players.get(currPlayerIndex);
 
-            view.nextPlayer(currPlayer, topCard);
+            view.nextPlayer(currPlayer, topCard.getCard(cardType));
 
             if (playerChoice != 0){
-                Card card = currPlayer.getHand().get(playerChoice-1);
-                view.cardPlayed(card, legalMove(card));
-                while (!legalMove(card)){
+                CardPair card = currPlayer.getHand().get(playerChoice-1);
+                view.cardPlayed(card.getCard(cardType), legalMove(card.getCard(cardType)));
+                while (!legalMove(card.getCard(cardType))){
                     view.illegalMove(currPlayer);
                     card = currPlayer.getHand().get(playerChoice-1);
-                    view.cardPlayed(card, legalMove(card));
+                    view.cardPlayed(card.getCard(cardType), legalMove(card.getCard(cardType)));
                 }
                 //Switch case for the different types of special cards
-                if (card.getSpecialType() != null){
-                    switch (card.getSpecialType()) {
+                if (card.getCard(cardType).getSpecialType() != null){
+                    switch (card.getCard(cardType).getSpecialType()) {
                         case DRAW_ONE -> {
                             drawOne();
                         }
@@ -137,10 +140,10 @@ public class Game {
                             skip();
                         }
                         case WILD -> {
-                            card.setColour(view.getColour());
+                            card.getCard(cardType).setColour(view.getColour());
                         }
                         case WILD_DRAW_TWO_CARDS -> {
-                            card.setColour(view.getColour());
+                            card.getCard(cardType).setColour(view.getColour());
                             wildDrawTwo();
                         }
                         default -> {
@@ -164,7 +167,7 @@ public class Game {
         int roundScore = 0;
         for (Player player : players){
             if (player != roundWinner) {
-                roundScore += player.getHandScore();
+                roundScore += player.getHandScore(cardType);
             }
         }
         roundWinner.addPoints(roundScore);
@@ -261,16 +264,16 @@ public class Game {
             return true;
         }
         if (card.getSpecialType() != null){
-            return (card.getCardColour() == topCard.getCardColour() || card.getSpecialType() == topCard.getSpecialType());
+            return (card.getCardColour() == topCard.getCard(cardType).getCardColour() || card.getSpecialType() == topCard.getCard(cardType).getSpecialType());
         }
-        return (card.getCardNum() == topCard.getCardNum() || card.getCardColour() == topCard.getCardColour());
+        return (card.getCardNum() == topCard.getCard(cardType).getCardNum() || card.getCardColour() == topCard.getCard(cardType).getCardColour());
     }
 
     /**
      * Plays a given card, adding it to the end of the discard pile.
      * @param card the card being played
      */
-    private void playCard(Card card){
+    private void playCard(CardPair card){
         playedCards.add(card);
     }
 
@@ -280,9 +283,13 @@ public class Game {
      * @param amount The amount of cards the player draws
      */
     private void drawCard(Player player, int amount){
-        ArrayList<Card> cards = deck.getNCards(amount);
+        ArrayList<CardPair> cards = deck.drawNCard(amount);
+        ArrayList<Card> drawnCards = new ArrayList<>();
         player.addCard(cards);
-        view.drawCard(player, cards);
+        for (CardPair card : cards){
+            drawnCards.add(card.getCard(cardType));
+        }
+        view.drawCard(player, drawnCards);
     }
 
     /**

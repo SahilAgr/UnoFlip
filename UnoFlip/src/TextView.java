@@ -90,9 +90,9 @@ public class TextView implements View{
      */
     public void nextPlayer(Player player, Card topCard){
         System.out.println("\n The top card is " +  topCard);
-        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType());
+        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), topCard.getType());
         System.out.println(player.getName() + "'s Turn\n");
-        cardHand(player.getHand());
+        cardHand(CardPair.toCardArrayList(player.getHand(), topCard.getType()));
         controller.getPlay(player);
     }
 
@@ -126,8 +126,12 @@ public class TextView implements View{
      * @param player Player who made the illegal move.
      */
     public void illegalMove(Player player){
-        cardHand(player.getHand());
+        cardHand(CardPair.toCardArrayList(player.getHand(), topCard.getType()));
         controller.getPlay(player);
+    }
+
+    public void switchCards(Card.Type type){
+
     }
 
     /**

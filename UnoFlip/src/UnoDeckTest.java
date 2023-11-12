@@ -7,7 +7,7 @@ class UnoDeckTest {
     @org.junit.jupiter.api.Test
     void UnoDeck() {
         deck = new UnoDeck();
-        ArrayList<Card> cards = deck.getDeckCards();
+        ArrayList<CardPair> cards = deck.getDeck();
         assertEquals(112, cards.size());
 
 
@@ -21,14 +21,14 @@ class UnoDeckTest {
     @org.junit.jupiter.api.Test
     void getNCards() {
         deck = new UnoDeck();
-        ArrayList<Card> fiveCards = deck.getNCards(5);
+        ArrayList<CardPair> fiveCards = deck.drawNCard(5);
         assertEquals(5,fiveCards.size());
     }
 
-    private int countCardsOfColour(ArrayList<Card> cards, Card.Colour colour) {
+    private int countCardsOfColour(ArrayList<CardPair> cards, Card.Colour colour) {
         int count = 0;
-        for (Card card : cards) {
-            if (card.getCardColour() == colour) {
+        for (CardPair card : cards) {
+            if (card.getCard(Card.Type.LIGHT).getCardColour() == colour) {
                 count++;
             }
         }

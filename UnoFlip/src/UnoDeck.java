@@ -2,24 +2,6 @@ import java.util.*;
 
 public class UnoDeck {
 
-    public class CardPair {
-        private Card lightCard;
-        private Card darkCard;
-
-        public CardPair(Card lightCard, Card darkCard) {
-            this.lightCard = lightCard;
-            this.darkCard = darkCard;
-        }
-
-        public Card getLightCard() {
-            return lightCard;
-        }
-
-        public Card getDarkCard() {
-            return darkCard;
-        }
-    }
-
     private ArrayList<CardPair> deck;
 
     public UnoDeck() {
@@ -90,8 +72,8 @@ public class UnoDeck {
      * @param nCards int
      * @return ArrayList<Card>
      */
-    public List<CardPair> drawNCard(int nCards) {
-        List<CardPair> drawnCards = new ArrayList<>();
+    public ArrayList<CardPair> drawNCard(int nCards) {
+        ArrayList<CardPair> drawnCards = new ArrayList<>();
 
         // Check if there are enough cards in the deck
         if (deck.size() < nCards) {
