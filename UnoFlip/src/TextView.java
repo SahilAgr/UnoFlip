@@ -26,7 +26,16 @@ public class TextView implements View{
         jFrame.setSize(600,600);
         numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
 
-        this.getNumPlayers();
+        try {
+            while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
+                JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+                numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+            }
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+            new TextView();
+        }
 
         for (int i = 1; i <= Integer.parseInt(numPlayers); i ++){
             String name = JOptionPane.showInputDialog("Name of player "+i);
@@ -67,25 +76,7 @@ public class TextView implements View{
 
         game.startGame();
     }
-
-    private void getNumPlayers(){
-
-
-        try {
-            while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
-                JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
-                numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
-            }
-        } catch (NumberFormatException e) {
-
-            JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
-            numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
-
-        }
-
-
-    }
-
+    
     /**
      * Displays the top card of the game.
      * @param card The top card to be displayed.
