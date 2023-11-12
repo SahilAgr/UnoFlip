@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class TextView implements View{
     UnoController controller;
     private Card topCard;
+    private String numPlayers;
 
     /**
      * Constructs an instance to start the game with a text-based interface.
@@ -23,11 +24,9 @@ public class TextView implements View{
 
         JFrame jFrame = new JFrame("UNO GAME");
         jFrame.setSize(600,600);
-        String numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
-        while(numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4){
-            JOptionPane.showMessageDialog(null,"Please enter a value that is between 2-4! ");
-            numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
-        }
+        numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+
+        this.getNumPlayers();
 
         for (int i = 1; i <= Integer.parseInt(numPlayers); i ++){
             String name = JOptionPane.showInputDialog("Name of player "+i);
@@ -37,17 +36,27 @@ public class TextView implements View{
 
         JPanel jPanel1 = new JPanel();
         JPanel jPanel2 = new JPanel();
+        JPanel jPanel3 = new JPanel();
+        JPanel jPanel4 = new JPanel(new GridLayout(7,1));
         JButton jButton1 = new JButton();
         JButton jButton2 = new JButton();
 
-        Dimension dimension = new Dimension(600,600);
-        jButton2.setSize(dimension);
+        //Dimension dimension = new Dimension(600,600);
+        jButton2.setSize(600,600);
+        jButton1.setSize(100,100);
 
-        jPanel1.add(jButton1);
-        jPanel2.add(jButton2);
+        //jPanel3.add(jButton1);
+        jPanel4.add(jButton2,BorderLayout.CENTER);
+        jPanel4.add(jButton1,BorderLayout.CENTER);
+
         JSplitPane splitPane = new JSplitPane(SwingConstants.HORIZONTAL,jPanel1,jPanel2);
-        splitPane.setDividerLocation(300);
+        splitPane.setTopComponent(jPanel3);
+        splitPane.setBottomComponent(jPanel4);
+        splitPane.setDividerLocation(jFrame.getHeight()/2);
         jFrame.add(splitPane);
+        //splitPane.setBottomComponent(jButton1);
+        //splitPane.setTopComponent(jButton2);
+        //jPanel2.add(jButton2);
 
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +66,24 @@ public class TextView implements View{
 
 
         game.startGame();
+    }
+
+    private void getNumPlayers(){
+
+
+        try {
+            while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
+                JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+                numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+            }
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+            numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+
+        }
+
+
     }
 
     /**
