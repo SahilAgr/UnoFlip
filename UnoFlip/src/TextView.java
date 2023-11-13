@@ -43,6 +43,7 @@ public class TextView implements View{
             controller.addPlayers(name);
         }
 
+        // Used to create buttons
         this.addButtons(100);
 
         JPanel jPanel1 = new JPanel();
