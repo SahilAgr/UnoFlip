@@ -96,7 +96,7 @@ public class Game {
         this.currPlayerIndex = 0;
         this.deck = new UnoDeck();
         this.playedCards = new ArrayList<Card>();
-        playCard(deck.getNCards(1).get(0));
+        playCard(deck.drawNCard(1).get(0));
 
         view.roundStart(roundCounter);
 
@@ -280,7 +280,7 @@ public class Game {
      * @param amount The amount of cards the player draws
      */
     private void drawCard(Player player, int amount){
-        ArrayList<Card> cards = deck.getNCards(amount);
+        ArrayList<Card> cards = deck.drawNCard(amount);
         player.addCard(cards);
         view.drawCard(player, cards);
     }
