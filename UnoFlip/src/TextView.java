@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -11,6 +10,8 @@ public class TextView implements View{
     UnoController controller;
     private Card topCard;
     private String numPlayers;
+    private JButton jButton;
+    private ArrayList<JButton> jButtonArrayList;
 
     /**
      * Constructs an instance to start the game with a text-based interface.
@@ -42,31 +43,24 @@ public class TextView implements View{
             controller.addPlayers(name);
         }
 
+        this.addButtons(100);
 
         JPanel jPanel1 = new JPanel();
+        ScrollPane scrollPane = new ScrollPane();
         JPanel jPanel2 = new JPanel();
-        JPanel jPanel3 = new JPanel();
-        JPanel jPanel4 = new JPanel(new GridLayout(7,1));
-        JButton jButton1 = new JButton();
-        JButton jButton2 = new JButton();
 
-        //Dimension dimension = new Dimension(600,600);
-        jButton2.setSize(600,600);
-        jButton1.setSize(100,100);
+        scrollPane.add(jPanel2);
+        jPanel2.setLayout(new GridLayout(jButtonArrayList.size(),1,10,10));
 
-        //jPanel3.add(jButton1);
-        jPanel4.add(jButton2,BorderLayout.CENTER);
-        jPanel4.add(jButton1,BorderLayout.CENTER);
+        for(int i =0; i < this.jButtonArrayList.size(); i++){
+            jPanel2.add(jButtonArrayList.get(i));
+        }
 
-        JSplitPane splitPane = new JSplitPane(SwingConstants.HORIZONTAL,jPanel1,jPanel2);
-        splitPane.setTopComponent(jPanel3);
-        splitPane.setBottomComponent(jPanel4);
+        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
+        splitPane.setTopComponent(jPanel1);
+        splitPane.setBottomComponent(scrollPane);
         splitPane.setDividerLocation(jFrame.getHeight()/2);
         jFrame.add(splitPane);
-        //splitPane.setBottomComponent(jButton1);
-        //splitPane.setTopComponent(jButton2);
-        //jPanel2.add(jButton2);
-
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
@@ -76,7 +70,16 @@ public class TextView implements View{
 
         game.startGame();
     }
-    
+
+    private ArrayList<JButton> addButtons(int numButton){
+        this.jButtonArrayList= new ArrayList<JButton>();
+        for(int i = 0; i < numButton; i++){
+            this.jButton = new JButton();
+            jButtonArrayList.add(jButton);
+        }
+        return jButtonArrayList;
+    }
+
     /**
      * Displays the top card of the game.
      * @param card The top card to be displayed.
