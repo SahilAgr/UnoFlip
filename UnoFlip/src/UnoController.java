@@ -1,20 +1,36 @@
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Class responsible for controlling the flow Uno game.
  */
-public class UnoController {
+public class UnoController implements ActionListener {
 
     private Game game;
 
     /**
-     * Constructs a new Uncontroller with specified game instance.
+     * Constructs a new UnoController with specified game instance.
      * @param game The Game instance to control.
      */
     public UnoController(Game game){
         this.game = game;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        //Regex splits the ActionCommand into command and, if there is a number, (i.e. card index), the card index.
+        String[] command = e.getActionCommand().split("(?<![0-9])(?=[0-9]+)");
+        switch (command[0]){
+            case "draw":{
+                game.attemptDrawCard();
+            }
+            case "play":{
+                game.attemptPlayCard(Integer.parseInt(command[1]));
+            }
+        }
+    }
+
+    public void getPlay(Player player){
+        //temporarily still here so as not to cause compiler crashes while waiting on new View code.
     }
 
     /**
@@ -22,24 +38,6 @@ public class UnoController {
      */
     public void addPlayers(String name){
         this.game.addPlayer(new Player(name));
-    }
-
-    /**
-     * Prompts the current player to make a move and get the play input.
-     * @param player The current player.
-     */
-    public void getPlay(Player player){
-        ArrayList<String> options = new ArrayList<String>();
-        for (int i = 0; i <= player.getHand().size(); i ++){
-            options.add(String.valueOf(i));
-        }
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        while (!options.contains(input)){
-            System.out.println("\n"+input+" is not a valid input.");
-            input = sc.nextLine();
-        }
-        game.setPlayerChoice(Integer.parseInt(input));
     }
 
 }
