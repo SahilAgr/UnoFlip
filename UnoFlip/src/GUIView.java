@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -25,6 +26,7 @@ public class GUIView implements View{
 
         JFrame jFrame = new JFrame("UNO GAME");
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+
         numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
 
         try {
@@ -56,6 +58,8 @@ public class GUIView implements View{
         for(int i =0; i < testButtons.size(); i++){
             jPanel2.add(testButtons.get(i));
         }
+
+
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
         splitPane.setLeftComponent(scrollPane);
@@ -220,42 +224,22 @@ public class GUIView implements View{
      * @return Chosen colour.
      */
     public Card.Colour getColour(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Pick a Colour that you would like to change to (RED,BLUE,YELLOW,GREEN): ");
 
-        boolean test = true;
+        Card.Colour[] options = {Card.Colour.RED,
+                Card.Colour.BLUE,
+                Card.Colour.GREEN,
+                Card.Colour.YELLOW};
 
-        System.out.println("Pick a Colour that you would like to change to: ");
-        System.out.println("1 RED");
-        System.out.println("2 BLUE");
-        System.out.println("3 GREEN");
-        System.out.println("4 YELLOW");
-        int input = sc.nextInt();
+        int colourChoice = JOptionPane.showOptionDialog(scrollPane,
+                "Choose colour to set card to.",
+                "Colour Choice",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[3]);
 
-        while(test) {
-            if (input == 1) {
-                  test = false;
-                return Card.Colour.RED;
-            } else if (input == 2) {
-              test = false;
-              return Card.Colour.BLUE;
-
-          } else if (input == 3) {
-              test = false;
-              return Card.Colour.GREEN;
-
-          } else if (input == 4) {
-              test = false;
-              return Card.Colour.YELLOW;
-
-          } else {
-              System.out.println("\n" + input + " is not a valid input.");
-              input = sc.nextInt();
-          }
-      }
-
-        return Card.Colour.BLACK;
-
+        return options[colourChoice];
     }
 
 
