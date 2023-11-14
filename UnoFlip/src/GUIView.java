@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  * Implements the View interface and provides a text-based interface for the game.
  */
-public class TextView implements View{
+public class GUIView implements View{
     UnoController controller;
     private Card topCard;
     private String numPlayers;
@@ -17,7 +17,7 @@ public class TextView implements View{
      * Constructs an instance to start the game with a text-based interface.
      * Initializes the game, adds players, and starts the game.
      */
-    public TextView(){
+    public GUIView(){
         ArrayList<Player> players = new ArrayList<Player>();
         Game game = new Game(players);
         controller = new UnoController(game);
@@ -35,7 +35,7 @@ public class TextView implements View{
         } catch (NumberFormatException e) {
 
             JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
-            new TextView();
+            new GUIView();
         }
 
         for (int i = 1; i <= Integer.parseInt(numPlayers); i ++){
@@ -234,7 +234,7 @@ public class TextView implements View{
 
 
     public static void main(String[] args){
-        new TextView();
+        new GUIView();
     }
 
 }
