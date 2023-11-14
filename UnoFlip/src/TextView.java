@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -50,11 +51,19 @@ public class TextView implements View{
         ScrollPane scrollPane = new ScrollPane();
         JPanel jPanel2 = new JPanel();
 
+
         scrollPane.add(jPanel2);
         jPanel2.setLayout(new GridLayout(jButtonArrayList.size(),1,10,10));
 
         for(int i =0; i < this.jButtonArrayList.size(); i++){
             jPanel2.add(jButtonArrayList.get(i));
+            try{
+                Card test = new Card(Card.Rank.FOUR, Card.Colour.RED,null, Card.Type.LIGHT);
+                Image img = ImageIO.read(getClass().getResource(test.getImagePath()));
+                jButtonArrayList.get(i).setIcon(new ImageIcon(img));
+            }catch (Exception e){
+                System.out.println(e);
+            }
         }
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
