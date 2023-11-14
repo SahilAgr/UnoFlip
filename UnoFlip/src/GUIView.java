@@ -12,7 +12,7 @@ public class GUIView implements View{
     private Card topCard;
     private String numPlayers;
     private JButton jButton;
-    private ArrayList<JButton> jButtonArrayList;
+    private ScrollPane scrollPane;
 
     /**
      * Constructs an instance to start the game with a text-based interface.
@@ -45,25 +45,17 @@ public class GUIView implements View{
         }
 
         // Used to create buttons
-        this.addButtons(100);
+        ArrayList<JButton> testButtons = addButtons(100);
 
         JPanel jPanel1 = new JPanel();
-        ScrollPane scrollPane = new ScrollPane();
+        scrollPane = new ScrollPane();
         JPanel jPanel2 = new JPanel();
 
-
         scrollPane.add(jPanel2);
-        jPanel2.setLayout(new GridLayout(jButtonArrayList.size(),1,10,10));
+        jPanel2.setLayout(new GridLayout(testButtons.size(),1,10,10));
 
-        for(int i =0; i < this.jButtonArrayList.size(); i++){
-            jPanel2.add(jButtonArrayList.get(i));
-            try{
-                Card test = new Card(Card.Rank.FOUR, Card.Colour.RED,null, Card.Type.LIGHT);
-                Image img = ImageIO.read(getClass().getResource(test.getImagePath()));
-                jButtonArrayList.get(i).setIcon(new ImageIcon(img));
-            }catch (Exception e){
-                System.out.println(e);
-            }
+        for(int i =0; i < testButtons.size(); i++){
+            jPanel2.add(testButtons.get(i));
         }
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
@@ -82,10 +74,11 @@ public class GUIView implements View{
     }
 
     private ArrayList<JButton> addButtons(int numButton){
-        this.jButtonArrayList= new ArrayList<JButton>();
+        ArrayList<JButton> jButtonArrayList = new ArrayList<JButton>();
+        JButton button;
         for(int i = 0; i < numButton; i++){
-            this.jButton = new JButton();
-            jButtonArrayList.add(jButton);
+            button = new JButton();
+            jButtonArrayList.add(button);
         }
         return jButtonArrayList;
     }
@@ -120,11 +113,35 @@ public class GUIView implements View{
      * @param topCard The current top card in the game.
      */
     public void nextPlayer(Player player, Card topCard){
+        scrollPane.removeAll();
+        JPanel jPanel = new JPanel();
+        int cardIndex = 0;
+        Image img;
+        ArrayList<Card> playerHand = player.getHand();
+        for (JButton button : addButtons(playerHand.size())){
+            System.out.println(cardIndex);
+            System.out.println(playerHand.get(cardIndex));
+            System.out.println(playerHand.get(cardIndex).getImagePath());
+            try {
+                Card test = new Card(Card.Rank.FOUR, Card.Colour.RED, null, Card.Type.LIGHT);
+                img = ImageIO.read(getClass().getResource(test.getImagePath()));
+                button.setIcon(new ImageIcon(img));
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
+            jPanel.add(button);
+            cardIndex ++;
+        }
+        scrollPane.add(jPanel);
+        /*
         System.out.println("\n The top card is " +  topCard);
         this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
         System.out.println(player.getName() + "'s Turn\n");
         cardHand(player.getHand());
         controller.getPlay(player);
+
+         */
     }
 
     /**
