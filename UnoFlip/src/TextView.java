@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -10,6 +9,9 @@ import java.util.Scanner;
 public class TextView implements View{
     UnoController controller;
     private Card topCard;
+    private String numPlayers;
+    private JButton jButton;
+    private ArrayList<JButton> jButtonArrayList;
 
     /**
      * Constructs an instance to start the game with a text-based interface.
@@ -23,10 +25,17 @@ public class TextView implements View{
 
         JFrame jFrame = new JFrame("UNO GAME");
         jFrame.setSize(600,600);
-        String numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
-        while(numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4){
-            JOptionPane.showMessageDialog(null,"Please enter a value that is between 2-4! ");
-            numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+        numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+
+        try {
+            while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
+                JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+                numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+            }
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+            new TextView();
         }
 
         for (int i = 1; i <= Integer.parseInt(numPlayers); i ++){
@@ -34,21 +43,25 @@ public class TextView implements View{
             controller.addPlayers(name);
         }
 
+        // Used to create buttons
+        this.addButtons(100);
 
         JPanel jPanel1 = new JPanel();
+        ScrollPane scrollPane = new ScrollPane();
         JPanel jPanel2 = new JPanel();
-        JButton jButton1 = new JButton();
-        JButton jButton2 = new JButton();
 
-        Dimension dimension = new Dimension(600,600);
-        jButton2.setSize(dimension);
+        scrollPane.add(jPanel2);
+        jPanel2.setLayout(new GridLayout(jButtonArrayList.size(),1,10,10));
 
-        jPanel1.add(jButton1);
-        jPanel2.add(jButton2);
-        JSplitPane splitPane = new JSplitPane(SwingConstants.HORIZONTAL,jPanel1,jPanel2);
-        splitPane.setDividerLocation(300);
+        for(int i =0; i < this.jButtonArrayList.size(); i++){
+            jPanel2.add(jButtonArrayList.get(i));
+        }
+
+        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
+        splitPane.setTopComponent(jPanel1);
+        splitPane.setBottomComponent(scrollPane);
+        splitPane.setDividerLocation(jFrame.getHeight()/2);
         jFrame.add(splitPane);
-
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
@@ -57,6 +70,15 @@ public class TextView implements View{
 
 
         game.startGame();
+    }
+
+    private ArrayList<JButton> addButtons(int numButton){
+        this.jButtonArrayList= new ArrayList<JButton>();
+        for(int i = 0; i < numButton; i++){
+            this.jButton = new JButton();
+            jButtonArrayList.add(jButton);
+        }
+        return jButtonArrayList;
     }
 
     /**
