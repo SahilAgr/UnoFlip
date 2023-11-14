@@ -112,7 +112,7 @@ public class TextView implements View{
      */
     public void nextPlayer(Player player, Card topCard){
         System.out.println("\n The top card is " +  topCard);
-        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType());
+        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
         System.out.println(player.getName() + "'s Turn\n");
         cardHand(player.getHand());
         controller.getPlay(player);
