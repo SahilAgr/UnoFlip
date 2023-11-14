@@ -140,27 +140,29 @@ public class Game {
         Card card = this.currPlayer.getHand().get(cardIndex);
         view.cardPlayed(card, legalMove(card));
         if (legalMove(card)){
-            switch (card.getSpecialType()) {
-                case DRAW_ONE -> {
-                    drawOne();
-                }
-                case FLIP -> {
-                    flip();
-                }
-                case REVERSE -> {
-                    reverse();
-                }
-                case SKIP -> {
-                    skip();
-                }
-                case WILD -> {
-                    card.setColour(view.getColour());
-                }
-                case WILD_DRAW_TWO_CARDS -> {
-                    card.setColour(view.getColour());
-                    wildDrawTwo();
-                }
-                default -> {
+            if (card.getSpecialType() != null){
+                switch (card.getSpecialType()) {
+                    case DRAW_ONE -> {
+                        drawOne();
+                    }
+                    case FLIP -> {
+                        flip();
+                    }
+                    case REVERSE -> {
+                        reverse();
+                    }
+                    case SKIP -> {
+                        skip();
+                    }
+                    case WILD -> {
+                        card.setColour(view.getColour());
+                    }
+                    case WILD_DRAW_TWO_CARDS -> {
+                        card.setColour(view.getColour());
+                        wildDrawTwo();
+                    }
+                    default -> {
+                    }
                 }
             }
             playCard(currPlayer.playCard(card));

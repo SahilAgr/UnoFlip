@@ -11,7 +11,6 @@ public class GUIView implements View{
     UnoController controller;
     private Card topCard;
     private String numPlayers;
-    private JButton jButton;
     private ScrollPane scrollPane;
 
     /**
@@ -117,19 +116,20 @@ public class GUIView implements View{
         JPanel jPanel = new JPanel();
         int cardIndex = 0;
         Image img;
+        Card card;
         ArrayList<Card> playerHand = player.getHand();
+        jPanel.setLayout(new GridLayout(playerHand.size(),1,10,10));
         for (JButton button : addButtons(playerHand.size())){
-            System.out.println(cardIndex);
-            System.out.println(playerHand.get(cardIndex));
-            System.out.println(playerHand.get(cardIndex).getImagePath());
+            card = playerHand.get(cardIndex);
             try {
-                Card test = new Card(Card.Rank.FOUR, Card.Colour.RED, null, Card.Type.LIGHT);
-                img = ImageIO.read(getClass().getResource(test.getImagePath()));
+                img = ImageIO.read(getClass().getResource(card.getImagePath()));
                 button.setIcon(new ImageIcon(img));
             }
             catch (Exception e){
                 System.out.println(e);
             }
+            button.setActionCommand("play"+cardIndex);
+            button.addActionListener(controller);
             jPanel.add(button);
             cardIndex ++;
         }
