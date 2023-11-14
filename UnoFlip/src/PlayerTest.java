@@ -42,9 +42,9 @@ public class PlayerTest {
      * **/
     public void playCard() {
         ArrayList<Card> cards = new ArrayList<Card>();
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null);
-        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null);
-        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null, Card.Type.LIGHT);
+        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null, Card.Type.LIGHT);
+        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS, Card.Type.LIGHT);
 
         cards.add(card1);
         cards.add(card2);
@@ -63,11 +63,11 @@ public class PlayerTest {
      * **/
     public void addCard() {
         ArrayList<Card> cards = new ArrayList<Card>();
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null);
-        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null, Card.Type.LIGHT);
+        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null, Card.Type.LIGHT);
 
         ArrayList<Card> card = new ArrayList<Card>();
-        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS);
+        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS, Card.Type.LIGHT);
 
         cards.add(card1);
         cards.add(card2);
@@ -87,9 +87,9 @@ public class PlayerTest {
      * **/
     public void removeCard() {
         ArrayList<Card> cards = new ArrayList<Card>();
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null);
-        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null);
-        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null, Card.Type.LIGHT);
+        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null, Card.Type.LIGHT);
+        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS, Card.Type.LIGHT);
 
         cards.add(card1);
         cards.add(card2);
@@ -109,9 +109,9 @@ public class PlayerTest {
      * **/
     public void getHand() {
         ArrayList<Card> cards = new ArrayList<Card>();
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null);
-        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null);
-        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null, Card.Type.LIGHT);
+        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null, Card.Type.LIGHT);
+        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS, Card.Type.LIGHT);
 
         cards.add(card1);
         cards.add(card2);
@@ -131,9 +131,9 @@ public class PlayerTest {
      * **/
     public void getHandScore() {
         ArrayList<Card> cards = new ArrayList<Card>();
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null);
-        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null);
-        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null, Card.Type.LIGHT);
+        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null, Card.Type.LIGHT);
+        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS, Card.Type.LIGHT);
 
         cards.add(card1);
         cards.add(card2);
@@ -149,9 +149,9 @@ public class PlayerTest {
      * **/
     public void removeAllCards() {
         ArrayList<Card> cards = new ArrayList<Card>();
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null);
-        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null);
-        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null, Card.Type.LIGHT);
+        Card card2 = new Card(Card.Rank.FIVE, Card.Colour.GREEN,null, Card.Type.LIGHT);
+        Card card3 = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS, Card.Type.LIGHT);
 
         cards.add(card1);
         cards.add(card2);
