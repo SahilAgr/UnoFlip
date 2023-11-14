@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class GUIView implements View{
         game.setView(this);
 
         JFrame jFrame = new JFrame("UNO GAME");
-        jFrame.setSize(600,600);
+        jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
 
         try {
@@ -50,17 +51,25 @@ public class GUIView implements View{
         ScrollPane scrollPane = new ScrollPane();
         JPanel jPanel2 = new JPanel();
 
+
         scrollPane.add(jPanel2);
         jPanel2.setLayout(new GridLayout(jButtonArrayList.size(),1,10,10));
 
         for(int i =0; i < this.jButtonArrayList.size(); i++){
             jPanel2.add(jButtonArrayList.get(i));
+            try{
+                Card test = new Card(Card.Rank.FOUR, Card.Colour.RED,null, Card.Type.LIGHT);
+                Image img = ImageIO.read(getClass().getResource(test.getImagePath()));
+                jButtonArrayList.get(i).setIcon(new ImageIcon(img));
+            }catch (Exception e){
+                System.out.println(e);
+            }
         }
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
-        splitPane.setTopComponent(jPanel1);
-        splitPane.setBottomComponent(scrollPane);
-        splitPane.setDividerLocation(jFrame.getHeight()/2);
+        splitPane.setLeftComponent(scrollPane);
+        splitPane.setRightComponent(jPanel1);
+        splitPane.setDividerLocation(jFrame.getWidth()/2);
         jFrame.add(splitPane);
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
