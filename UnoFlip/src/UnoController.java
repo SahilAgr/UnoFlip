@@ -27,9 +27,6 @@ public class UnoController implements ActionListener {
             case "play":{
                 game.attemptPlayCard(Integer.parseInt(command[1]));
             }
-            case "colour":{
-
-            }
         }
     }
 
