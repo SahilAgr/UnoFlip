@@ -25,7 +25,7 @@ public class TextView implements View{
         game.setView(this);
 
         JFrame jFrame = new JFrame("UNO GAME");
-        jFrame.setSize(600,600);
+        jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
 
         try {
@@ -67,9 +67,9 @@ public class TextView implements View{
         }
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
-        splitPane.setTopComponent(jPanel1);
-        splitPane.setBottomComponent(scrollPane);
-        splitPane.setDividerLocation(jFrame.getHeight()/2);
+        splitPane.setLeftComponent(scrollPane);
+        splitPane.setRightComponent(jPanel1);
+        splitPane.setDividerLocation(jFrame.getWidth()/2);
         jFrame.add(splitPane);
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
