@@ -1,7 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,6 +12,11 @@ public class GUIView implements View{
     private Card topCard;
     private String numPlayers;
     private ScrollPane scrollPane;
+    private JLabel currentPlayer;
+    private JLabel topCardLabel;
+    private ImageIcon topCardImage;
+    private JButton drawCardButton;
+
 
     JFrame jFrame;
 
@@ -28,7 +32,6 @@ public class GUIView implements View{
 
         jFrame = new JFrame("UNO GAME");
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-
         numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
 
         try {
@@ -50,22 +53,42 @@ public class GUIView implements View{
         // Used to create buttons
         ArrayList<JButton> testButtons = addButtons(100);
 
-        JPanel jPanel1 = new JPanel();
+        JPanel jPanelRight = new JPanel();
         scrollPane = new ScrollPane();
-        JPanel jPanel2 = new JPanel();
+        jPanelRight.setLayout(new BorderLayout());
 
-        scrollPane.add(jPanel2);
-        jPanel2.setLayout(new GridLayout(testButtons.size(),1,10,10));
+        JPanel jPanelLeft = new JPanel();
+        scrollPane.add(jPanelLeft);
+        jPanelLeft.setLayout(new GridLayout(testButtons.size(),1,10,10));
 
-        for(int i =0; i < testButtons.size(); i++){
-            jPanel2.add(testButtons.get(i));
+        for(int i =0; i < testButtons.size(); i++) {
+            jPanelLeft.add(testButtons.get(i));
         }
 
 
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
+        currentPlayer = new JLabel();
+        currentPlayer.setHorizontalAlignment(JLabel.CENTER);
+        jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
+
+        topCardLabel = new JLabel("Top Card");
+        topCardLabel.setHorizontalAlignment(JLabel.CENTER);
+        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
+        topCardImage = new ImageIcon();
+        ImageIcon topCardImage = new ImageIcon(getClass().getResource("/uno_cards/blue_draw_one.png"));
+        topCardImage.setImage(topCardImage.getImage());
+        JLabel topCardLabel = new JLabel(topCardImage);
+        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
+
+        drawCardButton = new JButton("Draw Card");
+        drawCardButton.setActionCommand("draw");
+        drawCardButton.addActionListener(controller);
+        jPanelRight.add(drawCardButton, BorderLayout.PAGE_END);
+
+        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
         splitPane.setLeftComponent(scrollPane);
-        splitPane.setRightComponent(jPanel1);
+        splitPane.setRightComponent(jPanelRight);
         splitPane.setDividerLocation(jFrame.getWidth()/2);
         jFrame.add(splitPane);
 
@@ -132,6 +155,7 @@ public class GUIView implements View{
             cardIndex ++;
         }
         scrollPane.add(jPanel);
+        currentPlayer.setText(player.getName() + "'s Turn");
         /*
         System.out.println("\n The top card is " +  topCard);
         this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
