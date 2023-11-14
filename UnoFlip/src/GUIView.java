@@ -67,7 +67,7 @@ public class GUIView implements View{
 
 
 
-        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
+        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelLeft,scrollPane);
         currentPlayer = new JLabel();
         currentPlayer.setHorizontalAlignment(JLabel.CENTER);
         jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
@@ -86,7 +86,7 @@ public class GUIView implements View{
         drawCardButton.addActionListener(controller);
         jPanelRight.add(drawCardButton, BorderLayout.PAGE_END);
 
-        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
+        splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
         splitPane.setLeftComponent(scrollPane);
         splitPane.setRightComponent(jPanelRight);
         splitPane.setDividerLocation(jFrame.getWidth()/2);
