@@ -107,6 +107,8 @@ public class GUIView implements View{
         for(int i = 0; i < numButton; i++){
             button = new JButton();
             jButtonArrayList.add(button);
+            jButtonArrayList.get(i).setBackground(Color.white);
+            jButtonArrayList.get(i).setBorderPainted(false);
         }
         return jButtonArrayList;
     }
