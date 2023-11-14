@@ -14,6 +14,8 @@ public class GUIView implements View{
     private String numPlayers;
     private ScrollPane scrollPane;
 
+    JFrame jFrame;
+
     /**
      * Constructs an instance to start the game with a text-based interface.
      * Initializes the game, adds players, and starts the game.
@@ -24,7 +26,7 @@ public class GUIView implements View{
         controller = new UnoController(game);
         game.setView(this);
 
-        JFrame jFrame = new JFrame("UNO GAME");
+        jFrame = new JFrame("UNO GAME");
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 
         numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
@@ -95,14 +97,6 @@ public class GUIView implements View{
     }
 
     /**
-     * Prompts the current player to make the decision, play a card, or draw a card.
-     * @param player The current player playing.
-     */
-    public void playerDecision(Player player) {
-        System.out.println("Enter card index to play or 0 to draw a card: \n");
-    }
-
-    /**
      * Notifies when a new player has been added to the game.
      * @param player The newly added player.
      */
@@ -149,19 +143,6 @@ public class GUIView implements View{
     }
 
     /**
-     * Displays the player's hand of cards.
-     * @param playerHand List of cards in the player's hand.
-     */
-    public void cardHand(ArrayList<Card> playerHand) {
-        System.out.println("Your Cards: \n");
-        for (int i = 0; i < playerHand.size(); i++) {
-            System.out.println(String.valueOf(i+1) + " " + playerHand.get(i));
-        }
-        System.out.println("\nThe top card is " +  this.topCard);
-        System.out.println("Enter card index to play or 0 to draw a card: ");
-    }
-
-    /**
      * Displays the cards that a player has drawn.
      * @param player Player who drew the cards.
      * @param cardsDrawn List of cards drawn.
@@ -175,11 +156,9 @@ public class GUIView implements View{
 
     /**
      * Notfies the player that their move is illegal and prompts them to try again.
-     * @param player Player who made the illegal move.
      */
-    public void illegalMove(Player player){
-        cardHand(player.getHand());
-        controller.getPlay(player);
+    public void illegalMove(){
+        JOptionPane.showMessageDialog(jFrame, "That is not a legal play!", "Illegal Move", JOptionPane.ERROR_MESSAGE);
     }
 
     /**

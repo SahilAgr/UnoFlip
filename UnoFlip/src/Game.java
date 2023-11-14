@@ -172,6 +172,9 @@ public class Game {
             }
             nextTurn();
         }
+        else {
+            view.illegalMove();
+        }
     }
 
     /**

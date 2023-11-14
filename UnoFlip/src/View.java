@@ -22,9 +22,8 @@ public interface View {
 
     /**
      * Notifies the player that their move was illegal and prompts them to try again.
-     * @param player Player who made the illegal move.
      */
-    public void illegalMove(Player player);
+    public void illegalMove();
 
     /**
      * Notifies when a player has drawn one or more cards and displays the drawn card.
