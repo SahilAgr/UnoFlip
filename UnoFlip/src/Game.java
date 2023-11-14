@@ -81,7 +81,7 @@ public class Game {
         }
         else {
             roundCounter ++;
-            playRound();
+            startRound();
         }
     }
 
@@ -91,12 +91,12 @@ public class Game {
      * until one of the players reaches zero cards. It then calculates the scores,
      * and cals updateGame()
      */
-    private void playRound(){
+    private void startRound(){
         //Initializing round variables and objects
-        this.currPlayerIndex = 0;
+        this.currPlayerIndex = players.size(); //Guarantees that when nextTurn is first called, it will jump to the first player
         this.deck = new UnoDeck();
         this.playedCards = new ArrayList<Card>();
-        playCard(deck.getNCards(1).get(0));
+        playCard(deck.drawNCard(1).get(0));
 
         view.roundStart(roundCounter);
 
@@ -106,70 +106,78 @@ public class Game {
             drawCard(player, 7);
         }
 
-        //Runs round
-        while (gameState == State.IN_ROUND){
+        nextTurn();
+    }
+
+    /**
+     * Either moves on to the next turn in the round, or effects the end of the round.
+     */
+    public void nextTurn(){
+        if (this.gameState == State.IN_ROUND){
+            iteratePlayers();
             this.topCard = this.playedCards.get(this.playedCards.size()-1);
             this.currPlayer = players.get(currPlayerIndex);
-
             view.nextPlayer(currPlayer, topCard);
-
-            if (playerChoice != 0){
-                Card card = currPlayer.getHand().get(playerChoice-1);
-                view.cardPlayed(card, legalMove(card));
-                while (!legalMove(card)){
-                    view.illegalMove(currPlayer);
-                    card = currPlayer.getHand().get(playerChoice-1);
-                    view.cardPlayed(card, legalMove(card));
+        }
+        else {
+            int roundScore = 0;
+            for (Player player : players){
+                if (player != roundWinner) {
+                    roundScore += player.getHandScore();
                 }
-                //Switch case for the different types of special cards
-                if (card.getSpecialType() != null){
-                    switch (card.getSpecialType()) {
-                        case DRAW_ONE -> {
-                            drawOne();
-                        }
-                        case FLIP -> {
-                            flip();
-                        }
-                        case REVERSE -> {
-                            reverse();
-                        }
-                        case SKIP -> {
-                            skip();
-                        }
-                        case WILD -> {
-                            card.setColour(view.getColour());
-                        }
-                        case WILD_DRAW_TWO_CARDS -> {
-                            card.setColour(view.getColour());
-                            wildDrawTwo();
-                        }
-                        default -> {
-                        }
-                    }
-                }
-                playCard(currPlayer.playCard(card));
+            }
+            roundWinner.addPoints(roundScore);
+            view.roundEnd(roundWinner);
+            updateGame();
+        }
+    }
 
+    /**
+     * Called by the controller when a card is clicked to be played.
+     * @param cardIndex The index of the card in the player's hand which has been clicked on.
+     */
+    public void attemptPlayCard(int cardIndex){
+        Card card = this.currPlayer.getHand().get(cardIndex);
+        view.cardPlayed(card, legalMove(card));
+        if (legalMove(card)){
+            switch (card.getSpecialType()) {
+                case DRAW_ONE -> {
+                    drawOne();
+                }
+                case FLIP -> {
+                    flip();
+                }
+                case REVERSE -> {
+                    reverse();
+                }
+                case SKIP -> {
+                    skip();
+                }
+                case WILD -> {
+                    card.setColour(view.getColour());
+                }
+                case WILD_DRAW_TWO_CARDS -> {
+                    card.setColour(view.getColour());
+                    wildDrawTwo();
+                }
+                default -> {
+                }
             }
-            else {
-                drawCard(currPlayer, 1);
-            }
+            playCard(currPlayer.playCard(card));
             if (currPlayer.getHand().isEmpty()){
                 gameState = State.BETWEEN_ROUND;
                 roundWinner = currPlayer;
             }
-            //Moves on to the next player
-            iteratePlayers();
+            nextTurn();
         }
-        //Scoring
-        int roundScore = 0;
-        for (Player player : players){
-            if (player != roundWinner) {
-                roundScore += player.getHandScore();
-            }
-        }
-        roundWinner.addPoints(roundScore);
-        view.roundEnd(roundWinner);
-        updateGame();
+    }
+
+    /**
+     * Called by the controller when the player draws a card.
+     */
+    public void attemptDrawCard(){
+        drawCard(currPlayer, 1);
+        nextTurn();
     }
 
     /**
@@ -280,7 +288,7 @@ public class Game {
      * @param amount The amount of cards the player draws
      */
     private void drawCard(Player player, int amount){
-        ArrayList<Card> cards = deck.getNCards(amount);
+        ArrayList<Card> cards = deck.drawNCard(amount);
         player.addCard(cards);
         view.drawCard(player, cards);
     }

@@ -19,7 +19,7 @@ class UnoControllerTest {
         players = new ArrayList<>();
         game = new Game(players);
         controller = new UnoController(game);
-        view = new TextView();
+        view = new GUIView();
         game.setView(view);
     }
 
@@ -37,8 +37,8 @@ class UnoControllerTest {
         setUp();
         Player player = new Player("Player1");
 
-        player.addCard(new Card(Card.Rank.ONE, Card.Colour.RED, null));
-        player.addCard(new Card(Card.Rank.TWO, Card.Colour.BLUE, null));
+        player.addCard(new Card(Card.Rank.ONE, Card.Colour.RED, null, Card.Type.LIGHT));
+        player.addCard(new Card(Card.Rank.TWO, Card.Colour.BLUE, null, Card.Type.LIGHT));
 
 
         String input = "1\n";

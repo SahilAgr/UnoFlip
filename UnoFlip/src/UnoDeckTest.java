@@ -7,7 +7,7 @@ class UnoDeckTest {
     @org.junit.jupiter.api.Test
     void UnoDeck() {
         deck = new UnoDeck();
-        ArrayList<Card> cards = deck.getDeckCards();
+        ArrayList<Card> cards = deck.getDeck();
         assertEquals(112, cards.size());
 
 
@@ -21,7 +21,7 @@ class UnoDeckTest {
     @org.junit.jupiter.api.Test
     void getNCards() {
         deck = new UnoDeck();
-        ArrayList<Card> fiveCards = deck.getNCards(5);
+        ArrayList<Card> fiveCards = deck.drawNCard(5);
         assertEquals(5,fiveCards.size());
     }
 

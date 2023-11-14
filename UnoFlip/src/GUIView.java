@@ -1,44 +1,42 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
  * Implements the View interface and provides a text-based interface for the game.
  */
-public class TextView implements View{
+public class GUIView implements View{
     UnoController controller;
     private Card topCard;
-    private JLabel topCardLabel;
-    private JButton drawCardButton;
-    private JLabel playerLabel;
-    //private JButton nextPlayerButton;
-    //private JLabel playerDiagramLabel;
-
+    private String numPlayers;
+    private JButton jButton;
+    private ScrollPane scrollPane;
 
     /**
      * Constructs an instance to start the game with a text-based interface.
      * Initializes the game, adds players, and starts the game.
      */
-    public TextView(){
+    public GUIView(){
         ArrayList<Player> players = new ArrayList<Player>();
         Game game = new Game(players);
         controller = new UnoController(game);
         game.setView(this);
 
-        topCardLabel = new JLabel();
-        drawCardButton = new JButton("Draw Card");
-        //playerDirectionLabel = new JLabel();
-        playerLabel = new JLabel();
-        //playerDiagramLabel = new JLabel();
-
         JFrame jFrame = new JFrame("UNO GAME");
-        jFrame.setSize(600,600);
-        String numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
-        while(numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4){
-            JOptionPane.showMessageDialog(null,"Please enter a value that is between 2-4! ");
-            numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+        jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+
+        try {
+            while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
+                JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+                numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+            }
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+            new GUIView();
         }
 
         for (int i = 1; i <= Integer.parseInt(numPlayers); i ++){
@@ -46,21 +44,24 @@ public class TextView implements View{
             controller.addPlayers(name);
         }
 
+        // Used to create buttons
+        ArrayList<JButton> testButtons = addButtons(100);
 
-        JPanel topPanel = new JPanel();
-        topPanel.add(playerLabel);
-        jFrame.add(topPanel, BorderLayout.WEST);
-        topPanel.add(topCardLabel);
-        topPanel.add(drawCardButton);
-        jFrame.add(topPanel, BorderLayout.NORTH);
+        JPanel jPanel1 = new JPanel();
+        scrollPane = new ScrollPane();
+        JPanel jPanel2 = new JPanel();
 
-        JPanel bottomPanel = new JPanel();
-        jFrame.add(bottomPanel, BorderLayout.SOUTH);
+        scrollPane.add(jPanel2);
+        jPanel2.setLayout(new GridLayout(testButtons.size(),1,10,10));
 
-        Dimension dimension = new Dimension(600,600);
+        for(int i =0; i < testButtons.size(); i++){
+            jPanel2.add(testButtons.get(i));
+        }
 
-        JSplitPane splitPane = new JSplitPane(SwingConstants.HORIZONTAL, topPanel, bottomPanel);
-        splitPane.setDividerLocation(300);
+        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanel1,scrollPane);
+        splitPane.setLeftComponent(scrollPane);
+        splitPane.setRightComponent(jPanel1);
+        splitPane.setDividerLocation(jFrame.getWidth()/2);
         jFrame.add(splitPane);
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,13 +73,22 @@ public class TextView implements View{
         game.startGame();
     }
 
+    private ArrayList<JButton> addButtons(int numButton){
+        ArrayList<JButton> jButtonArrayList = new ArrayList<JButton>();
+        JButton button;
+        for(int i = 0; i < numButton; i++){
+            button = new JButton();
+            jButtonArrayList.add(button);
+        }
+        return jButtonArrayList;
+    }
+
     /**
      * Displays the top card of the game.
      * @param card The top card to be displayed.
      */
     public void topCard(Card card) {
         System.out.println("Top Card: " + card + "\n");
-        playerLabel.setText(card.toString());
     }
 
     /**
@@ -103,12 +113,35 @@ public class TextView implements View{
      * @param topCard The current top card in the game.
      */
     public void nextPlayer(Player player, Card topCard){
+        scrollPane.removeAll();
+        JPanel jPanel = new JPanel();
+        int cardIndex = 0;
+        Image img;
+        ArrayList<Card> playerHand = player.getHand();
+        for (JButton button : addButtons(playerHand.size())){
+            System.out.println(cardIndex);
+            System.out.println(playerHand.get(cardIndex));
+            System.out.println(playerHand.get(cardIndex).getImagePath());
+            try {
+                Card test = new Card(Card.Rank.FOUR, Card.Colour.RED, null, Card.Type.LIGHT);
+                img = ImageIO.read(getClass().getResource(test.getImagePath()));
+                button.setIcon(new ImageIcon(img));
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
+            jPanel.add(button);
+            cardIndex ++;
+        }
+        scrollPane.add(jPanel);
+        /*
         System.out.println("\n The top card is " +  topCard);
-        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType());
+        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
         System.out.println(player.getName() + "'s Turn\n");
-        playerLabel.setText("Player: " + player.getName());
         cardHand(player.getHand());
         controller.getPlay(player);
+
+         */
     }
 
     /**
@@ -227,7 +260,7 @@ public class TextView implements View{
 
 
     public static void main(String[] args){
-        new TextView();
+        new GUIView();
     }
 
 }
