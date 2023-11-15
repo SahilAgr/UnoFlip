@@ -39,12 +39,11 @@ public class Player {
 
     /**
      * Plays a chosen card by the player
-     * @param card Card
+     * @param cardIndex int
      * @return card
      */
-    public Card playCard(Card card){
-        this.hand.remove(card);
-        return card;
+    public Card playCard(int cardIndex){
+        return this.hand.remove(cardIndex);
     }
 
     /**
