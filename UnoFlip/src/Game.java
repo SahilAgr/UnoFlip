@@ -96,7 +96,12 @@ public class Game {
         this.currPlayerIndex = players.size(); //Guarantees that when nextTurn is first called, it will jump to the first player
         this.deck = new UnoDeck();
         this.playedCards = new ArrayList<Card>();
-        playCard(deck.drawNCard(1).get(0));
+        int i = 0;
+        while (deck.drawNCard(1).get(i).getCardColour() == Card.Colour.BLACK){
+            deck.drawNCard(1);
+        }
+        addToPlayedCards(deck.drawNCard(1).get(i));
+
 
         view.roundStart(roundCounter);
 
@@ -138,6 +143,7 @@ public class Game {
      */
     public void attemptPlayCard(int cardIndex){
         Card card = this.currPlayer.getHand().get(cardIndex);
+        System.out.println(card+"  THIS IS THE CARD THAT IS PASSED");
         view.cardPlayed(card, legalMove(card));
         if (legalMove(card)){
             if (card.getSpecialType() != null){
@@ -165,7 +171,7 @@ public class Game {
                     }
                 }
             }
-            playCard(currPlayer.playCard(card));
+            addToPlayedCards(currPlayer.playCard(cardIndex));
             if (currPlayer.getHand().isEmpty()){
                 gameState = State.BETWEEN_ROUND;
                 roundWinner = currPlayer;
@@ -283,7 +289,7 @@ public class Game {
      * Plays a given card, adding it to the end of the discard pile.
      * @param card the card being played
      */
-    private void playCard(Card card){
+    private void addToPlayedCards(Card card){
         playedCards.add(card);
     }
 
