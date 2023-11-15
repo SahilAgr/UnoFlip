@@ -54,7 +54,7 @@ public class PlayerTest {
 
         player.playCard(2);
         assertEquals(2,cards.size());
-        assertEquals("[BLUE EIGHT, GREEN FIVE]", cards.toString());
+        assertEquals("[EIGHT BLUE, FIVE GREEN]", cards.toString());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class PlayerTest {
         player.addCard(card);
 
         assertEquals(3,cards.size());
-        assertEquals("[BLUE EIGHT, GREEN FIVE, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
+        assertEquals("[EIGHT BLUE, FIVE GREEN, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
 
     }
 
@@ -99,7 +99,7 @@ public class PlayerTest {
         player.removeCard(card1);
 
         assertEquals(2,cards.size());
-        assertEquals("[GREEN FIVE, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
+        assertEquals("[FIVE GREEN, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
 
     }
 
@@ -121,7 +121,7 @@ public class PlayerTest {
         player.getHand();
 
         assertEquals(3,cards.size());
-        assertEquals("[BLUE EIGHT, GREEN FIVE, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
+        assertEquals("[EIGHT BLUE, FIVE GREEN, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
 
     }
 
