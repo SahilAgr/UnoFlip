@@ -52,7 +52,7 @@ public class PlayerTest {
 
         Player player = new Player("Tim",cards);
 
-        player.playCard(card3);
+        player.playCard(2);
         assertEquals(2,cards.size());
         assertEquals("[BLUE EIGHT, GREEN FIVE]", cards.toString());
     }

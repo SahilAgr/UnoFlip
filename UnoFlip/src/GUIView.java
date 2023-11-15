@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Implements the View interface and provides a text-based interface for the game.
@@ -16,6 +15,7 @@ public class GUIView implements View{
     private JLabel topCardLabel;
     private ImageIcon topCardImage;
     private JButton drawCardButton;
+    private JLabel score;
 
 
     JFrame jFrame;
@@ -74,17 +74,20 @@ public class GUIView implements View{
 
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelLeft,scrollPane);
+        JPanel pageTitle = new JPanel();
         currentPlayer = new JLabel();
         currentPlayer.setHorizontalAlignment(JLabel.CENTER);
-        jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
+        pageTitle.add(currentPlayer);
+        //jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
+
+        score = new JLabel();
+        score.setHorizontalAlignment(JLabel.CENTER);
+        pageTitle.add(score);
+        jPanelRight.add(pageTitle,BorderLayout.PAGE_START);
 
         topCardLabel = new JLabel("Top Card");
         topCardLabel.setHorizontalAlignment(JLabel.CENTER);
         jPanelRight.add(topCardLabel, BorderLayout.CENTER);
-        topCardImage = new ImageIcon();
-        ImageIcon topCardImage = new ImageIcon(getClass().getResource("/uno_cards/blue_draw_one.png"));
-        topCardImage.setImage(topCardImage.getImage());
-        JLabel topCardLabel = new JLabel(topCardImage);
         jPanelRight.add(topCardLabel, BorderLayout.CENTER);
 
         drawCardButton = new JButton("Draw Card");
@@ -117,14 +120,6 @@ public class GUIView implements View{
             jButtonArrayList.get(i).setBorderPainted(false);
         }
         return jButtonArrayList;
-    }
-
-    /**
-     * Displays the top card of the game.
-     * @param card The top card to be displayed.
-     */
-    public void topCard(Card card) {
-        System.out.println("Top Card: " + card + "\n");
     }
 
     /**
@@ -162,8 +157,15 @@ public class GUIView implements View{
             jPanel.add(button);
             cardIndex ++;
         }
+        try {
+            topCardLabel.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(topCard.getImagePath()))));
+            topCardLabel.setText("Top Card is: " + topCard.toString());
+        }catch (Exception e){
+            System.out.println(e);
+        }
         scrollPane.add(jPanel);
-        currentPlayer.setText(player.getName() + "'s Turn");
+        currentPlayer.setText("Player: "+ player.getName() + "'s Turn");
+        score.setText(", Score: " + player.getPoints() + "");
         /*
         System.out.println("\n The top card is " +  topCard);
         this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
@@ -237,6 +239,10 @@ public class GUIView implements View{
                 null,
                 options,
                 options[3]);
+
+        if (colourChoice == -1){
+            return getColour();
+        }
 
         return options[colourChoice];
     }

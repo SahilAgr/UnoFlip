@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/UnoFlip.iml" filepath="$PROJECT_DIR$/UnoFlip.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Proj.iml" filepath="$PROJECT_DIR$/Proj.iml" />
     </modules>
   </component>
 </project>
