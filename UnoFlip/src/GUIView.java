@@ -210,6 +210,8 @@ public class GUIView implements View{
     public void roundEnd(Player roundWinner){
         System.out.println(roundWinner.getName() + " has won the round, bringing their score to " + roundWinner.getPoints());
         System.out.println("Starting new round...");
+        String message = roundWinner.getName() + " has won the round, bringing their score to " + roundWinner.getPoints();
+        JOptionPane.showMessageDialog(null, message, "Starting new round...", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
