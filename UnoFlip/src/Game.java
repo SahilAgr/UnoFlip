@@ -196,7 +196,7 @@ public class Game {
      */
     private void drawOne() {
         if(currPlayerIndex == players.size()-1){
-            drawCard(players.get(currPlayerIndex+1),1);
+            drawCard(players.get(0),1);
             currPlayerIndex = 0;
         }
         else{
@@ -238,7 +238,7 @@ public class Game {
      */
     private void wildDrawTwo() {
         if(currPlayerIndex == players.size()-1){
-            drawCard(players.get(currPlayerIndex+1),2);
+            drawCard(players.get(0),2);
             currPlayerIndex = 0;
         }
         else{
