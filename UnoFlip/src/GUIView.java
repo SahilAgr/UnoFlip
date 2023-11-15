@@ -182,9 +182,23 @@ public class GUIView implements View{
      * @param cardsDrawn List of cards drawn.
      */
     public void drawCard(Player player, ArrayList<Card> cardsDrawn){
-        for (Card card : cardsDrawn){
-
-            System.out.println(card);
+        if (cardsDrawn.size() != 7) {
+            JDialog dialog;
+            JLabel label;
+            for (Card card : cardsDrawn) {
+                dialog = new JDialog();
+                dialog.setLocationRelativeTo(jFrame);
+                label = new JLabel(new ImageIcon());
+                try {
+                    label.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(card.getImagePath()))));
+                    label.setText(player.getName() + " has drawn " + card);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                dialog.add(label);
+                dialog.pack();
+                dialog.setVisible(true);
+            }
         }
     }
 
