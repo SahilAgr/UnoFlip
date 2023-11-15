@@ -15,6 +15,7 @@ public class GUIView implements View{
     private JLabel topCardLabel;
     private ImageIcon topCardImage;
     private JButton drawCardButton;
+    private JLabel score;
 
 
     JFrame jFrame;
@@ -67,9 +68,16 @@ public class GUIView implements View{
 
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelLeft,scrollPane);
+        JPanel pageTitle = new JPanel();
         currentPlayer = new JLabel();
         currentPlayer.setHorizontalAlignment(JLabel.CENTER);
-        jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
+        pageTitle.add(currentPlayer);
+        //jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
+
+        score = new JLabel();
+        score.setHorizontalAlignment(JLabel.CENTER);
+        pageTitle.add(score);
+        jPanelRight.add(pageTitle,BorderLayout.PAGE_START);
 
         topCardLabel = new JLabel("Top Card");
         topCardLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -150,7 +158,8 @@ public class GUIView implements View{
             System.out.println(e);
         }
         scrollPane.add(jPanel);
-        currentPlayer.setText(player.getName() + "'s Turn");
+        currentPlayer.setText("Player: "+ player.getName() + "'s Turn");
+        score.setText(", Score: " + player.getPoints() + "");
         /*
         System.out.println("\n The top card is " +  topCard);
         this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
