@@ -36,6 +36,7 @@ public class GUIView implements View{
 
         try {
             while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
+                if (numPlayers == null) System.exit(0);
                 JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
                 numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
                 System.out.println(numPlayers);
@@ -51,8 +52,9 @@ public class GUIView implements View{
             new GUIView();
         }
 
-        for (int i = 1; i <= Integer.parseInt(numPlayers); i ++){
-            String name = JOptionPane.showInputDialog("Name of player "+i);
+        for (int i = 1; i <= Integer.parseInt(numPlayers); i ++) {
+            String name = JOptionPane.showInputDialog("Name of player " + i);
+            if (name == null) System.exit(0);
             controller.addPlayers(name);
         }
 
