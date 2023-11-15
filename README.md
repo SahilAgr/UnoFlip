@@ -5,8 +5,8 @@
 JDK: OpenJDK 20.0.2
 
 ## Known Issues
-- When deck is empty program ends unexpectedly.
 - Game.java is not fully tested
+- Wild cards sometimes appear as starting cards despite code which should prevent this from occurring.
 
 ## Authors
 Ben Li (101113284)
@@ -16,4 +16,4 @@ Sahil Agrawal (101132393)
 Divya Vithiyatharan (101196047)
 
 ## Changes
-As this is the first version of the program, there are no changes.
+A GUI has been implemented through JSwing. Card assets have been generated and added to git.
