@@ -96,11 +96,12 @@ public class Game {
         this.currPlayerIndex = players.size(); //Guarantees that when nextTurn is first called, it will jump to the first player
         this.deck = new UnoDeck();
         this.playedCards = new ArrayList<Card>();
-        int i = 0;
-        while (deck.drawNCard(1).get(i).getCardColour() == Card.Colour.BLACK){
-            deck.drawNCard(1);
+
+        Card topTemp = deck.drawNCard(1).get(0);
+        while (topTemp.getCardColour() == Card.Colour.BLACK){
+            topTemp = deck.drawNCard(1).get(0);
         }
-        addToPlayedCards(deck.drawNCard(1).get(i));
+        addToPlayedCards(topTemp);
 
 
         view.roundStart(roundCounter);

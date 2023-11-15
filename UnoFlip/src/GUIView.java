@@ -32,6 +32,7 @@ public class GUIView implements View{
 
         jFrame = new JFrame("UNO GAME");
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
 
         try {
@@ -95,7 +96,7 @@ public class GUIView implements View{
         drawCardButton = new JButton("Draw Card");
         drawCardButton.setActionCommand("draw");
         drawCardButton.addActionListener(controller);
-        jPanelRight.add(drawCardButton, BorderLayout.PAGE_END);
+        jPanelRight.add(drawCardButton, BorderLayout.SOUTH);
 
         splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
         splitPane.setLeftComponent(scrollPane);
