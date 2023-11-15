@@ -23,9 +23,11 @@ public class UnoController implements ActionListener {
         switch (command[0]){
             case "draw":{
                 game.attemptDrawCard();
+                break;
             }
             case "play":{
                 game.attemptPlayCard(Integer.parseInt(command[1]));
+                break;
             }
         }
     }
