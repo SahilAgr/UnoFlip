@@ -13,12 +13,14 @@ public class UnoDeck {
 
 
                     cards.add(new Card(rank, colour, null, Card.Type.LIGHT));
+                    cards.add(new Card(rank, colour, null, Card.Type.LIGHT));
 
 
                 }
 
                 for (Card.Special special : Card.Special.values()) {
                     if (special != Card.Special.WILD && special != Card.Special.WILD_DRAW_TWO_CARDS) {
+                        cards.add(new Card(null, colour, special, Card.Type.LIGHT));
                         cards.add(new Card(null, colour, special, Card.Type.LIGHT));
                     }
                 }

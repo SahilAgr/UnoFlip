@@ -1,16 +1,23 @@
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 class UnoDeckTest {
 
     private UnoDeck deck;
 
+
+    @BeforeEach
+    public void setUp() {
+        deck = new UnoDeck();
+    }
+
+
     @org.junit.jupiter.api.Test
     void UnoDeck() {
-        deck = new UnoDeck();
+
         ArrayList<Card> cards = deck.getDeck();
         assertEquals(112, cards.size());
-
-
         assertEquals(8,countCardsOfColour(cards, Card.Colour.BLACK));
         assertEquals(26,countCardsOfColour(cards, Card.Colour.BLUE));
         assertEquals(26,countCardsOfColour(cards, Card.Colour.RED));

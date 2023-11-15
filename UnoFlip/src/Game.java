@@ -143,6 +143,8 @@ public class Game {
      */
     public void attemptPlayCard(int cardIndex){
         Card card = this.currPlayer.getHand().get(cardIndex);
+        System.out.println(card+"  THIS IS THE CARD THAT IS PASSED");
+        view.cardPlayed(card, legalMove(card));
         if (legalMove(card)){
             if (card.getSpecialType() != null){
                 switch (card.getSpecialType()) {
@@ -257,6 +259,15 @@ public class Game {
             }
         }
         return false;
+    }
+
+    /**
+     * Used by the controller to transmit what option the player chose, which
+     * is then used in the main playRound loop.
+     * @param choice The input choice of the player, an integer between 0 and the number of cards in their hand.
+     */
+    public void setPlayerChoice(int choice){
+        this.playerChoice = choice;
     }
 
     /**
