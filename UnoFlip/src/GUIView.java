@@ -38,9 +38,15 @@ public class GUIView implements View{
             while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
                 JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
                 numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+                System.out.println(numPlayers);
+                if (numPlayers == null){
+                    System.exit(0);
+                }
             }
         } catch (NumberFormatException e) {
-
+            if (numPlayers == null){
+                System.exit(0);
+            }
             JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
             new GUIView();
         }
@@ -176,9 +182,23 @@ public class GUIView implements View{
      * @param cardsDrawn List of cards drawn.
      */
     public void drawCard(Player player, ArrayList<Card> cardsDrawn){
-        System.out.println("\n"+player.getName()+" has drawn:");
-        for (Card card : cardsDrawn){
-            System.out.println(card);
+        if (cardsDrawn.size() != 7) {
+            JDialog dialog;
+            JLabel label;
+            for (Card card : cardsDrawn) {
+                dialog = new JDialog();
+                dialog.setLocationRelativeTo(jFrame);
+                label = new JLabel(new ImageIcon());
+                try {
+                    label.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(card.getImagePath()))));
+                    label.setText(player.getName() + " has drawn " + card);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                dialog.add(label);
+                dialog.pack();
+                dialog.setVisible(true);
+            }
         }
     }
 
@@ -187,18 +207,6 @@ public class GUIView implements View{
      */
     public void illegalMove(){
         JOptionPane.showMessageDialog(jFrame, "That is not a legal play!", "Illegal Move", JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
-     * Notifies when a card is played and whether it's a valid move.
-     * @param card Card that was played.
-     * @param validCard True if card is valid, otherwise false.
-     */
-    public void cardPlayed(Card card, Boolean validCard){
-        if (!validCard) {
-            System.out.println("Card doesn't match the top card. Try again.\n");
-        }
-        System.out.println("Played: " + card + ".\n");
     }
 
     /**

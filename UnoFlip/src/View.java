@@ -14,13 +14,6 @@ public interface View {
     public void nextPlayer(Player player, Card topCard);
 
     /**
-     * Notifies that a card has been played and whether it's a valid move.
-     * @param card Card that was played.
-     * @param valid True if playing card is a valid move, otherwise false.
-     */
-    public void cardPlayed(Card card, Boolean valid);
-
-    /**
      * Notifies the player that their move was illegal and prompts them to try again.
      */
     public void illegalMove();
