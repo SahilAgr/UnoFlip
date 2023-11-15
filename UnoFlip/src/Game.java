@@ -144,7 +144,6 @@ public class Game {
      */
     public void attemptPlayCard(int cardIndex){
         Card card = this.currPlayer.getHand().get(cardIndex);
-        System.out.println(card+"  THIS IS THE CARD THAT IS PASSED");
         view.cardPlayed(card, legalMove(card));
         if (legalMove(card)){
             if (card.getSpecialType() != null){

@@ -37,17 +37,25 @@ public class GUIView implements View{
 
         try {
             while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
+                if(numPlayers == null)System.exit(0);
                 JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
                 numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+                if (numPlayers == null){
+                    System.exit(0);
+                }
             }
         } catch (NumberFormatException e) {
+            if (numPlayers == null) {
+                System.exit(0);
+            }
 
             JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
             new GUIView();
         }
 
-        for (int i = 1; i <= Integer.parseInt(numPlayers); i ++){
-            String name = JOptionPane.showInputDialog("Name of player "+i);
+        for (int i = 1; i <= Integer.parseInt(numPlayers); i ++) {
+            String name = JOptionPane.showInputDialog("Name of player " + i);
+            if (name == null) System.exit(0);
             controller.addPlayers(name);
         }
 
@@ -177,11 +185,25 @@ public class GUIView implements View{
      * @param cardsDrawn List of cards drawn.
      */
     public void drawCard(Player player, ArrayList<Card> cardsDrawn){
-        System.out.println("\n"+player.getName()+" has drawn:");
-        for (Card card : cardsDrawn){
-            System.out.println(card);
-        }
-    }
+        if (cardsDrawn.size() != 7) {
+            JDialog dialog;
+            JLabel label;
+            for (Card card : cardsDrawn) {
+                dialog = new JDialog();
+                dialog.setLocationRelativeTo(jFrame);
+                label = new JLabel(new ImageIcon());
+                try {
+                    label.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(card.getImagePath()))));
+                    label.setText(player.getName() + " has drawn " + card);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                dialog.add(label);
+                dialog.pack();
+                dialog.setVisible(true);
+            }
+
+        }}
 
     /**
      * Notfies the player that their move is illegal and prompts them to try again.
