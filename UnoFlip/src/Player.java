@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Player {
     private String name;
-    private ArrayList<CardPair> hand;
+    private ArrayList<Card> hand;
 
     private int points;
 
@@ -12,10 +12,10 @@ public class Player {
      */
     public Player(String inputName){
         this.name = inputName;
-        this.hand = new ArrayList<CardPair>();
+        this.hand = new ArrayList<Card>();
         this.points = 0;
     }
-    public Player(String inputName, ArrayList<CardPair> inputHand){
+    public Player(String inputName, ArrayList<Card> inputHand){
         this.name = inputName;
         this.hand = inputHand;
         this.points = 0;
@@ -39,35 +39,34 @@ public class Player {
 
     /**
      * Plays a chosen card by the player
-     * @param card Card
+     * @param cardIndex int
      * @return card
      */
-    public CardPair playCard(CardPair card){
-        this.hand.remove(card);
-        return card;
+    public Card playCard(int cardIndex){
+        return this.hand.remove(cardIndex);
     }
 
     /**
      * Adds a card to the players hand
-     * @param cardList ArrayList<CardPair>
+     * @param cardList ArrayList<Card>
      */
-    public void addCard(ArrayList<CardPair> cardList){
+    public void addCard(ArrayList<Card> cardList){
         hand.addAll(cardList);
     }
 
     /**
      * removes a card from the players hand
-     * @param card CardPair
+     * @param card Card
      */
-    public void removeCard(CardPair card){
+    public void removeCard(Card card){
         hand.remove(card);
     }
 
     /**
      * Returns all the cards in a players hand
-     * @return ArrayList<CardPair>
+     * @return ArrayList<Card>
      */
-    public ArrayList<CardPair> getHand(){
+    public ArrayList<Card> getHand(){
         return this.hand;
     }
 
@@ -75,11 +74,11 @@ public class Player {
      * Returns the score of a players hand based on the rules
      * @return int
      */
-    public int getHandScore(Card.Type cardType){
+    public int getHandScore(){
         int total = 0;
-        for (CardPair card : this.hand){
-            if (card.getCard(cardType).getCardNum() == null){
-                if (card.getCard(cardType).getSpecialType() == Card.Special.WILD || card.getCard(cardType).getSpecialType() == Card.Special.WILD_DRAW_TWO_CARDS){
+        for (Card card : this.hand){
+            if (card.getCardNum() == null){
+                if (card.getSpecialType() == Card.Special.WILD || card.getSpecialType() == Card.Special.WILD_DRAW_TWO_CARDS){
                     total += 50;
                 }
                 else {
@@ -87,7 +86,7 @@ public class Player {
                 }
             }
             else {
-                total += card.getCard(cardType).getCardNum().ordinal()+1;
+                total += card.getCardNum().ordinal()+1;
             }
         }
         return total;
@@ -97,7 +96,7 @@ public class Player {
      * Removes all cards from a players hand
      */
     public void removeAllCards(){
-        this.hand = new ArrayList<CardPair>();
+        this.hand = new ArrayList<Card>();
     }
 
     /**

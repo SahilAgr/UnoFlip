@@ -1,8 +1,7 @@
 import java.util.*;
 
 public class UnoDeck {
-
-    private ArrayList<CardPair> deck;
+    private ArrayList<Card> deck;
 
     public UnoDeck() {
         ArrayList<Card> lightCards = new ArrayList<Card>();
@@ -31,8 +30,6 @@ public class UnoDeck {
                         darkCards.add(new Card(null, colour, special, Card.Type.DARK));
                     }
                 }
-
-
             }
             /**
              * Adding the wild cards
@@ -62,7 +59,7 @@ public class UnoDeck {
      * returns all the cards in the deck
      * @return ArrayList<Card>
      */
-    public ArrayList<CardPair> getDeck() {
+    public ArrayList<Card> getDeck() {
         return deck;
     }
 
@@ -72,8 +69,8 @@ public class UnoDeck {
      * @param nCards int
      * @return ArrayList<Card>
      */
-    public ArrayList<CardPair> drawNCard(int nCards) {
-        ArrayList<CardPair> drawnCards = new ArrayList<>();
+    public ArrayList<Card> drawNCard(int nCards) {
+        ArrayList<Card> drawnCards = new ArrayList<>();
 
         // Check if there are enough cards in the deck
         if (deck.size() < nCards) {

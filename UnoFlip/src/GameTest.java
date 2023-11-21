@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
     private Game game;
@@ -17,7 +16,7 @@ class GameTest {
         players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
-        mockView = new TextView();
+        mockView = new GUIView();
         game = new Game(players);
         game.setView(mockView);
     }

@@ -8,7 +8,7 @@ public class Main {
         UnoDeck unoDeck = new UnoDeck();
 
         // Get the deck of card pairs
-        ArrayList<CardPair> deck = unoDeck.getDeck();
+        ArrayList<Card> deck = unoDeck.getDeck();
         Card card1 = new Card(Card.Rank.ONE, Card.Colour.BLUE, null, Card.Type.LIGHT);
         Card card2 = new Card(Card.Rank.TWO, Card.Colour.RED, Card.Special.DRAW_ONE, Card.Type.DARK);
         Card card3 = new Card(Card.Rank.TWO, Card.Colour.RED, null, Card.Type.LIGHT);
@@ -29,18 +29,18 @@ public class Main {
                 }
             }
         }
-
+        /*
         System.out.println("Deck Contents:");
         for (int i = 0; i < deck.size(); i++) {
-            CardPair cardPair = deck.get(i);
-            Card lightCard = cardPair.getCard(Card.Type.LIGHT);
-            Card darkCard = cardPair.getCard(Card.Type.DARK);
+            UnoDeck.CardPair cardPair = deck.get(i);
+            Card lightCard = cardPair.getLightCard();
+            Card darkCard = cardPair.getDarkCard();
 
             // Concatenating the details of the Light and Dark card for each pair
             String cardPairDetails = String.format("Pair %d: [Light Card: %s, Dark Card: %s]", i + 1, lightCard, darkCard);
             System.out.println(cardPairDetails);
         }
-
+        */
 
     }
 
