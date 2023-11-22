@@ -13,19 +13,14 @@ public class UnoDeck implements FlipListener {
         for (Card.Colour colour : Card.Colour.values()) {
             if (colour != Card.Colour.BLACK) { // Assuming BLACK is not used in Light/Dark cards
                 for (Card.Rank rank : Card.Rank.values()) {
-
-
                     lightCards.add(new Card(rank, colour, null, Card.Type.LIGHT));
                     darkCards.add(new Card(rank, colour, null, Card.Type.DARK));
                     lightCards.add(new Card(rank, colour, null, Card.Type.LIGHT));
                     darkCards.add(new Card(rank, colour, null, Card.Type.DARK));
-
-
                 }
 
                 for (Card.Special special : Card.Special.values()) {
                     if (special != Card.Special.WILD && special != Card.Special.WILD_DRAW_TWO_CARDS) {
-
                         lightCards.add(new Card(null, colour, special, Card.Type.LIGHT));
                         darkCards.add(new Card(null, colour, special, Card.Type.DARK));
                         lightCards.add(new Card(null, colour, special, Card.Type.LIGHT));

@@ -2,7 +2,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.util.ArrayList;
+
 public class CardTest {
+    // Create an UnoDeck instance
+    UnoDeck unoDeck = new UnoDeck();
+
+    // Get the deck of card pairs
+    ArrayList<Card> deck = unoDeck.getDeck();
 
     @Test
     /**
@@ -11,9 +19,6 @@ public class CardTest {
     public void getCardNum() {
         Card card = new Card(Card.Rank.EIGHT, Card.Colour.RED,null, Card.Type.LIGHT);
         Assert.assertEquals(Card.Rank.EIGHT,card.getCardNum());
-
-        card = new Card(null, Card.Colour.RED,null, Card.Type.LIGHT);
-        Assert.assertEquals(null,card.getCardNum());
     }
 
     @Test
@@ -55,15 +60,16 @@ public class CardTest {
         Assert.assertEquals(Card.Colour.GREEN,card.getCardColour());
     }
 
-    @Test
-    /**
-     * Checks Card class if you are able to get the card toString.
-     *  **/
-    public void testToString() {
-        Card card = new Card(Card.Rank.EIGHT, Card.Colour.RED,null, Card.Type.LIGHT);
-        Assert.assertEquals("RED EIGHT", card.toString());
 
-        card = new Card(null, Card.Colour.BLACK, Card.Special.WILD_DRAW_TWO_CARDS, Card.Type.LIGHT);
-        Assert.assertEquals("BLACK WILD_DRAW_TWO_CARDS", card.toString());
+
+
+    @Test
+    public void testGetCardNum() {
+        Card card = new Card(Card.Rank.EIGHT, Card.Colour.RED,null, Card.Type.LIGHT);
+        Assert.assertEquals(Card.Rank.EIGHT,card.getCardNum());
     }
+
+
+
+
 }

@@ -79,7 +79,6 @@ public class PlayerTest {
 
         assertEquals(3,cards.size());
         assertEquals("[LIGHT BLUE EIGHT, LIGHT GREEN FIVE, LIGHT BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
-
     }
 
     @Test
@@ -123,7 +122,6 @@ public class PlayerTest {
 
         assertEquals(3,cards.size());
         assertEquals("[LIGHT BLUE EIGHT, LIGHT GREEN FIVE, LIGHT BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
-
     }
 
     @Test
