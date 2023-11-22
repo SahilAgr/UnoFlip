@@ -1,7 +1,9 @@
 import java.util.*;
 
-public class UnoDeck {
+public class UnoDeck implements FlipListener {
     private ArrayList<Card> deck;
+    private ArrayList<Card> activeDeck;
+    private ArrayList<Card> inactiveDeck;
 
     public UnoDeck() {
         ArrayList<Card> lightCards = new ArrayList<Card>();
@@ -48,11 +50,14 @@ public class UnoDeck {
 
         Collections.shuffle(darkCards);
 
-        this.deck = new ArrayList<CardPair>();
-
         for (int i = 0; i < lightCards.size(); i++) {
-            this.deck.add(new CardPair(lightCards.get(i), darkCards.get(i)));
+            System.out.println("Setting "+lightCards.get(i)+" to match with "+darkCards.get(i));
+            lightCards.get(i).setOtherSide(darkCards.get(i));
+            darkCards.get(i).setOtherSide(lightCards.get(i));
         }
+
+        activeDeck = lightCards;
+        inactiveDeck = darkCards;
     }
 
     /**
@@ -60,7 +65,7 @@ public class UnoDeck {
      * @return ArrayList<Card>
      */
     public ArrayList<Card> getDeck() {
-        return deck;
+        return activeDeck;
     }
 
 
@@ -73,19 +78,25 @@ public class UnoDeck {
         ArrayList<Card> drawnCards = new ArrayList<>();
 
         // Check if there are enough cards in the deck
-        if (deck.size() < nCards) {
+        if (activeDeck.size() < nCards) {
             throw new IllegalStateException("Not enough cards in the deck to draw " + nCards + " cards.");
         }
-
+        Card card;
         // Draw the specified number of cards
         for (int i = 0; i < nCards; i++) {
-            drawnCards.add(deck.remove(0)); // Removes and returns the top card from the deck
+            card = activeDeck.remove(0);
+            drawnCards.add(card); // Removes and returns the top card from the deck
+            inactiveDeck.remove(card.getOtherSide());
         }
 
         return drawnCards;
     }
 
-
+    public void handleFlip(){
+        ArrayList<Card> temp = activeDeck;
+        activeDeck = inactiveDeck;
+        inactiveDeck = temp;
+    }
 
 
 }

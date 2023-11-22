@@ -6,9 +6,8 @@ import java.util.ArrayList;
 /**
  * Implements the View interface and provides a text-based interface for the game.
  */
-public class GUIView implements View{
+public class GUIView implements View, FlipListener{
     UnoController controller;
-    private Card topCard;
     private String numPlayers;
     private ScrollPane scrollPane;
     private JLabel currentPlayer;
@@ -146,8 +145,10 @@ public class GUIView implements View{
         Card card;
         ArrayList<Card> playerHand = player.getHand();
         jPanel.setLayout(new GridLayout(playerHand.size(),1,10,10));
+        System.out.println(player.getName());
         for (JButton button : addButtons(playerHand.size())){
             card = playerHand.get(cardIndex);
+            System.out.println(card + " with reverse side " + card.getOtherSide());
             try {
                 img = ImageIO.read(getClass().getResource(card.getImagePath()));
                 button.setIcon(new ImageIcon(img));
@@ -169,14 +170,6 @@ public class GUIView implements View{
         scrollPane.add(jPanel);
         currentPlayer.setText("Player: "+ player.getName() + "'s Turn");
         score.setText(", Score: " + player.getPoints() + "");
-        /*
-        System.out.println("\n The top card is " +  topCard);
-        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
-        System.out.println(player.getName() + "'s Turn\n");
-        cardHand(player.getHand());
-        controller.getPlay(player);
-
-         */
     }
 
     /**
@@ -203,6 +196,10 @@ public class GUIView implements View{
                 dialog.setVisible(true);
             }
         }
+    }
+
+    public void handleFlip(){
+        JOptionPane.showMessageDialog(jFrame, "Worlds are shifting... \n Cards are flipping...", "Flip", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**

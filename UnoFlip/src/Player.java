@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements FlipListener {
     private String name;
     private ArrayList<Card> hand;
 
@@ -113,5 +113,14 @@ public class Player {
      */
     public void addPoints(int roundScore){
         this.points += roundScore;
+    }
+
+    public void handleFlip() {
+        Card otherSide;
+        for (int i = 0; i < hand.size(); i ++){
+            otherSide = hand.get(i).getOtherSide();
+            System.out.println(otherSide.getOtherSide());
+            hand.set(i, otherSide);
+        }
     }
 }

@@ -18,7 +18,6 @@ public class UnoController implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         //Regex splits the ActionCommand into command and, if there is a number, (i.e. card index), the card index.
-        System.out.println(e.getActionCommand());
         String[] command = e.getActionCommand().split("(?<![0-9])(?=[0-9]+)");
         switch (command[0]){
             case "draw":{
