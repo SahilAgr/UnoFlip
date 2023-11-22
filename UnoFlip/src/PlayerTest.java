@@ -173,6 +173,8 @@ public class PlayerTest {
         Card darkCard2 = new Card(Card.Rank.ONE, Card.Colour.YELLOW,null, Card.Type.DARK);
         lightCard1.setOtherSide(darkCard1);
         lightCard2.setOtherSide(darkCard2);
+        darkCard1.setOtherSide(lightCard1);
+        darkCard2.setOtherSide(lightCard2);
         ArrayList<Card> cards = new ArrayList<>();
         cards.add(lightCard1);
         cards.add(lightCard2);
@@ -182,6 +184,9 @@ public class PlayerTest {
         player.handleFlip();
         assertEquals(player.getHand().get(0), darkCard1);
         assertEquals(player.getHand().get(0), darkCard2);
+        player.handleFlip();
+        assertEquals(player.getHand().get(0), lightCard1);
+        assertEquals(player.getHand().get(1), lightCard2);
     }
 
     @Test

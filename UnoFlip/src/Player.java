@@ -119,7 +119,6 @@ public class Player implements FlipListener {
         Card otherSide;
         for (int i = 0; i < hand.size(); i ++){
             otherSide = hand.get(i).getOtherSide();
-            System.out.println(otherSide.getOtherSide());
             hand.set(i, otherSide);
         }
     }
