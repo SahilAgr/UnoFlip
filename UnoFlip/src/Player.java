@@ -114,4 +114,8 @@ public class Player {
     public void addPoints(int roundScore){
         this.points += roundScore;
     }
+
+    public int getCardIndex(Card c){
+        return this.hand.indexOf(c);
+    }
 }

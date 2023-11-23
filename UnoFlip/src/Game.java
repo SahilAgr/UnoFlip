@@ -145,6 +145,9 @@ public class Game {
     public void attemptPlayCard(int cardIndex){
         Card card = this.currPlayer.getHand().get(cardIndex);
         view.cardPlayed(card, legalMove(card));
+        if (currPlayer instanceof AIPlayer){
+            System.out.println("THE AI PLAYER TRIED TO PLAY " + card.getCardColour() + card.getCardNum());
+        }
         if (legalMove(card)){
             if (card.getSpecialType() != null){
                 switch (card.getSpecialType()) {
@@ -275,7 +278,7 @@ public class Game {
      * @param card A card, normally the one being played.
      * @return whether the provided card is a legal move
      */
-    private boolean legalMove(Card card){
+    public boolean legalMove(Card card){
         if (card.getCardColour() == Card.Colour.BLACK){
             return true;
         }
@@ -309,11 +312,16 @@ public class Game {
      * back around to 0.
      */
     public void iteratePlayers(){
+        if (currPlayer instanceof AIPlayer){
+            ((AIPlayer) currPlayer).legalCards(this,currPlayer);
+            System.out.println("THE AI PLAYER IS PLAYING");
+        }
         if(currPlayerIndex < players.size()-1){
             currPlayerIndex ++;
         } else {
             currPlayerIndex = 0;
         }
         currPlayer = players.get(currPlayerIndex);
+
     }
 }
