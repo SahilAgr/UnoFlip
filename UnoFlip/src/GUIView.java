@@ -6,9 +6,8 @@ import java.util.ArrayList;
 /**
  * Implements the View interface and provides a text-based interface for the game.
  */
-public class GUIView implements View{
+public class GUIView implements View, FlipListener{
     UnoController controller;
-    private Card topCard;
     private String numPlayers;
     private ScrollPane scrollPane;
     private JLabel currentPlayer;
@@ -21,7 +20,7 @@ public class GUIView implements View{
     JFrame jFrame;
 
     /**
-     * Constructs an instance to start the game with a text-based interface.
+     * Constructs an instance to start the game with a visual interface.
      * Initializes the game, adds players, and starts the game.
      */
     public GUIView(){
@@ -33,30 +32,91 @@ public class GUIView implements View{
         jFrame = new JFrame("UNO GAME");
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
+        String numHumans = JOptionPane.showInputDialog("Enter Number of Human players (1-4): ");
 
         try {
-            while (numPlayers == null || numPlayers.length() > 1 || Integer.parseInt(numPlayers) < 2 || Integer.parseInt(numPlayers) > 4) {
-                if(numPlayers == null)System.exit(0);
-                JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
-                numPlayers = JOptionPane.showInputDialog("Enter Number of players (2-4): ");
-                if (numPlayers == null){
+            while (numHumans == null || numHumans.length() > 1 || Integer.parseInt(numHumans) < 1 || Integer.parseInt(numHumans) > 4) {
+                if (numHumans == null) System.exit(0);
+                JOptionPane.showMessageDialog(null, "Please enter a numeric value between 1-4! ");
+                numHumans = JOptionPane.showInputDialog("Enter Number of Human players (1-4): ");
+                System.out.println(numHumans);
+                if (numHumans == null){
                     System.exit(0);
                 }
             }
         } catch (NumberFormatException e) {
-            if (numPlayers == null) {
+            if (numHumans == null){
                 System.exit(0);
             }
-
-            JOptionPane.showMessageDialog(null, "Please enter a value that is between 2-4! ");
+            JOptionPane.showMessageDialog(null, "Please enter a numeric value between 1-4! ");
             new GUIView();
         }
 
-        for (int i = 1; i <= Integer.parseInt(numPlayers); i ++) {
+        for (int i = 1; i <= Integer.parseInt(numHumans); i ++) {
             String name = JOptionPane.showInputDialog("Name of player " + i);
             if (name == null) System.exit(0);
-            controller.addPlayers(name);
+            controller.addPlayer(name);
+        }
+        String botLimits;
+        String numBots = null;
+
+        if (Integer.parseInt(numHumans) == 3){
+            int option;
+            while (numBots == null) {
+                try {
+                    option = JOptionPane.showConfirmDialog(jFrame, "Would you like to add a Bot?");
+                    if (option == JOptionPane.YES_OPTION){
+                        numBots = "1";
+                    }
+                    else if (option == JOptionPane.NO_OPTION){
+                        numBots = "0";
+                    }
+                }
+                catch (Exception e){
+                    System.exit(0);
+                }
+            }
+        }
+        else if (Integer.parseInt(numHumans) < 3) {
+
+            int minimum;
+
+            if (Integer.parseInt(numHumans) == 1){
+                botLimits = "1-"+(4-Integer.parseInt(numHumans));
+                minimum = 1;
+            }
+            else {
+                botLimits = "0-"+(4-Integer.parseInt(numHumans));
+                minimum = 0;
+            }
+
+            numBots = JOptionPane.showInputDialog("Enter Number of Bot players "+botLimits+": ");
+
+            try {
+                while (numBots == null || numBots.length() > 1 || Integer.parseInt(numBots) < minimum || Integer.parseInt(numBots) > 4) {
+                    if (numBots == null) System.exit(0);
+                    JOptionPane.showMessageDialog(null, "Please enter a value that is between "+botLimits+"! ");
+                    numBots = JOptionPane.showInputDialog("Enter Number of Human players ("+botLimits+"): ");
+                    System.out.println(numBots);
+                    if (numBots == null) {
+                        System.exit(0);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                if (numBots == null) {
+                    System.exit(0);
+                }
+                JOptionPane.showMessageDialog(null, "Please enter a value that is between "+botLimits+"! ");
+                new GUIView();
+            }
+        }
+
+        if (numBots != null) {
+            for (int i = 1; i <= Integer.parseInt(numBots); i++) {
+                String name = JOptionPane.showInputDialog("Name of bot " + i);
+                if (name == null) System.exit(0);
+                controller.addBot(name);
+            }
         }
 
         // Used to create buttons
@@ -70,7 +130,7 @@ public class GUIView implements View{
         scrollPane.add(jPanelLeft);
         jPanelLeft.setLayout(new GridLayout(testButtons.size(),1,10,10));
 
-        for(int i =0; i < testButtons.size(); i++) {
+        for (int i = 0; i < testButtons.size(); i++) {
             jPanelLeft.add(testButtons.get(i));
         }
 
@@ -202,26 +262,18 @@ public class GUIView implements View{
                 dialog.pack();
                 dialog.setVisible(true);
             }
+        }
+    }
 
-        }}
+    public void handleFlip(){
+        JOptionPane.showMessageDialog(jFrame, "Worlds are shifting... \n Cards are flipping...", "Flip", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     /**
      * Notfies the player that their move is illegal and prompts them to try again.
      */
     public void illegalMove(){
         JOptionPane.showMessageDialog(jFrame, "That is not a legal play!", "Illegal Move", JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
-     * Notifies when a card is played and whether it's a valid move.
-     * @param card Card that was played.
-     * @param validCard True if card is valid, otherwise false.
-     */
-    public void cardPlayed(Card card, Boolean validCard){
-        if (!validCard) {
-            System.out.println("Card doesn't match the top card. Try again.\n");
-        }
-        System.out.println("Played: " + card + ".\n");
     }
 
     /**

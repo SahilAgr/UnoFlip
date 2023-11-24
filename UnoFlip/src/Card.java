@@ -4,6 +4,8 @@ import java.util.Scanner;
 public class Card extends ArrayList<Card> {
     private String imagePath;
 
+    private Card otherSide;
+
     private Rank rank;
     private Colour colour;
     private Special special;
@@ -124,6 +126,12 @@ public class Card extends ArrayList<Card> {
         this.colour = colour;
     }
 
+    public void setOtherSide(Card card){
+        this.otherSide = card;
+    }
+
+    public Card getOtherSide(){return this.otherSide;}
+
     public String getImagePath() {
         return this.imagePath;
     }
@@ -135,12 +143,16 @@ public class Card extends ArrayList<Card> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (this.rank != null) {
-            sb.append(this.rank);
+        if (this.type != null){
+            sb.append(this.type);
             sb.append(" ");
         }
         if (this.colour != null) {
             sb.append(this.colour);
+            sb.append(" ");
+        }
+        if (this.rank != null) {
+            sb.append(this.rank);
             sb.append(" ");
         }
         if (this.special != null) {

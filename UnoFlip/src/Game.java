@@ -10,6 +10,8 @@ public class Game {
 
     public enum State{GAME_START, IN_ROUND, BETWEEN_ROUND, GAME_END}
 
+    public Card.Type cardType;
+
     private State gameState;
 
     private Card topCard;
@@ -20,8 +22,6 @@ public class Game {
 
     private Player currPlayer;
 
-    private int playerChoice;
-
     private int roundCounter;
 
     private Player roundWinner;
@@ -29,6 +29,8 @@ public class Game {
     private Player gameWinner;
 
     private View view;
+
+    private ArrayList<FlipListener> flipListeners;
 
     int currPlayerIndex;
 
@@ -40,6 +42,8 @@ public class Game {
         this.players = players;
         this.roundCounter = 0;
         this.gameState = State.GAME_START;
+        this.cardType = Card.Type.LIGHT;
+        this.flipListeners = new ArrayList<>();
     }
 
     /**
@@ -48,6 +52,7 @@ public class Game {
      */
     public void setView(View view){
         this.view = view;
+        flipListeners.add((FlipListener) this.view);
     }
 
     /**
@@ -63,6 +68,7 @@ public class Game {
      */
     public void addPlayer(Player player){
         if (gameState != State.IN_ROUND){
+            flipListeners.add(player);
             players.add(player);
             view.addPlayer(player);
         }
@@ -95,6 +101,7 @@ public class Game {
         //Initializing round variables and objects
         this.currPlayerIndex = players.size(); //Guarantees that when nextTurn is first called, it will jump to the first player
         this.deck = new UnoDeck();
+        flipListeners.add(deck);
         this.playedCards = new ArrayList<Card>();
 
         Card topTemp = deck.drawNCard(1).get(0);
@@ -210,7 +217,9 @@ public class Game {
 
     //Not yet necessary, but place here for posterity's sake
     private void flip(){
-        //TODO
+        for (FlipListener listener : flipListeners){
+            listener.handleFlip();
+        }
     }
 
     /**
@@ -303,6 +312,9 @@ public class Game {
      */
     private void drawCard(Player player, int amount){
         ArrayList<Card> cards = deck.drawNCard(amount);
+        for (Card card : cards){
+            System.out.println(card + " has been drawn, with reverse side " + card.getOtherSide());
+        }
         player.addCard(cards);
         view.drawCard(player, cards);
     }
