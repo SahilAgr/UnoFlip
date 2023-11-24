@@ -7,7 +7,7 @@ public class AIPlayer extends Player{
         super(inputName);
     }
 
-    public ArrayList<Card.Colour> getRandomElement(ArrayList<Card.Colour> list, int totalItems)
+    public ArrayList<Card.Colour> getRandomElement(ArrayList<Card.Colour> list)
     {
         Random rand = new Random();
 
@@ -17,10 +17,10 @@ public class AIPlayer extends Player{
 
         // take a random index between 0 to size
         // of given List
-        int randomIndex = rand.nextInt(list.size());
+        int randomIndex = rand.nextInt(3);
 
         // add element in temporary list
-        newList.add(list.get(randomIndex));
+
 
         return newList;
     }
@@ -30,6 +30,7 @@ public class AIPlayer extends Player{
         for(Card c: p.getHand()){
             if(game.legalMove(c)){
                 playableCards.add(c);
+                System.out.println(c);
             }
 
         }
@@ -49,13 +50,16 @@ public class AIPlayer extends Player{
                 options.add(Card.Colour.GREEN);
                 options.add(Card.Colour.YELLOW);
 
-                this.getRandomElement(options,4);
-                game.currPlayerIndex++;
+                this.getRandomElement(options);
+
 
             }
             else {
+                System.out.println("THIS IS WHAT AI PICKS FROM AIPLAYER.JAVA"+playableCards.get(0));
+                System.out.println(p.getCardIndex(playableCards.get(0)));
                 game.attemptPlayCard(p.getCardIndex(playableCards.get(0)));
-                game.currPlayerIndex++;
+
+
 
             }
 

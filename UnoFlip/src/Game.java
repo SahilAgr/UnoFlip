@@ -131,6 +131,10 @@ public class Game {
             this.topCard = this.playedCards.get(this.playedCards.size()-1);
             this.currPlayer = players.get(currPlayerIndex);
             view.nextPlayer(currPlayer, topCard);
+            if (currPlayer instanceof AIPlayer){
+                ((AIPlayer) currPlayer).legalCards(this,currPlayer);
+                System.out.println("THE AI PLAYER IS PLAYING");
+            }
         }
         else {
             int roundScore = 0;
@@ -151,6 +155,7 @@ public class Game {
      */
     public void attemptPlayCard(int cardIndex){
         Card card = this.currPlayer.getHand().get(cardIndex);
+        System.out.println("THIS IS WHAT I AM PLAYING: " + card);
         view.cardPlayed(card, legalMove(card));
         if (currPlayer instanceof AIPlayer){
             System.out.println("THE AI PLAYER TRIED TO PLAY " + card.getCardColour() + card.getCardNum());
@@ -171,7 +176,10 @@ public class Game {
                         skip();
                     }
                     case WILD -> {
-                        card.setColour(view.getColour());
+                        if(currPlayer instanceof AIPlayer){
+                            //card.setColour(AIPlayer.getColor());
+                        }else {
+                        card.setColour(view.getColour());}
                     }
                     case WILD_DRAW_TWO_CARDS -> {
                         card.setColour(view.getColour());
@@ -315,10 +323,6 @@ public class Game {
      * back around to 0.
      */
     public void iteratePlayers(){
-        if (currPlayer instanceof AIPlayer){
-            ((AIPlayer) currPlayer).legalCards(this,currPlayer);
-            System.out.println("THE AI PLAYER IS PLAYING");
-        }
         if(currPlayerIndex < players.size()-1){
             currPlayerIndex ++;
         } else {

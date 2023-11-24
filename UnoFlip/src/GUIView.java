@@ -199,6 +199,9 @@ public class GUIView implements View, FlipListener{
      * @param topCard The current top card in the game.
      */
     public void nextPlayer(Player player, Card topCard){
+        if (player instanceof AIPlayer){
+            //disable the frame
+        }
         scrollPane.removeAll();
         JPanel jPanel = new JPanel();
         int cardIndex = 0;

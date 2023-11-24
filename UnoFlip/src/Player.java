@@ -124,6 +124,12 @@ public class Player implements FlipListener {
     }
 
     public int getCardIndex(Card c){
-        return this.hand.indexOf(c);
+        for(int i = 0; i < hand.size(); i++){
+            if (hand.get(i) == c){
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
