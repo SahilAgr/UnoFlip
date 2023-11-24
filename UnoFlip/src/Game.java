@@ -274,15 +274,6 @@ public class Game {
     }
 
     /**
-     * Used by the controller to transmit what option the player chose, which
-     * is then used in the main playRound loop.
-     * @param choice The input choice of the player, an integer between 0 and the number of cards in their hand.
-     */
-    public void setPlayerChoice(int choice){
-        this.playerChoice = choice;
-    }
-
-    /**
      * Verifies whether a given card can be legally played on topCard.
      * @param card A card, normally the one being played.
      * @return whether the provided card is a legal move

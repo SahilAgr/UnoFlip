@@ -40,11 +40,10 @@ public class UnoController implements ActionListener {
      */
     public void addPlayer(String name){
         this.game.addPlayer(new Player(name));
-        this.game.addPlayer(new AIPlayer("AI"));
     }
 
     public void addBot(String name){
-        //Add bot
+        this.game.addPlayer(new AIPlayer(name));
     }
 
 }

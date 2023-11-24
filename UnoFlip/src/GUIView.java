@@ -277,6 +277,18 @@ public class GUIView implements View, FlipListener{
     }
 
     /**
+     * Notifies when a card is played and whether it's a valid move.
+     * @param card Card that was played.
+     * @param validCard True if card is valid, otherwise false.
+     */
+    public void cardPlayed(Card card, Boolean validCard){
+        if (!validCard) {
+            System.out.println("Card doesn't match the top card. Try again.\n");
+        }
+        System.out.println("Played: " + card + ".\n");
+    }
+
+    /**
      * Displays game round number at the start of a new round.
      * @param roundCount New game round number.
      */
