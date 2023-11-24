@@ -38,8 +38,12 @@ public class UnoController implements ActionListener {
     /**
      * Allows the user to add players to the game, specifying the number of players and their names.
      */
-    public void addPlayers(String name){
+    public void addPlayer(String name){
         this.game.addPlayer(new Player(name));
+    }
+
+    public void addBot(String name){
+        //Add bot
     }
 
 }
