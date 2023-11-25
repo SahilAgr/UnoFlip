@@ -237,7 +237,7 @@ public class Game {
                 card.getOtherSide().setColour(player.getColour());
             }
             else {
-                card.setColour(view.getColour());
+                card.getOtherSide().setColour(view.getColour());
             }
         }
         for (FlipListener listener : flipListeners){
