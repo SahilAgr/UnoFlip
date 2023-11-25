@@ -28,7 +28,7 @@ class UnoControllerTest {
         String input = "2\nPlayer1\nPlayer2\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
-        controller.addPlayers("bill");
+        controller.addPlayer("bill");
         assertEquals(2, players.size());
     }
 

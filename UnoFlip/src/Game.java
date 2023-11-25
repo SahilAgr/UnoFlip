@@ -10,6 +10,8 @@ public class Game {
 
     public enum State{GAME_START, IN_ROUND, BETWEEN_ROUND, GAME_END}
 
+    public Card.Type cardType;
+
     private State gameState;
 
     private Card topCard;
@@ -20,8 +22,6 @@ public class Game {
 
     private Player currPlayer;
 
-    private int playerChoice;
-
     private int roundCounter;
 
     private Player roundWinner;
@@ -29,6 +29,8 @@ public class Game {
     private Player gameWinner;
 
     private View view;
+
+    private ArrayList<FlipListener> flipListeners;
 
     int currPlayerIndex;
 
@@ -40,6 +42,8 @@ public class Game {
         this.players = players;
         this.roundCounter = 0;
         this.gameState = State.GAME_START;
+        this.cardType = Card.Type.LIGHT;
+        this.flipListeners = new ArrayList<>();
     }
 
     /**
@@ -48,6 +52,7 @@ public class Game {
      */
     public void setView(View view){
         this.view = view;
+        flipListeners.add((FlipListener) this.view);
     }
 
     /**
@@ -63,6 +68,7 @@ public class Game {
      */
     public void addPlayer(Player player){
         if (gameState != State.IN_ROUND){
+            flipListeners.add(player);
             players.add(player);
             view.addPlayer(player);
         }
@@ -95,6 +101,7 @@ public class Game {
         //Initializing round variables and objects
         this.currPlayerIndex = players.size(); //Guarantees that when nextTurn is first called, it will jump to the first player
         this.deck = new UnoDeck();
+        flipListeners.add(deck);
         this.playedCards = new ArrayList<Card>();
 
         Card topTemp = deck.drawNCard(1).get(0);
@@ -124,6 +131,10 @@ public class Game {
             this.topCard = this.playedCards.get(this.playedCards.size()-1);
             this.currPlayer = players.get(currPlayerIndex);
             view.nextPlayer(currPlayer, topCard);
+            if (currPlayer instanceof AIPlayer){
+                ((AIPlayer) currPlayer).legalCards(this,currPlayer);
+                System.out.println("THE AI PLAYER IS PLAYING");
+            }
         }
         else {
             int roundScore = 0;
@@ -144,7 +155,11 @@ public class Game {
      */
     public void attemptPlayCard(int cardIndex){
         Card card = this.currPlayer.getHand().get(cardIndex);
+        System.out.println("THIS IS WHAT I AM PLAYING: " + card);
         view.cardPlayed(card, legalMove(card));
+        if (currPlayer instanceof AIPlayer){
+            System.out.println("THE AI PLAYER TRIED TO PLAY " + card.getCardColour() + card.getCardNum());
+        }
         if (legalMove(card)){
             if (card.getSpecialType() != null){
                 switch (card.getSpecialType()) {
@@ -152,7 +167,7 @@ public class Game {
                         drawOne();
                     }
                     case FLIP -> {
-                        flip();
+                        flip(card);
                     }
                     case REVERSE -> {
                         reverse();
@@ -161,7 +176,10 @@ public class Game {
                         skip();
                     }
                     case WILD -> {
-                        card.setColour(view.getColour());
+                        if (currPlayer instanceof AIPlayer){
+                            //card.setColour(AIPlayer.getColor());
+                        }else {
+                        card.setColour(view.getColour());}
                     }
                     case WILD_DRAW_TWO_CARDS -> {
                         card.setColour(view.getColour());
@@ -205,9 +223,22 @@ public class Game {
         }
     }
 
-    //Not yet necessary, but place here for posterity's sake
-    private void flip(){
-        //TODO
+    /**
+     * Notifies the flip handlers to flip, as well as making a check to see whether the reverse of the card being played needs to have a colour assigned.
+     * @param card The flip card that has just been played.
+     */
+    private void flip(Card card){
+        if (card.getOtherSide().getCardColour() == Card.Colour.BLACK){
+            if (currPlayer instanceof AIPlayer player) {
+                card.setColour(player.getColour());
+            }
+            else {
+                card.setColour(view.getColour());
+            }
+        }
+        for (FlipListener listener : flipListeners){
+            listener.handleFlip();
+        }
     }
 
     /**
@@ -262,20 +293,11 @@ public class Game {
     }
 
     /**
-     * Used by the controller to transmit what option the player chose, which
-     * is then used in the main playRound loop.
-     * @param choice The input choice of the player, an integer between 0 and the number of cards in their hand.
-     */
-    public void setPlayerChoice(int choice){
-        this.playerChoice = choice;
-    }
-
-    /**
      * Verifies whether a given card can be legally played on topCard.
      * @param card A card, normally the one being played.
      * @return whether the provided card is a legal move
      */
-    private boolean legalMove(Card card){
+    public boolean legalMove(Card card){
         if (card.getCardColour() == Card.Colour.BLACK){
             return true;
         }
@@ -300,6 +322,9 @@ public class Game {
      */
     private void drawCard(Player player, int amount){
         ArrayList<Card> cards = deck.drawNCard(amount);
+        for (Card card : cards){
+            System.out.println(card + " has been drawn, with reverse side " + card.getOtherSide());
+        }
         player.addCard(cards);
         view.drawCard(player, cards);
     }
@@ -315,5 +340,6 @@ public class Game {
             currPlayerIndex = 0;
         }
         currPlayer = players.get(currPlayerIndex);
+
     }
 }

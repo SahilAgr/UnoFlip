@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -54,7 +55,7 @@ public class PlayerTest {
 
         player.playCard(2);
         assertEquals(2,cards.size());
-        assertEquals("[EIGHT BLUE, FIVE GREEN]", cards.toString());
+        assertEquals("[LIGHT BLUE EIGHT, LIGHT GREEN FIVE]", cards.toString());
     }
 
     @Test
@@ -77,7 +78,7 @@ public class PlayerTest {
         player.addCard(card);
 
         assertEquals(3,cards.size());
-        assertEquals("[EIGHT BLUE, FIVE GREEN, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
+        assertEquals("[LIGHT BLUE EIGHT, LIGHT GREEN FIVE, LIGHT BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
 
     }
 
@@ -99,7 +100,7 @@ public class PlayerTest {
         player.removeCard(card1);
 
         assertEquals(2,cards.size());
-        assertEquals("[FIVE GREEN, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
+        assertEquals("[LIGHT GREEN FIVE, LIGHT BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
 
     }
 
@@ -121,7 +122,7 @@ public class PlayerTest {
         player.getHand();
 
         assertEquals(3,cards.size());
-        assertEquals("[EIGHT BLUE, FIVE GREEN, BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
+        assertEquals("[LIGHT BLUE EIGHT, LIGHT GREEN FIVE, LIGHT BLACK WILD_DRAW_TWO_CARDS]", cards.toString());
 
     }
 
@@ -162,6 +163,30 @@ public class PlayerTest {
 
         assertEquals(0, player.getHand().size());
         assertEquals("[]", player.getHand().toString());
+    }
+
+    @Test
+    public void handleFlip(){
+        Card lightCard1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,null, Card.Type.LIGHT);
+        Card darkCard1 = new Card(Card.Rank.ONE, Card.Colour.GREEN,null, Card.Type.DARK);
+        Card lightCard2 = new Card(Card.Rank.EIGHT, Card.Colour.RED,null, Card.Type.LIGHT);
+        Card darkCard2 = new Card(Card.Rank.ONE, Card.Colour.YELLOW,null, Card.Type.DARK);
+        lightCard1.setOtherSide(darkCard1);
+        lightCard2.setOtherSide(darkCard2);
+        darkCard1.setOtherSide(lightCard1);
+        darkCard2.setOtherSide(lightCard2);
+        ArrayList<Card> cards = new ArrayList<>();
+        cards.add(lightCard1);
+        cards.add(lightCard2);
+        Player player = new Player("Tim",cards);
+        assertEquals(player.getHand().get(0), lightCard1);
+        assertEquals(player.getHand().get(1), lightCard2);
+        player.handleFlip();
+        assertEquals(player.getHand().get(0), darkCard1);
+        assertEquals(player.getHand().get(0), darkCard2);
+        player.handleFlip();
+        assertEquals(player.getHand().get(0), lightCard1);
+        assertEquals(player.getHand().get(1), lightCard2);
     }
 
     @Test
