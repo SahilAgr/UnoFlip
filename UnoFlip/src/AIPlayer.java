@@ -7,6 +7,10 @@ public class AIPlayer extends Player{
         super(inputName);
     }
 
+    public Card.Colour getColour() {
+        return Card.Colour.BLACK;
+    }
+
     public ArrayList<Card.Colour> getRandomElement(ArrayList<Card.Colour> list)
     {
         Random rand = new Random();

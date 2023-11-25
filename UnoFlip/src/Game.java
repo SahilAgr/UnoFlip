@@ -167,7 +167,7 @@ public class Game {
                         drawOne();
                     }
                     case FLIP -> {
-                        flip();
+                        flip(card);
                     }
                     case REVERSE -> {
                         reverse();
@@ -176,7 +176,7 @@ public class Game {
                         skip();
                     }
                     case WILD -> {
-                        if(currPlayer instanceof AIPlayer){
+                        if (currPlayer instanceof AIPlayer){
                             //card.setColour(AIPlayer.getColor());
                         }else {
                         card.setColour(view.getColour());}
@@ -223,8 +223,19 @@ public class Game {
         }
     }
 
-    //Not yet necessary, but place here for posterity's sake
-    private void flip(){
+    /**
+     * Notifies the flip handlers to flip, as well as making a check to see whether the reverse of the card being played needs to have a colour assigned.
+     * @param card The flip card that has just been played.
+     */
+    private void flip(Card card){
+        if (card.getOtherSide().getCardColour() == Card.Colour.BLACK){
+            if (currPlayer instanceof AIPlayer player) {
+                card.setColour(player.getColour());
+            }
+            else {
+                card.setColour(view.getColour());
+            }
+        }
         for (FlipListener listener : flipListeners){
             listener.handleFlip();
         }
