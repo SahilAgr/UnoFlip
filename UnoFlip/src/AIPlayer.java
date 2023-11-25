@@ -13,7 +13,7 @@ public class AIPlayer extends Player{
         colour.add(Card.Colour.BLUE);
         colour.add(Card.Colour.GREEN);
         colour.add(Card.Colour.YELLOW);
-
+      
         int index = (int)(Math.random() * colour.size());
 
         return colour.get(index);
