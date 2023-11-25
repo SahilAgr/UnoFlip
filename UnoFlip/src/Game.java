@@ -230,7 +230,7 @@ public class Game {
     private void flip(Card card){
         if (card.getOtherSide().getCardColour() == Card.Colour.BLACK){
             if (currPlayer instanceof AIPlayer player) {
-                card.setColour(player.getColour());
+                card.getOtherSide().setColour(player.getColour());
             }
             else {
                 card.setColour(view.getColour());
