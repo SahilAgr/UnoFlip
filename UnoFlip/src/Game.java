@@ -177,12 +177,16 @@ public class Game {
                     }
                     case WILD -> {
                         if(currPlayer instanceof AIPlayer){
-                            //card.setColour(AIPlayer.getColor());
+                            card.setColour(((AIPlayer) currPlayer).getColour());
                         }else {
-                        card.setColour(view.getColour());}
+                            card.setColour(view.getColour());}
                     }
                     case WILD_DRAW_TWO_CARDS -> {
-                        card.setColour(view.getColour());
+                        if(currPlayer instanceof AIPlayer){
+                            card.setColour(((AIPlayer) currPlayer).getColour());
+                        }else {
+                            card.setColour(view.getColour());
+                        }
                         wildDrawTwo();
                     }
                     default -> {
