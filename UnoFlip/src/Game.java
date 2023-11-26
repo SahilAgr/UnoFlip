@@ -198,6 +198,9 @@ public class Game {
                 gameState = State.BETWEEN_ROUND;
                 roundWinner = currPlayer;
             }
+            if (currPlayer instanceof AIPlayer){
+                view.AiPlayerPlayed(card);
+            }
             nextTurn();
         }
         else {
