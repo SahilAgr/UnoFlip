@@ -62,4 +62,6 @@ public interface View {
      */
     public Card.Colour getColour();
 
+    public void AiPlayerPlayed(Card card);
+
 }

@@ -344,6 +344,15 @@ public class GUIView implements View, FlipListener{
 
         return options[colourChoice];
     }
+    public void AiPlayerPlayed(Card card){
+        try {
+            ImageIcon pic = new ImageIcon(ImageIO.read(getClass().getResource(card.getImagePath())));
+            JOptionPane.showMessageDialog(jFrame, "AI has played: " + card, "AI Play", JOptionPane.PLAIN_MESSAGE, pic);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
 
 
     public static void main(String[] args){
