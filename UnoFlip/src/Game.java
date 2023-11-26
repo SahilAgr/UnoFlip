@@ -116,6 +116,7 @@ public class Game {
         this.gameState = State.IN_ROUND;
 
         for (Player player : this.players){
+            player.removeAllCards();
             drawCard(player, 7);
         }
 
