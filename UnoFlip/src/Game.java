@@ -116,6 +116,7 @@ public class Game {
         this.gameState = State.IN_ROUND;
 
         for (Player player : this.players){
+            player.removeAllCards();
             drawCard(player, 7);
         }
 
@@ -237,10 +238,10 @@ public class Game {
     private void flip(Card card){
         if (card.getOtherSide().getCardColour() == Card.Colour.BLACK){
             if (currPlayer instanceof AIPlayer player) {
-                card.setColour(player.getColour());
+                card.getOtherSide().setColour(player.getColour());
             }
             else {
-                card.setColour(view.getColour());
+                card.getOtherSide().setColour(view.getColour());
             }
         }
         for (FlipListener listener : flipListeners){
