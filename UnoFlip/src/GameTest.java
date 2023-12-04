@@ -16,8 +16,8 @@ class GameTest {
         players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
-        mockView = new GUIView();
         game = new Game(players);
+        mockView = new GUIView(game);
         game.setView(mockView);
     }
 

@@ -8,11 +8,9 @@ import java.util.ArrayList;
  */
 public class GUIView implements View, FlipListener{
     UnoController controller;
-    private String numPlayers;
     private ScrollPane scrollPane;
     private JLabel currentPlayer;
     private JLabel topCardLabel;
-    private ImageIcon topCardImage;
     private JButton drawCardButton;
     private JLabel score;
 
@@ -23,17 +21,81 @@ public class GUIView implements View, FlipListener{
      * Constructs an instance to start the game with a visual interface.
      * Initializes the game, adds players, and starts the game.
      */
-    public GUIView(){
+    public GUIView(Game game){
         ArrayList<Player> players = new ArrayList<Player>();
-        Game game = new Game(players);
+
         controller = new UnoController(game);
+
         game.setView(this);
+
+        if (!game.hasPlayers()){
+            game = new Game(players);
+            controller.setGame(game);
+            game.setView(this);
+            getPlayers(game);
+        }
 
         jFrame = new JFrame("UNO GAME");
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        String numHumans = JOptionPane.showInputDialog("Enter Number of Human players (1-4): ");
 
+
+
+        // Used to create buttons
+        ArrayList<JButton> testButtons = addButtons(100);
+
+        JPanel jPanelRight = new JPanel();
+        scrollPane = new ScrollPane();
+        jPanelRight.setLayout(new BorderLayout());
+
+        JPanel jPanelLeft = new JPanel();
+        scrollPane.add(jPanelLeft);
+        jPanelLeft.setLayout(new GridLayout(testButtons.size(),1,10,10));
+
+        for (int i = 0; i < testButtons.size(); i++) {
+            jPanelLeft.add(testButtons.get(i));
+        }
+
+
+
+        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelLeft,scrollPane);
+        JPanel pageTitle = new JPanel();
+        currentPlayer = new JLabel();
+        currentPlayer.setHorizontalAlignment(JLabel.CENTER);
+        pageTitle.add(currentPlayer);
+
+        score = new JLabel();
+        score.setHorizontalAlignment(JLabel.CENTER);
+        pageTitle.add(score);
+        jPanelRight.add(pageTitle,BorderLayout.PAGE_START);
+
+        topCardLabel = new JLabel("Top Card");
+        topCardLabel.setHorizontalAlignment(JLabel.CENTER);
+        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
+        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
+
+        drawCardButton = new JButton("Draw Card");
+        drawCardButton.setActionCommand("draw");
+        drawCardButton.addActionListener(controller);
+        jPanelRight.add(drawCardButton, BorderLayout.SOUTH);
+
+        splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
+        splitPane.setLeftComponent(scrollPane);
+        splitPane.setRightComponent(jPanelRight);
+        splitPane.setDividerLocation(jFrame.getWidth()/2);
+        jFrame.add(splitPane);
+
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setVisible(true);
+        jFrame.validate();
+        jFrame.repaint();
+
+
+        game.startGame();
+    }
+
+    private void getPlayers(Game game){
+        String numHumans = JOptionPane.showInputDialog("Enter Number of Human players (1-4): ");
         try {
             while (numHumans == null || numHumans.length() > 1 || Integer.parseInt(numHumans) < 1 || Integer.parseInt(numHumans) > 4) {
                 if (numHumans == null) System.exit(0);
@@ -49,7 +111,7 @@ public class GUIView implements View, FlipListener{
                 System.exit(0);
             }
             JOptionPane.showMessageDialog(null, "Please enter a numeric value between 1-4! ");
-            new GUIView();
+            new GUIView(game);
         }
 
         for (int i = 1; i <= Integer.parseInt(numHumans); i ++) {
@@ -107,7 +169,7 @@ public class GUIView implements View, FlipListener{
                     System.exit(0);
                 }
                 JOptionPane.showMessageDialog(null, "Please enter a value that is between "+botLimits+"! ");
-                new GUIView();
+                new GUIView(game);
             }
         }
 
@@ -118,59 +180,6 @@ public class GUIView implements View, FlipListener{
                 controller.addBot(name);
             }
         }
-
-        // Used to create buttons
-        ArrayList<JButton> testButtons = addButtons(100);
-
-        JPanel jPanelRight = new JPanel();
-        scrollPane = new ScrollPane();
-        jPanelRight.setLayout(new BorderLayout());
-
-        JPanel jPanelLeft = new JPanel();
-        scrollPane.add(jPanelLeft);
-        jPanelLeft.setLayout(new GridLayout(testButtons.size(),1,10,10));
-
-        for (int i = 0; i < testButtons.size(); i++) {
-            jPanelLeft.add(testButtons.get(i));
-        }
-
-
-
-        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelLeft,scrollPane);
-        JPanel pageTitle = new JPanel();
-        currentPlayer = new JLabel();
-        currentPlayer.setHorizontalAlignment(JLabel.CENTER);
-        pageTitle.add(currentPlayer);
-        //jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
-
-        score = new JLabel();
-        score.setHorizontalAlignment(JLabel.CENTER);
-        pageTitle.add(score);
-        jPanelRight.add(pageTitle,BorderLayout.PAGE_START);
-
-        topCardLabel = new JLabel("Top Card");
-        topCardLabel.setHorizontalAlignment(JLabel.CENTER);
-        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
-        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
-
-        drawCardButton = new JButton("Draw Card");
-        drawCardButton.setActionCommand("draw");
-        drawCardButton.addActionListener(controller);
-        jPanelRight.add(drawCardButton, BorderLayout.SOUTH);
-
-        splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
-        splitPane.setLeftComponent(scrollPane);
-        splitPane.setRightComponent(jPanelRight);
-        splitPane.setDividerLocation(jFrame.getWidth()/2);
-        jFrame.add(splitPane);
-
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setVisible(true);
-        jFrame.validate();
-        jFrame.repaint();
-
-
-        game.startGame();
     }
 
     private ArrayList<JButton> addButtons(int numButton){
@@ -183,14 +192,6 @@ public class GUIView implements View, FlipListener{
             jButtonArrayList.get(i).setBorderPainted(false);
         }
         return jButtonArrayList;
-    }
-
-    /**
-     * Notifies when a new player has been added to the game.
-     * @param player The newly added player.
-     */
-    public void addPlayer(Player player){
-        System.out.println("Added player " + player.getName());
     }
 
     /**
@@ -352,11 +353,6 @@ public class GUIView implements View, FlipListener{
             System.out.println(e);
         }
 
-    }
-
-
-    public static void main(String[] args){
-        new GUIView();
     }
 
 }

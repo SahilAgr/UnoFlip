@@ -70,7 +70,6 @@ public class Game {
         if (gameState != State.IN_ROUND){
             flipListeners.add(player);
             players.add(player);
-            view.addPlayer(player);
         }
     }
 
@@ -348,6 +347,20 @@ public class Game {
             currPlayerIndex = 0;
         }
         currPlayer = players.get(currPlayerIndex);
+
+    }
+
+    public boolean hasPlayers(){
+        System.out.println(players.size());
+        return !players.isEmpty();
+    }
+
+
+    public void importGame(){
+
+    }
+
+    public void exportGame(){
 
     }
 }

@@ -19,7 +19,7 @@ class UnoControllerTest {
         players = new ArrayList<>();
         game = new Game(players);
         controller = new UnoController(game);
-        view = new GUIView();
+        view = new GUIView(game);
         game.setView(view);
     }
 

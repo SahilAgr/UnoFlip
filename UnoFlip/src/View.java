@@ -51,12 +51,6 @@ public interface View {
     public void winner(Player winner);
 
     /**
-     * Notifies when a new player has been added to the game.
-     * @param player Player that was added.
-     */
-    public void addPlayer(Player player);
-
-    /**
      * Allows the user to pick a colour for a Wild Card.
      * @return Colour that was chosen.
      */
