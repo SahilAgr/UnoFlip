@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class UnoDeck implements FlipListener {
+public class UnoDeck implements FlipListener, Serializable {
     private ArrayList<Card> deck;
     private ArrayList<Card> activeDeck;
     private ArrayList<Card> inactiveDeck;

@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Card extends ArrayList<Card> {
+public class Card extends ArrayList<Card> implements Serializable {
     private String imagePath;
 
     private Card otherSide;

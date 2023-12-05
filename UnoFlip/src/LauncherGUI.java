@@ -3,7 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class LauncherGUI {
@@ -26,11 +27,12 @@ public class LauncherGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Importer i = new Importer();
-                    i.readXMLGameFile("game.xml", game);
-                    System.out.println(game.hasPlayers());
-                    new GUIView(game);
-                } catch (IOException err) {
+                    FileInputStream fileInputStream = new FileInputStream("autosave.ser");
+                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                    Game loadedGame = (Game) objectInputStream.readObject();
+                    new GUIView(loadedGame);
+                } catch (Exception err) {
+                    JOptionPane.showMessageDialog(null, "Either no save file has been found, or the save file has been corrupted.", "Error", JOptionPane.ERROR_MESSAGE);
                     System.out.println(err.getMessage());
                 }
             }

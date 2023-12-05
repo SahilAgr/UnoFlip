@@ -1,10 +1,11 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 /**
  * Class responsible for controlling the flow Uno game.
  */
-public class UnoController implements ActionListener {
+public class UnoController implements ActionListener, Serializable {
 
     private Game game;
 

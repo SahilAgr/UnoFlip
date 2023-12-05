@@ -1,3 +1,6 @@
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -5,7 +8,7 @@ import java.util.Collections;
  * @author Sahil, Nic
  * @version 1.0
  */
-public class Game {
+public class Game implements Serializable {
     private final ArrayList<Player> players;
 
     public enum State{GAME_START, IN_ROUND, BETWEEN_ROUND, GAME_END}
@@ -147,6 +150,7 @@ public class Game {
             view.roundEnd(roundWinner);
             updateGame();
         }
+        exportGame();
     }
 
     /**
@@ -361,6 +365,16 @@ public class Game {
     }
 
     public void exportGame(){
-
+        try {
+            FileOutputStream fileOut = new FileOutputStream("autosave.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(this);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized data is saved in autosave.ser");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }

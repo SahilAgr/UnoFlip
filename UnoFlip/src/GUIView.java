@@ -1,12 +1,13 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Implements the View interface and provides a text-based interface for the game.
  */
-public class GUIView implements View, FlipListener{
+public class GUIView implements View, FlipListener, Serializable {
     UnoController controller;
     private ScrollPane scrollPane;
     private JLabel currentPlayer;
@@ -56,9 +57,8 @@ public class GUIView implements View, FlipListener{
             jPanelLeft.add(testButtons.get(i));
         }
 
+        jFrame.setLayout(new GridLayout(1, 2));
 
-
-        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelLeft,scrollPane);
         JPanel pageTitle = new JPanel();
         currentPlayer = new JLabel();
         currentPlayer.setHorizontalAlignment(JLabel.CENTER);
@@ -79,11 +79,8 @@ public class GUIView implements View, FlipListener{
         drawCardButton.addActionListener(controller);
         jPanelRight.add(drawCardButton, BorderLayout.SOUTH);
 
-        splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
-        splitPane.setLeftComponent(scrollPane);
-        splitPane.setRightComponent(jPanelRight);
-        splitPane.setDividerLocation(jFrame.getWidth()/2);
-        jFrame.add(splitPane);
+        jFrame.add(scrollPane);
+        jFrame.add(jPanelRight);
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
