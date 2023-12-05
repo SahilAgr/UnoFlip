@@ -359,11 +359,6 @@ public class Game implements Serializable {
         return !players.isEmpty();
     }
 
-
-    public void importGame(){
-
-    }
-
     public void exportGame(){
         try {
             FileOutputStream fileOut = new FileOutputStream("autosave.ser");
