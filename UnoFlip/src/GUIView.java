@@ -18,6 +18,8 @@ public class GUIView implements View, FlipListener {
     private JButton drawCardButton;
     private JLabel score;
 
+    private JMenuItem autosave;
+
 
     JFrame jFrame;
 
@@ -50,7 +52,7 @@ public class GUIView implements View, FlipListener {
         export.setActionCommand("export");
         export.addActionListener(controller);
 
-        JMenuItem autosave = new JMenuItem("Enable Autosave");
+        autosave = new JMenuItem("Enable Autosave");
         autosave.setActionCommand("autosave");
         autosave.addActionListener(controller);
 
@@ -210,6 +212,21 @@ public class GUIView implements View, FlipListener {
         else {
             return "";
         }
+    }
+
+    public void autosaveToggled(boolean status, String path){
+        String menuText;
+        String popupText;
+        if (status) {
+            menuText = "Disable Autosave";
+            popupText = "Autosave has been enabled, and will save the game to " + path + " at the end of each player turn.";
+        }
+        else {
+            menuText = "Enable Autosave";
+            popupText = "Autosave has been disabled. The autosave file can still be found at " + path;
+        }
+        autosave.setText(menuText);
+        JOptionPane.showMessageDialog(jFrame, popupText, "Flip", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private ArrayList<JButton> addButtons(int numButton){

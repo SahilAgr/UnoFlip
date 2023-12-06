@@ -387,6 +387,7 @@ public class Game implements Serializable {
 
     public void toggleAutosave(){
         storage.autosave = !storage.autosave;
+        view.autosaveToggled(storage.autosave, storage.autosavePath);
     }
 
     public void setAutosave(String path){

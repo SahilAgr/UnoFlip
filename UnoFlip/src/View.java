@@ -13,6 +13,8 @@ public interface View {
      */
     public void nextPlayer(Player player, Card topCard);
 
+    public void autosaveToggled(boolean status, String path);
+
     /**
      * Notifies that a card has been played and whether it's a valid move.
      * @param card Card that was played.
