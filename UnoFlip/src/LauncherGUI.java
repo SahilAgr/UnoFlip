@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -15,11 +14,11 @@ public class LauncherGUI {
         frame.setSize(400, 100);
         frame.setLayout(new GridLayout(1, 2));
         JButton newGame = new JButton("New Game");
+        Game game = new Game(new ArrayList<Player>());
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game newGame = new Game(new ArrayList<Player>());
-                new GUIView(newGame);
+                new GUIView(game);
                 frame.setVisible(false);
             }
         });
@@ -34,14 +33,14 @@ public class LauncherGUI {
                 if (option == JFileChooser.APPROVE_OPTION){
                     File file = fileChooser.getSelectedFile();
                     try {
-                        FileInputStream fileInputStream = new FileInputStream(file.getName());
+                        FileInputStream fileInputStream = new FileInputStream(file.getAbsoluteFile());
                         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                        Game loadedGame = (Game) objectInputStream.readObject();
-                        new GUIView(loadedGame);
+                        game.importGame((Game.GameStorage) objectInputStream.readObject());
+                        new GUIView(game);
                         frame.setVisible(false);
                     } catch (Exception err) {
                         JOptionPane.showMessageDialog(null, "Either no save file has been found, or the save file has been corrupted.", "Error", JOptionPane.ERROR_MESSAGE);
-                        System.out.println(err.getMessage());
+                        throw new RuntimeException(err);
                     }
                 }
             }

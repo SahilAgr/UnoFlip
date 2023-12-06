@@ -1,13 +1,16 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Implements the View interface and provides a text-based interface for the game.
  */
-public class GUIView implements View, FlipListener, Serializable {
+public class GUIView implements View, FlipListener {
     UnoController controller;
     private ScrollPane scrollPane;
     private JLabel currentPlayer;
@@ -25,7 +28,7 @@ public class GUIView implements View, FlipListener, Serializable {
     public GUIView(Game game){
         ArrayList<Player> players = new ArrayList<Player>();
 
-        controller = new UnoController(game);
+        controller = new UnoController(game, this);
 
         game.setView(this);
 
@@ -40,6 +43,21 @@ public class GUIView implements View, FlipListener, Serializable {
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Save");
+
+        JMenuItem export = new JMenuItem("Export game");
+        export.setActionCommand("export");
+        export.addActionListener(controller);
+
+        JMenuItem autosave = new JMenuItem("Enable Autosave");
+        autosave.setActionCommand("autosave");
+        autosave.addActionListener(controller);
+
+        menu.add(export);
+        menu.add(autosave);
+        menuBar.add(menu);
+        jFrame.setJMenuBar(menuBar);
 
 
         // Used to create buttons
@@ -176,6 +194,21 @@ public class GUIView implements View, FlipListener, Serializable {
                 if (name == null) System.exit(0);
                 controller.addBot(name);
             }
+        }
+    }
+
+    public String getPath(){
+        System.out.println("Step 1");
+        JFileChooser fileChooser = new JFileChooser();
+        int option = fileChooser.showSaveDialog(jFrame);
+        System.out.println("Step 2");
+        if (option == JFileChooser.APPROVE_OPTION){
+            System.out.println("Step 3");
+            File autosaveFile = fileChooser.getSelectedFile();
+            return autosaveFile.getAbsolutePath();
+        }
+        else {
+            return "";
         }
     }
 

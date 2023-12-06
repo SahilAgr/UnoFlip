@@ -8,13 +8,15 @@ import java.io.Serializable;
 public class UnoController implements ActionListener, Serializable {
 
     private Game game;
+    private GUIView view;
 
     /**
      * Constructs a new UnoController with specified game instance.
      * @param game The Game instance to control.
      */
-    public UnoController(Game game){
+    public UnoController(Game game, GUIView view){
         this.game = game;
+        this.view = view;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -29,12 +31,27 @@ public class UnoController implements ActionListener, Serializable {
                 game.attemptPlayCard(Integer.parseInt(command[1]));
                 break;
             }
+            case "export":{
+                String path = view.getPath();
+                if (!path.isEmpty()) {
+                    game.exportGame(path);
+                }
+                break;
+            }
+            case "autosave":{
+                if (!game.autosaveOn()){
+                    String path = view.getPath();
+                    if (!path.equals("")) {
+                        game.setAutosave(path);
+                    }
+                }
+                game.toggleAutosave();
+                break;
+            }
         }
     }
 
-    public void getPlay(Player player){
-        //temporarily still here so as not to cause compiler crashes while waiting on new View code.
-    }
+
 
     /**
      * Allows the user to add players to the game, specifying the number of players and their names.

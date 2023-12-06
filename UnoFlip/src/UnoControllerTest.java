@@ -12,14 +12,14 @@ class UnoControllerTest {
     private Game game;
     private ArrayList<Player> players;
 
-    private View view;
+    private GUIView view;
 
     @BeforeEach
     void setUp() {
         players = new ArrayList<>();
         game = new Game(players);
-        controller = new UnoController(game);
         view = new GUIView(game);
+        controller = new UnoController(game, view);
         game.setView(view);
     }
 
@@ -46,7 +46,6 @@ class UnoControllerTest {
         System.setIn(in);
         game.addPlayer(player);
 
-        controller.getPlay(player);
         game.startGame();
 
     }
