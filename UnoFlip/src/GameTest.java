@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 class GameTest {
     private Game game;
-    private View mockView;
+    private GUIView mockView;
     private Player player1;
     private Player player2;
     private ArrayList<Player> players;
@@ -16,8 +16,8 @@ class GameTest {
         players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
-        mockView = new GUIView();
         game = new Game(players);
+        mockView = new GUIView(game);
         game.setView(mockView);
     }
 

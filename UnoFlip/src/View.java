@@ -13,6 +13,8 @@ public interface View {
      */
     public void nextPlayer(Player player, Card topCard);
 
+    public void autosaveToggled(boolean status, String path);
+
     /**
      * Notifies that a card has been played and whether it's a valid move.
      * @param card Card that was played.
@@ -49,12 +51,6 @@ public interface View {
      * @param winner Player who won the game with their total score.
      */
     public void winner(Player winner);
-
-    /**
-     * Notifies when a new player has been added to the game.
-     * @param player Player that was added.
-     */
-    public void addPlayer(Player player);
 
     /**
      * Allows the user to pick a colour for a Wild Card.

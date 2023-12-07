@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player implements FlipListener {
+public class Player implements FlipListener, Serializable {
     private String name;
     private ArrayList<Card> hand;
 

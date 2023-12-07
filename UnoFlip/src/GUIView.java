@@ -1,20 +1,24 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Implements the View interface and provides a text-based interface for the game.
  */
-public class GUIView implements View, FlipListener{
+public class GUIView implements View, FlipListener {
     UnoController controller;
-    private String numPlayers;
     private ScrollPane scrollPane;
     private JLabel currentPlayer;
     private JLabel topCardLabel;
-    private ImageIcon topCardImage;
     private JButton drawCardButton;
     private JLabel score;
+
+    private JMenuItem autosave;
 
 
     JFrame jFrame;
@@ -23,17 +27,92 @@ public class GUIView implements View, FlipListener{
      * Constructs an instance to start the game with a visual interface.
      * Initializes the game, adds players, and starts the game.
      */
-    public GUIView(){
+    public GUIView(Game game){
         ArrayList<Player> players = new ArrayList<Player>();
-        Game game = new Game(players);
-        controller = new UnoController(game);
+
+        controller = new UnoController(game, this);
+
         game.setView(this);
+
+        if (!game.hasPlayers()){
+            game = new Game(players);
+            controller.setGame(game);
+            game.setView(this);
+            getPlayers(game);
+        }
 
         jFrame = new JFrame("UNO GAME");
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        String numHumans = JOptionPane.showInputDialog("Enter Number of Human players (1-4): ");
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Save");
+
+        JMenuItem export = new JMenuItem("Export game");
+        export.setActionCommand("export");
+        export.addActionListener(controller);
+
+        autosave = new JMenuItem("Enable Autosave");
+        autosave.setActionCommand("autosave");
+        autosave.addActionListener(controller);
+
+        menu.add(export);
+        menu.add(autosave);
+        menuBar.add(menu);
+        jFrame.setJMenuBar(menuBar);
+
+
+        // Used to create buttons
+        ArrayList<JButton> testButtons = addButtons(100);
+
+        JPanel jPanelRight = new JPanel();
+        scrollPane = new ScrollPane();
+        jPanelRight.setLayout(new BorderLayout());
+
+        JPanel jPanelLeft = new JPanel();
+        scrollPane.add(jPanelLeft);
+        jPanelLeft.setLayout(new GridLayout(testButtons.size(),1,10,10));
+
+        for (int i = 0; i < testButtons.size(); i++) {
+            jPanelLeft.add(testButtons.get(i));
+        }
+
+        jFrame.setLayout(new GridLayout(1, 2));
+
+        JPanel pageTitle = new JPanel();
+        currentPlayer = new JLabel();
+        currentPlayer.setHorizontalAlignment(JLabel.CENTER);
+        pageTitle.add(currentPlayer);
+
+        score = new JLabel();
+        score.setHorizontalAlignment(JLabel.CENTER);
+        pageTitle.add(score);
+        jPanelRight.add(pageTitle,BorderLayout.PAGE_START);
+
+        topCardLabel = new JLabel("Top Card");
+        topCardLabel.setHorizontalAlignment(JLabel.CENTER);
+        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
+        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
+
+        drawCardButton = new JButton("Draw Card");
+        drawCardButton.setActionCommand("draw");
+        drawCardButton.addActionListener(controller);
+        jPanelRight.add(drawCardButton, BorderLayout.SOUTH);
+
+        jFrame.add(scrollPane);
+        jFrame.add(jPanelRight);
+
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setVisible(true);
+        jFrame.validate();
+        jFrame.repaint();
+
+
+        game.startGame();
+    }
+
+    private void getPlayers(Game game){
+        String numHumans = JOptionPane.showInputDialog("Enter Number of Human players (1-4): ");
         try {
             while (numHumans == null || numHumans.length() > 1 || Integer.parseInt(numHumans) < 1 || Integer.parseInt(numHumans) > 4) {
                 if (numHumans == null) System.exit(0);
@@ -49,7 +128,7 @@ public class GUIView implements View, FlipListener{
                 System.exit(0);
             }
             JOptionPane.showMessageDialog(null, "Please enter a numeric value between 1-4! ");
-            new GUIView();
+            new GUIView(game);
         }
 
         for (int i = 1; i <= Integer.parseInt(numHumans); i ++) {
@@ -107,7 +186,7 @@ public class GUIView implements View, FlipListener{
                     System.exit(0);
                 }
                 JOptionPane.showMessageDialog(null, "Please enter a value that is between "+botLimits+"! ");
-                new GUIView();
+                new GUIView(game);
             }
         }
 
@@ -118,59 +197,36 @@ public class GUIView implements View, FlipListener{
                 controller.addBot(name);
             }
         }
+    }
 
-        // Used to create buttons
-        ArrayList<JButton> testButtons = addButtons(100);
-
-        JPanel jPanelRight = new JPanel();
-        scrollPane = new ScrollPane();
-        jPanelRight.setLayout(new BorderLayout());
-
-        JPanel jPanelLeft = new JPanel();
-        scrollPane.add(jPanelLeft);
-        jPanelLeft.setLayout(new GridLayout(testButtons.size(),1,10,10));
-
-        for (int i = 0; i < testButtons.size(); i++) {
-            jPanelLeft.add(testButtons.get(i));
+    public String getPath(){
+        System.out.println("Step 1");
+        JFileChooser fileChooser = new JFileChooser();
+        int option = fileChooser.showSaveDialog(jFrame);
+        System.out.println("Step 2");
+        if (option == JFileChooser.APPROVE_OPTION){
+            System.out.println("Step 3");
+            File autosaveFile = fileChooser.getSelectedFile();
+            return autosaveFile.getAbsolutePath();
         }
+        else {
+            return "";
+        }
+    }
 
-
-
-        JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelLeft,scrollPane);
-        JPanel pageTitle = new JPanel();
-        currentPlayer = new JLabel();
-        currentPlayer.setHorizontalAlignment(JLabel.CENTER);
-        pageTitle.add(currentPlayer);
-        //jPanelRight.add(currentPlayer, BorderLayout.PAGE_START);
-
-        score = new JLabel();
-        score.setHorizontalAlignment(JLabel.CENTER);
-        pageTitle.add(score);
-        jPanelRight.add(pageTitle,BorderLayout.PAGE_START);
-
-        topCardLabel = new JLabel("Top Card");
-        topCardLabel.setHorizontalAlignment(JLabel.CENTER);
-        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
-        jPanelRight.add(topCardLabel, BorderLayout.CENTER);
-
-        drawCardButton = new JButton("Draw Card");
-        drawCardButton.setActionCommand("draw");
-        drawCardButton.addActionListener(controller);
-        jPanelRight.add(drawCardButton, BorderLayout.SOUTH);
-
-        splitPane = new JSplitPane(SwingConstants.VERTICAL,jPanelRight,scrollPane);
-        splitPane.setLeftComponent(scrollPane);
-        splitPane.setRightComponent(jPanelRight);
-        splitPane.setDividerLocation(jFrame.getWidth()/2);
-        jFrame.add(splitPane);
-
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setVisible(true);
-        jFrame.validate();
-        jFrame.repaint();
-
-
-        game.startGame();
+    public void autosaveToggled(boolean status, String path){
+        String menuText;
+        String popupText;
+        if (status) {
+            menuText = "Disable Autosave";
+            popupText = "Autosave has been enabled, and will save the game to " + path + " at the end of each player turn.";
+        }
+        else {
+            menuText = "Enable Autosave";
+            popupText = "Autosave has been disabled. The autosave file can still be found at " + path;
+        }
+        autosave.setText(menuText);
+        JOptionPane.showMessageDialog(jFrame, popupText, "Flip", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private ArrayList<JButton> addButtons(int numButton){
@@ -183,14 +239,6 @@ public class GUIView implements View, FlipListener{
             jButtonArrayList.get(i).setBorderPainted(false);
         }
         return jButtonArrayList;
-    }
-
-    /**
-     * Notifies when a new player has been added to the game.
-     * @param player The newly added player.
-     */
-    public void addPlayer(Player player){
-        System.out.println("Added player " + player.getName());
     }
 
     /**
@@ -352,11 +400,6 @@ public class GUIView implements View, FlipListener{
             System.out.println(e);
         }
 
-    }
-
-
-    public static void main(String[] args){
-        new GUIView();
     }
 
 }
