@@ -23,7 +23,7 @@ public class LauncherGUI {
                 frame.setVisible(false);
             }
         });
-        JButton importGame = new JButton("Import Save");
+        JButton importGame = new JButton("Load Save");
         importGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

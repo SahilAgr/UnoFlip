@@ -4,14 +4,19 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import org.apache.commons.lang3.SerializationUtils;
 
 /**
  * @author Sahil, Nic
- * @version 1.0
+ * @version 2.0
  */
 public class Game implements Serializable {
     
     GameStorage storage;
+
+    ArrayList<GameStorage> playHistory;
+
+    int playIndex;
 
     private View view;
     
@@ -62,6 +67,8 @@ public class Game implements Serializable {
      */
     public Game(ArrayList<Player> players){
         storage = new GameStorage(players);
+        playHistory = new ArrayList<>();
+        playIndex = 0;
     }
 
     /**
@@ -124,6 +131,7 @@ public class Game implements Serializable {
         storage.deck = new UnoDeck();
         storage.flipListeners.add(storage.deck);
         storage.playedCards = new ArrayList<Card>();
+        playHistory = new ArrayList<GameStorage>();
 
         Card topTemp = storage.deck.drawNCard(1).get(0);
         while (topTemp.getCardColour() == Card.Colour.BLACK){
@@ -151,6 +159,7 @@ public class Game implements Serializable {
         if (storage.autosave){
             exportGame(storage.autosavePath);
         }
+        saveToHistory();
         if (storage.gameState == GameStorage.State.IN_ROUND){
             iteratePlayers();
             storage.topCard = storage.playedCards.get(storage.playedCards.size()-1);
@@ -355,9 +364,6 @@ public class Game implements Serializable {
      */
     private void drawCard(Player player, int amount){
         ArrayList<Card> cards = storage.deck.drawNCard(amount);
-        for (Card card : cards){
-            System.out.println(card + " has been drawn, with reverse side " + card.getOtherSide());
-        }
         player.addCard(cards);
         view.drawCard(player, cards);
     }
@@ -379,6 +385,37 @@ public class Game implements Serializable {
     public boolean hasPlayers(){
         System.out.println(storage.players.size());
         return !storage.players.isEmpty();
+    }
+
+    private void saveToHistory(){
+        View savedView = view;
+        view = null;
+        GameStorage saveState = (GameStorage) SerializationUtils.clone(storage);
+        playHistory.add(saveState);
+        playIndex ++;
+        view = savedView;
+    }
+
+    public void undo(){
+        if (playIndex > 1) {
+            playIndex--;
+            storage = playHistory.get(playIndex);
+            view.nextPlayer(storage.currPlayer, storage.topCard);
+        }
+        else {
+            //view.undoFail()
+        }
+    }
+
+    public void redo() {
+        if (playIndex < playHistory.size()-1) {
+            playIndex++;
+            storage = playHistory.get(playIndex);
+            view.nextPlayer(storage.currPlayer, storage.topCard);
+        }
+        else {
+            //view.redoFail();
+        }
     }
 
     public boolean autosaveOn(){
@@ -408,7 +445,6 @@ public class Game implements Serializable {
             out.writeObject(storage);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in "+path);
         }
         catch (Exception e){
             throw new RuntimeException(e);
