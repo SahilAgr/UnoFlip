@@ -13,6 +13,7 @@ public class LauncherGUI {
         JFrame frame = new JFrame();
         frame.setSize(400, 100);
         frame.setLayout(new GridLayout(1, 2));
+        frame.setLocation((int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().width*0.39), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().height*0.45));
         JButton newGame = new JButton("New Game");
         Game game = new Game(new ArrayList<Player>());
         newGame.addActionListener(new ActionListener() {
