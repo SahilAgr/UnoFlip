@@ -2,9 +2,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -45,6 +42,12 @@ public class GUIView implements View, FlipListener {
         jFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        //Undo, Redo, Replay
+        JMenu menu1 = new JMenu("Menu");
+        JMenuItem undo = new JMenuItem("Undo");
+        JMenuItem redo = new JMenuItem("Redo");
+        JMenuItem replay = new JMenuItem("Replay");
+
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Save");
 
@@ -56,8 +59,12 @@ public class GUIView implements View, FlipListener {
         autosave.setActionCommand("autosave");
         autosave.addActionListener(controller);
 
+        menu1.add(undo);
+        menu1.add(redo);
+        menu1.add(replay);
         menu.add(export);
         menu.add(autosave);
+        menuBar.add(menu1);
         menuBar.add(menu);
         jFrame.setJMenuBar(menuBar);
 
