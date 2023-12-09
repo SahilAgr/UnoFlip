@@ -22,6 +22,19 @@ public class Player implements FlipListener, Serializable {
         this.points = 0;
     }
 
+    public Player(Player p){
+        this.name = p.getName();
+        this.points = p.getPoints();
+        this.hand = new ArrayList<>();
+        Card newCard;
+        for (Card c : p.getHand()){
+            newCard = new Card(c);
+            newCard.setOtherSide(new Card(c.getOtherSide()));
+            newCard.getOtherSide().setOtherSide(newCard);
+            hand.add(newCard);
+        }
+    }
+
     /**
      * Returns the name of the player
      * @return String
@@ -133,4 +146,14 @@ public class Player implements FlipListener, Serializable {
 
         return -1;
     }
+
+    public String toString(){
+        String cardString= "[";
+        for (Card c : hand){
+            cardString += c.toString() + ", ";
+        }
+        cardString += "]";
+        return name+" is holding "+cardString;
+    }
+
 }

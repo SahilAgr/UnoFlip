@@ -15,6 +15,12 @@ public class GUIView implements View, FlipListener {
     private JButton drawCardButton;
     private JLabel score;
 
+    private JMenuItem undo;
+
+    private JMenuItem redo;
+
+    private JMenuItem replay;
+
     private JMenuItem autosave;
 
 
@@ -44,9 +50,18 @@ public class GUIView implements View, FlipListener {
 
         //Undo, Redo, Replay
         JMenu menu1 = new JMenu("Menu");
-        JMenuItem undo = new JMenuItem("Undo");
-        JMenuItem redo = new JMenuItem("Redo");
-        JMenuItem replay = new JMenuItem("Replay");
+        undo = new JMenuItem("Undo");
+        undo.setActionCommand("undo");
+        undo.addActionListener(controller);
+        undo.setEnabled(false);
+        redo = new JMenuItem("Redo");
+        redo.setActionCommand("redo");
+        redo.addActionListener(controller);
+        redo.setEnabled(false);
+        replay = new JMenuItem("Replay");
+        replay.setActionCommand("replay");
+        replay.addActionListener(controller);
+        replay.setEnabled(false);
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Save");
@@ -207,12 +222,9 @@ public class GUIView implements View, FlipListener {
     }
 
     public String getPath(){
-        System.out.println("Step 1");
         JFileChooser fileChooser = new JFileChooser();
         int option = fileChooser.showSaveDialog(jFrame);
-        System.out.println("Step 2");
         if (option == JFileChooser.APPROVE_OPTION){
-            System.out.println("Step 3");
             File autosaveFile = fileChooser.getSelectedFile();
             return autosaveFile.getAbsolutePath();
         }
@@ -254,9 +266,6 @@ public class GUIView implements View, FlipListener {
      * @param topCard The current top card in the game.
      */
     public void nextPlayer(Player player, Card topCard){
-        if (player instanceof AIPlayer){
-            //disable the frame
-        }
         scrollPane.removeAll();
         JPanel jPanel = new JPanel();
         int cardIndex = 0;
@@ -287,14 +296,6 @@ public class GUIView implements View, FlipListener {
         scrollPane.add(jPanel);
         currentPlayer.setText("Player: "+ player.getName() + "'s Turn");
         score.setText(", Score: " + player.getPoints() + "");
-        /*
-        System.out.println("\n The top card is " +  topCard);
-        this.topCard = new Card(topCard.getCardNum(),topCard.getCardColour(),topCard.getSpecialType(), Card.Type.LIGHT);
-        System.out.println(player.getName() + "'s Turn\n");
-        cardHand(player.getHand());
-        controller.getPlay(player);
-
-         */
     }
 
     /**
@@ -340,10 +341,12 @@ public class GUIView implements View, FlipListener {
      * @param validCard True if card is valid, otherwise false.
      */
     public void cardPlayed(Card card, Boolean validCard){
-        if (!validCard) {
-            System.out.println("Card doesn't match the top card. Try again.\n");
+        if (validCard) {
+            undo.setEnabled(true);
+            undo.setToolTipText("Go back in time!");
+            redo.setEnabled(false);
+            redo.setToolTipText("To redo, you must first undo.");
         }
-        System.out.println("Played: " + card + ".\n");
     }
 
     /**
@@ -409,4 +412,17 @@ public class GUIView implements View, FlipListener {
 
     }
 
+    public void undo(){
+        redo.setEnabled(true);
+    }
+
+    public void redo(boolean upToDate){
+        if (upToDate){
+            redo.setEnabled(false);
+        }
+    }
+
+    /*
+    JOptionPane dismissal: .dispose()
+     */
 }

@@ -2,7 +2,6 @@ import java.io.Serializable;
 import java.util.*;
 
 public class UnoDeck implements FlipListener, Serializable {
-    private ArrayList<Card> deck;
     private ArrayList<Card> activeDeck;
     private ArrayList<Card> inactiveDeck;
 
@@ -52,13 +51,27 @@ public class UnoDeck implements FlipListener, Serializable {
         Collections.shuffle(darkCards);
 
         for (int i = 0; i < lightCards.size(); i++) {
-            System.out.println("Setting "+lightCards.get(i)+" to match with "+darkCards.get(i));
             lightCards.get(i).setOtherSide(darkCards.get(i));
             darkCards.get(i).setOtherSide(lightCards.get(i));
         }
 
         activeDeck = lightCards;
         inactiveDeck = darkCards;
+    }
+
+    public UnoDeck(UnoDeck d){
+        this.activeDeck = new ArrayList<>();
+        this.inactiveDeck = new ArrayList<>();
+        Card activeCard;
+        Card inactiveCard;
+        for (Card c : d.activeDeck){
+            activeCard = new Card(c);
+            inactiveCard = new Card(c.getOtherSide());
+            activeCard.setOtherSide(inactiveCard);
+            inactiveCard.setOtherSide(activeCard);
+            activeDeck.add(activeCard);
+            inactiveDeck.add(inactiveCard);
+        }
     }
 
     /**

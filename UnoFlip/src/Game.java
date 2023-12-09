@@ -4,7 +4,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import org.apache.commons.lang3.SerializationUtils;
 
 /**
  * @author Sahil, Nic
@@ -22,7 +21,7 @@ public class Game implements Serializable {
     
     public class GameStorage implements Serializable {
 
-        private final ArrayList<Player> players;
+        private ArrayList<Player> players;
 
         private boolean autosave;
 
@@ -59,6 +58,64 @@ public class Game implements Serializable {
             this.flipListeners = new ArrayList<>();
             this.autosave = false;
         }
+
+        //Copy Constructor
+
+        public GameStorage(GameStorage s){
+
+            this.players = new ArrayList<>();
+
+            System.out.println(s.players.size());
+
+            for (Player p : s.players){
+                System.out.println("FUCK. Looks like "+p);
+                this.players.add(new Player(p));
+            }
+            System.out.println("That went well!");
+
+            this.autosave = s.autosave;
+
+            this.autosavePath = s.autosavePath;
+
+            this.cardType = s.cardType;
+
+            this.gameState = s.gameState;
+
+            this.topCard = new Card(s.topCard);
+
+            this.playedCards = new ArrayList<>();
+
+            for (Card c : s.playedCards){
+                this.playedCards.add(new Card(c));
+            }
+
+            this.deck = new UnoDeck(s.deck);
+
+            System.out.println("Things might go wrong here.");
+
+            this.currPlayer = new Player(s.currPlayer);
+
+            System.out.println("Nope!");
+
+            this.roundCounter = s.roundCounter;
+
+            this.roundWinner = s.roundWinner;
+
+            this.gameWinner = s.gameWinner;
+
+            this.flipListeners = new ArrayList<>();
+
+            System.out.println("Here comes the next part where shit can go sour");
+
+            for (Player p : this.players){
+                this.flipListeners.add(p);
+            }
+
+            this.flipListeners.add(this.deck);
+
+            this.currPlayerIndex = s.currPlayerIndex;
+        }
+
     }
 
     /**
@@ -67,8 +124,6 @@ public class Game implements Serializable {
      */
     public Game(ArrayList<Player> players){
         storage = new GameStorage(players);
-        playHistory = new ArrayList<>();
-        playIndex = 0;
     }
 
     /**
@@ -128,10 +183,15 @@ public class Game implements Serializable {
     private void startRound(){
         //Initializing round variables and objects
         storage.currPlayerIndex = storage.players.size(); //Guarantees that when nextTurn is first called, it will jump to the first player
+        storage.currPlayer = storage.players.get(0);
+        System.out.println("AHHHHH");
+        System.out.println("The current player is "+storage.currPlayer);
+        System.out.println("PLEASE!!");
         storage.deck = new UnoDeck();
         storage.flipListeners.add(storage.deck);
         storage.playedCards = new ArrayList<Card>();
         playHistory = new ArrayList<GameStorage>();
+        playIndex = -1;
 
         Card topTemp = storage.deck.drawNCard(1).get(0);
         while (topTemp.getCardColour() == Card.Colour.BLACK){
@@ -159,12 +219,13 @@ public class Game implements Serializable {
         if (storage.autosave){
             exportGame(storage.autosavePath);
         }
-        saveToHistory();
         if (storage.gameState == GameStorage.State.IN_ROUND){
             iteratePlayers();
             storage.topCard = storage.playedCards.get(storage.playedCards.size()-1);
             storage.currPlayer = storage.players.get(storage.currPlayerIndex);
             view.nextPlayer(storage.currPlayer, storage.topCard);
+            System.out.println("YEAH! It's FUCKING "+storage.currPlayer);
+            saveToHistory();
             if (storage.currPlayer instanceof AIPlayer){
                 ((AIPlayer) storage.currPlayer).legalCards(this,storage.currPlayer);
             }
@@ -189,11 +250,7 @@ public class Game implements Serializable {
      */
     public void attemptPlayCard(int cardIndex){
         Card card = this.storage.currPlayer.getHand().get(cardIndex);
-        System.out.println("THIS IS WHAT I AM PLAYING: " + card);
         view.cardPlayed(card, legalMove(card));
-        if (storage.currPlayer instanceof AIPlayer){
-            System.out.println("THE AI PLAYER TRIED TO PLAY " + card.getCardColour() + card.getCardNum());
-        }
         if (legalMove(card)){
             if (card.getSpecialType() != null){
                 switch (card.getSpecialType()) {
@@ -383,39 +440,49 @@ public class Game implements Serializable {
     }
 
     public boolean hasPlayers(){
-        System.out.println(storage.players.size());
         return !storage.players.isEmpty();
     }
 
     private void saveToHistory(){
+        for (Player p : storage.players){
+            System.out.println(p);
+        }
+        System.out.println("\n");
+        if (playIndex < playHistory.size()-1){
+            playHistory.subList(playIndex+1, playHistory.size()).clear();
+        }
         View savedView = view;
         view = null;
-        GameStorage saveState = (GameStorage) SerializationUtils.clone(storage);
-        playHistory.add(saveState);
+        playHistory.add(new GameStorage(storage));
         playIndex ++;
         view = savedView;
+        System.out.println("The current index of the play history is: "+playIndex+". The size of the play history is: "+playHistory.size());
+        for (Player p : storage.players){
+            System.out.println(p);
+        }
+        System.out.println("\n");
     }
 
     public void undo(){
-        if (playIndex > 1) {
+        if (playIndex > 0) {
+            System.out.println("The index of the play history before the undo is: "+playIndex+". The size of the play history is: "+playHistory.size());
             playIndex--;
             storage = playHistory.get(playIndex);
             view.nextPlayer(storage.currPlayer, storage.topCard);
-        }
-        else {
-            //view.undoFail()
+            System.out.println("The index of the play history after the undo is: "+playIndex+". The size of the play history is: "+playHistory.size());
+            view.undo();
         }
     }
 
     public void redo() {
         if (playIndex < playHistory.size()-1) {
+            System.out.println("The index of the play history before the redo is: "+playIndex+". The size of the play history is: "+playHistory.size());
             playIndex++;
             storage = playHistory.get(playIndex);
             view.nextPlayer(storage.currPlayer, storage.topCard);
+            System.out.println("The index of the play history after the redo is: "+playIndex+". The size of the play history is: "+playHistory.size());
         }
-        else {
-            //view.redoFail();
-        }
+        view.redo(playIndex == playHistory.size()-1);
     }
 
     public boolean autosaveOn(){

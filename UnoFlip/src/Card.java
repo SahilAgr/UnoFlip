@@ -56,6 +56,37 @@ public class Card extends ArrayList<Card> implements Serializable {
         }
     }
 
+    public Card(Card c){
+        this.rank = c.getCardNum();
+        this.colour = c.getCardColour();
+        this.special = c.getSpecialType();
+        this.type = c.getType();
+        String basePath = "uno_cards/";
+
+        if (this.special == Special.WILD || this.special == Special.WILD_DRAW_TWO_CARDS) {
+            this.imagePath = basePath + specialToString(this.special) + ".png";
+        } else {
+            String fileNamePart;
+            if (this.special != null) {
+
+                fileNamePart = specialToString(this.special);
+            } else {
+
+                fileNamePart = rankToString(rank);
+            }
+
+            String colourString = (colour != null) ? colour.toString().toLowerCase() : "";
+
+            // Adjust the path based on card type
+            if (type == Type.LIGHT) {
+                this.imagePath = basePath + colourString + "_" + fileNamePart + ".png";
+            } else if (type == Type.DARK) {
+                this.imagePath = basePath + "dark_" + colourString + "_" + fileNamePart + ".png";
+            }
+        }
+
+    }
+
 
     public Type getType(){
         return this.type;

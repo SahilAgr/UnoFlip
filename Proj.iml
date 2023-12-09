@@ -33,5 +33,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-lang3-3.14.0-sources" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.14" level="project" />
   </component>
 </module>

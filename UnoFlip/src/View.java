@@ -60,4 +60,7 @@ public interface View {
 
     public void AiPlayerPlayed(Card card);
 
+    void undo();
+
+    void redo(boolean upToDate);
 }

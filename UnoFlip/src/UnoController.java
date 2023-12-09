@@ -33,9 +33,14 @@ public class UnoController implements ActionListener, Serializable {
             }
             case "undo":{
                 game.undo();
+                break;
             }
             case "redo":{
                 game.redo();
+                break;
+            }
+            case "replay":{
+                break;
             }
             case "export":{
                 String path = view.getPath();
