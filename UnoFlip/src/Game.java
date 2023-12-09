@@ -61,14 +61,18 @@ public class Game implements Serializable {
 
         //Copy Constructor
 
-        public GameStorage(GameStorage s){
+        public GameStorage(GameStorage s) {
 
             this.players = new ArrayList<>();
 
             System.out.println(s.players.size());
 
-            for (Player p : s.players){
-                this.players.add(new Player(p));
+            for (Player p : s.players) {
+                if (p instanceof AIPlayer) {
+                    this.players.add(new AIPlayer((AIPlayer) p));
+                } else {
+                    this.players.add(new Player(p));
+                }
             }
 
             this.autosave = s.autosave;
@@ -85,13 +89,18 @@ public class Game implements Serializable {
 
             this.playedCards = new ArrayList<>();
 
-            for (Card c : s.playedCards){
+            for (Card c : s.playedCards) {
                 this.playedCards.add(new Card(c));
             }
 
             this.deck = new UnoDeck(s.deck);
 
-            this.currPlayer = new Player(s.currPlayer);
+            if (s.currPlayer instanceof AIPlayer){
+                this.currPlayer = new AIPlayer((AIPlayer) s.currPlayer);
+            }
+            else {
+                this.currPlayer = new Player(s.currPlayer);
+            }
 
             this.roundCounter = s.roundCounter;
 

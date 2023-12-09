@@ -7,6 +7,10 @@ public class AIPlayer extends Player{
         super(inputName);
     }
 
+    public AIPlayer(AIPlayer p){
+        super(p);
+    }
+
     public Card.Colour getColour(){
         ArrayList<Card.Colour> colour = new ArrayList<>();
         colour.add(Card.Colour.RED);
