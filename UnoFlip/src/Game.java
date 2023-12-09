@@ -478,6 +478,11 @@ public class Game implements Serializable {
         }
         view.redo(playIndex == playHistory.size()-1);
     }
+    public void replay(){
+        storage = playHistory.get(0);
+        view.nextPlayer(storage.currPlayer, storage.topCard);
+        view.replay();
+    }
 
     public boolean autosaveOn(){
         return storage.autosave;

@@ -40,6 +40,7 @@ public class UnoController implements ActionListener, Serializable {
                 break;
             }
             case "replay":{
+                game.replay();
                 break;
             }
             case "export":{

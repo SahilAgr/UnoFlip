@@ -63,4 +63,5 @@ public interface View {
     void undo();
 
     void redo(boolean upToDate);
+    void replay();
 }

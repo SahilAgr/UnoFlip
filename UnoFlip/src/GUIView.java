@@ -61,7 +61,7 @@ public class GUIView implements View, FlipListener {
         replay = new JMenuItem("Replay");
         replay.setActionCommand("replay");
         replay.addActionListener(controller);
-        replay.setEnabled(false);
+        replay.setEnabled(true);
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Save");
@@ -414,6 +414,11 @@ public class GUIView implements View, FlipListener {
 
     public void undo(){
         redo.setEnabled(true);
+    }
+
+    public void replay(){
+
+        replay.setEnabled(true);
     }
 
     public void redo(boolean upToDate){
