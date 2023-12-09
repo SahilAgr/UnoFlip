@@ -68,10 +68,8 @@ public class Game implements Serializable {
             System.out.println(s.players.size());
 
             for (Player p : s.players){
-                System.out.println("FUCK. Looks like "+p);
                 this.players.add(new Player(p));
             }
-            System.out.println("That went well!");
 
             this.autosave = s.autosave;
 
@@ -82,6 +80,8 @@ public class Game implements Serializable {
             this.gameState = s.gameState;
 
             this.topCard = new Card(s.topCard);
+            this.topCard.setOtherSide(new Card(s.topCard.getOtherSide()));
+
 
             this.playedCards = new ArrayList<>();
 
@@ -91,11 +91,7 @@ public class Game implements Serializable {
 
             this.deck = new UnoDeck(s.deck);
 
-            System.out.println("Things might go wrong here.");
-
             this.currPlayer = new Player(s.currPlayer);
-
-            System.out.println("Nope!");
 
             this.roundCounter = s.roundCounter;
 
@@ -104,8 +100,6 @@ public class Game implements Serializable {
             this.gameWinner = s.gameWinner;
 
             this.flipListeners = new ArrayList<>();
-
-            System.out.println("Here comes the next part where shit can go sour");
 
             for (Player p : this.players){
                 this.flipListeners.add(p);
@@ -161,6 +155,8 @@ public class Game implements Serializable {
     private void updateGame(){
         if (storage.gameState == GameStorage.State.IN_ROUND){
             storage.currPlayerIndex --;
+            playHistory = new ArrayList<GameStorage>();
+            playIndex = -1;
             nextTurn();
         }
         else {
@@ -182,11 +178,9 @@ public class Game implements Serializable {
      */
     private void startRound(){
         //Initializing round variables and objects
+
         storage.currPlayerIndex = storage.players.size(); //Guarantees that when nextTurn is first called, it will jump to the first player
         storage.currPlayer = storage.players.get(0);
-        System.out.println("AHHHHH");
-        System.out.println("The current player is "+storage.currPlayer);
-        System.out.println("PLEASE!!");
         storage.deck = new UnoDeck();
         storage.flipListeners.add(storage.deck);
         storage.playedCards = new ArrayList<Card>();
